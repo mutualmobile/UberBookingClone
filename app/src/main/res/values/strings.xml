@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Uber Booking Experience</string>
+    <string name="enter_pickup_point">Enter pickup point</string>
+    <string name="now">Now</string>
+    <string name="set_destination_on_map">Set destination on map</string>
+    <string name="set_pickup_time">Set pickup time</string>
+    <string name="close">Close</string>
+    <string name="when_do_you_want_pickup">When do you want to be picked up?</string>
+    <string name="flexibility_info"> Added flexibility if you book 2 hours ahead</string>
+    <string name="schedule_time_info_first">Choose your exact pick-up time up to 30 days in advance</string>
+    <string name="schedule_time_info_two">Extra wait time included to meet your trip</string>
+    <string name="schedule_time_info_three">Cancel at no charge up to 60 minute in advance</string>
+    <string name="see_terms">See Terms</string>
 </resources>
