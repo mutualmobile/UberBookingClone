@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.UberBookingExperience" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 
     <style name="SplashScreen" parent="Theme.SplashScreen">

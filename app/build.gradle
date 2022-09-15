@@ -58,6 +58,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$ktx_core_version"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.foundation:foundation:$compose_version"
     implementation "androidx.activity:activity-compose:$compose_activity_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_runtime_ktx_version"

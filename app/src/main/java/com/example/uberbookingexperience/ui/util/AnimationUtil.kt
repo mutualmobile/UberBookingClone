@@ -7,6 +7,8 @@ import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import kotlin.math.roundToInt
 
@@ -38,10 +40,32 @@ fun getSystemAnimationDuration(
  * would also be tweaked accordingly).
  * */
 @Composable
-fun <T> systemTween(): TweenSpec<T> = tween(
-    durationMillis = AnimationConstants.DefaultDurationMillis.times(getAnimationDurationScale())
-        .toInt(),
-)
+fun <T> systemTween(
+    durationMillis: Int = AnimationConstants.DefaultDurationMillis
+): TweenSpec<T> = tween(durationMillis = durationMillis.times(getAnimationDurationScale()).toInt())
+
+/**
+ * A util function for easily changing systemBars colors.
+ * @param statusBarColor refers to the system bar on top of the display
+ * @param navigationBarColor refers to the system bar on the bottom of the display
+ * (or on side of the display when in landscape mode)
+ * */
+fun Activity.changeSystemBarsColor(
+    statusBarColor: Color = Color.Transparent,
+    navigationBarColor: Color = Color.Transparent,
+) {
+    if (window.statusBarColor != statusBarColor.toArgb()) {
+        window.statusBarColor = statusBarColor.toArgb()
+    }
+    if (window.navigationBarColor != navigationBarColor.toArgb()) {
+        window.navigationBarColor = navigationBarColor.toArgb()
+    }
+}
+
+@Composable
+fun rememberActivity(): Activity {
+    return LocalContext.current as Activity
+}
 
 @Composable
 private fun getAnimationDurationScale(): Float {

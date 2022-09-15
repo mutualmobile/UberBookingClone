@@ -6,7 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val LightColorPalette = darkColorScheme(
-    primary = Color.Black, surface = Color.White, background = Color.White,
+    primary = Color.Black,
+    onPrimary = Color.White,
+    surface = Color.White,
+    onSurface = Color.Black,
+    background = Color.White,
+    onBackground = Color.Black,
 )
 
 @Composable
