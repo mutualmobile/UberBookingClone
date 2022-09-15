@@ -9,6 +9,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -21,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.uberbookingexperience.ui.screens.Screens
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
+import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
 import com.example.uberbookingexperience.ui.screens.splash.SplashScreen
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.util.changeSystemBarsColor
@@ -29,6 +32,7 @@ import com.example.uberbookingexperience.ui.util.getSystemAnimationDuration
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         setupSystemSplashScreen()
 
@@ -40,18 +44,21 @@ class MainActivity : ComponentActivity() {
             UberBookingExperienceTheme {
                 val config = LocalConfiguration.current
                 val systemUiController = rememberSystemUiController()
+                val deviceType = calculateWindowSizeClass(activity = this).widthSizeClass
 
                 LaunchedEffect(config) {
                     systemUiController.changeSystemBarsColor()
                 }
 
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.surface
                 ) {
                     val navController = rememberNavController()
 
                     NavHost(
-                        navController = navController, startDestination = Screens.SplashScreen()
+                        navController = navController,
+                        startDestination = Screens.SplashScreen()
                     ) {
                         composable(Screens.SplashScreen()) {
                             SplashScreen(onAnimationFinish = {
@@ -67,6 +74,10 @@ class MainActivity : ComponentActivity() {
                         composable(Screens.DashboardScreen()) {
                             DashboardScreen()
                         }
+
+                        composable(Screens.PaymentOptionsScreen()) {
+                            PaymentOptionsScreen(deviceType = deviceType)
+                        }
                     }
                 }
             }
@@ -79,7 +90,7 @@ class MainActivity : ComponentActivity() {
                 splashScreenView.view,
                 View.ALPHA,
                 1f,
-                0f,
+                0f
             )
 
             with(fadeAnim) {
