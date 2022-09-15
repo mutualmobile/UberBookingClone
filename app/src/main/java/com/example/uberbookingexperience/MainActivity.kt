@@ -16,11 +16,17 @@ import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import com.example.uberbookingexperience.ui.screens.splashScreen.SplashScreen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.uberbookingexperience.ui.screens.Screens
+import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
+import com.example.uberbookingexperience.ui.screens.splash.SplashScreen
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.util.changeSystemBarsColor
+import com.example.uberbookingexperience.ui.util.clearAndNavigate
 import com.example.uberbookingexperience.ui.util.getSystemAnimationDuration
-import com.example.uberbookingexperience.ui.util.rememberActivity
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,22 +38,36 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             UberBookingExperienceTheme {
-                val activity = rememberActivity()
                 val config = LocalConfiguration.current
+                val systemUiController = rememberSystemUiController()
 
                 LaunchedEffect(config) {
-                    activity.changeSystemBarsColor()
+                    systemUiController.changeSystemBarsColor()
                 }
 
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    SplashScreen(
-                        onAnimationFinish = {
-                            // TODO: Navigate to DashboardScreen
+                    val navController = rememberNavController()
+
+                    NavHost(
+                        navController = navController, startDestination = Screens.SplashScreen()
+                    ) {
+                        composable(Screens.SplashScreen()) {
+                            SplashScreen(onAnimationFinish = {
+                                systemUiController.changeSystemBarsColor()
+
+                                navController.clearAndNavigate(
+                                    clearDestination = Screens.SplashScreen(),
+                                    navigateToDestination = Screens.DashboardScreen()
+                                )
+                            })
                         }
-                    )
+
+                        composable(Screens.DashboardScreen()) {
+                            DashboardScreen()
+                        }
+                    }
                 }
             }
         }
@@ -65,7 +85,9 @@ class MainActivity : ComponentActivity() {
             with(fadeAnim) {
                 interpolator = LinearInterpolator()
                 duration = getSystemAnimationDuration().toLong()
-                doOnStart { changeSystemBarsColor() }
+                doOnStart {
+                    changeSystemBarsColor()
+                }
                 doOnEnd { splashScreenView.remove() }
                 start()
             }

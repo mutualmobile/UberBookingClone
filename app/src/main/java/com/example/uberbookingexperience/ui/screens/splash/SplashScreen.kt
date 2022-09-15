@@ -1,4 +1,4 @@
-package com.example.uberbookingexperience.ui.screens.splashScreen
+package com.example.uberbookingexperience.ui.screens.splash
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
@@ -24,14 +24,11 @@ import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.util.systemTween
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun SplashScreen(
     onAnimationFinish: () -> Unit,
 ) {
-    val systemUiController = rememberSystemUiController()
-
     var circleHeight by remember { mutableStateOf(0f) }
     val animatedCircleHeight by animateFloatAsState(
         targetValue = circleHeight,
@@ -42,10 +39,6 @@ fun SplashScreen(
     val screenHeight = LocalConfiguration.current.screenHeightDp * 2
 
     LaunchedEffect(Unit) {
-        systemUiController.setStatusBarColor(
-            Color.Transparent,
-            darkIcons = true
-        )
         circleHeight = screenHeight.toFloat()
     }
 

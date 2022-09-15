@@ -13,6 +13,7 @@ buildscript {
         kotlin_version = "1.7.0"
         ksp_version = "1.7.0-1.0.6"
         splash_screen_version = "1.0.0"
+        nav_version = "2.5.2"
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

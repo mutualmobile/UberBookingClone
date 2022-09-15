@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.systemuicontroller.SystemUiController
 import kotlin.math.roundToInt
 
 /**
@@ -46,20 +47,30 @@ fun <T> systemTween(
 
 /**
  * A util function for easily changing systemBars colors.
- * @param statusBarColor refers to the system bar on top of the display
- * @param navigationBarColor refers to the system bar on the bottom of the display
- * (or on side of the display when in landscape mode)
  * */
 fun Activity.changeSystemBarsColor(
-    statusBarColor: Color = Color.Transparent,
-    navigationBarColor: Color = Color.Transparent,
+    color: Color = Color.Transparent,
 ) {
-    if (window.statusBarColor != statusBarColor.toArgb()) {
-        window.statusBarColor = statusBarColor.toArgb()
+    if (window.statusBarColor != color.toArgb()) {
+        window.statusBarColor = color.toArgb()
     }
-    if (window.navigationBarColor != navigationBarColor.toArgb()) {
-        window.navigationBarColor = navigationBarColor.toArgb()
+
+    if (window.navigationBarColor != color.toArgb()) {
+        window.navigationBarColor = color.toArgb()
     }
+}
+
+/**
+ * A util function for easily changing systemBars colors.
+ * */
+fun SystemUiController.changeSystemBarsColor(
+    color: Color = Color.Transparent,
+    darkIcons: Boolean = true,
+) {
+    setSystemBarsColor(
+        color = color,
+        darkIcons = darkIcons
+    )
 }
 
 @Composable
