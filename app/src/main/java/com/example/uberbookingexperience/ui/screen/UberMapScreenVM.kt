@@ -1,39 +1,35 @@
 package com.example.uberbookingexperience.ui.screen
 
 import android.location.Location
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.uberbookingexperience.components.mmLocation
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import kotlin.random.Random
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.flow
 
-class UberMapScreenVM:ViewModel() {
+class UberMapScreenVM : ViewModel() {
+    val zoom = 8f
+    val mmLocation = LatLng(-31.673, 128.892)
+    val defaultCameraPosition = CameraPosition.fromLatLngZoom(mmLocation, zoom)
+    var startLocation: LatLng = LatLng(-31.673, 128.892)
+    var endLocation: LatLng =  LatLng(-12.4258, 130.7932)
 
 
-    val locationFlow = callbackFlow {
-        while (true) {
-
-            val location = newLocation()
-            Log.d("-->", "Location : $location")
-            trySend(location)
-
-            delay(2_000)
-        }
-    }.shareIn(
-        viewModelScope,
-        replay = 0,
-        started = SharingStarted.WhileSubscribed()
-    )
-}
-fun newLocation(): Location {
-    val location = Location("MyLocationProvider")
-    location.apply {
-        latitude = mmLocation.latitude + Random.nextFloat()
-        longitude = mmLocation.longitude + Random.nextFloat()
+    val locationFlow = flow {
+        emit(newLocation())
     }
-    return location
+
+    fun setLocations(start: LatLng, end: LatLng) {
+        startLocation = start
+        endLocation = end
+    }
+
+    fun newLocation(): Location {
+        val location = Location("MyLocationProvider")
+        location.apply {
+            latitude = mmLocation.latitude + Random.nextFloat()
+            longitude = mmLocation.longitude + Random.nextFloat()
+        }
+        return location
+    }
 }
