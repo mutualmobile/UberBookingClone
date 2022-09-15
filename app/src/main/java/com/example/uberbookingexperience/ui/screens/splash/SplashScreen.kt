@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +36,7 @@ fun SplashScreen(
     )
 
     val screenHeight = LocalConfiguration.current.screenHeightDp * 2
+    val circleColor = MaterialTheme.colorScheme.surface
 
     LaunchedEffect(Unit) {
         circleHeight = screenHeight.toFloat()
@@ -49,16 +49,17 @@ fun SplashScreen(
             .drawWithContent {
                 drawContent()
                 drawCircle(
-                    color = Color.White,
+                    color = circleColor,
                     radius = animatedCircleHeight,
                 )
             },
         contentAlignment = Alignment.Center
     ) {
+        val uberImageResource = painterResource(id = R.drawable.uber_foreground)
         Image(
-            modifier = Modifier.width(288.dp),
-            painter = painterResource(id = R.drawable.uber_foreground),
-            contentDescription = null
+            modifier = Modifier.width(uberImageResource.intrinsicSize.width.dp),
+            painter = uberImageResource,
+            contentDescription = "splashScreen"
         )
     }
 }

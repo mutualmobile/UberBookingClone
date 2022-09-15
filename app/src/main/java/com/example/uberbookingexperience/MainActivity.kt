@@ -85,9 +85,7 @@ class MainActivity : ComponentActivity() {
             with(fadeAnim) {
                 interpolator = LinearInterpolator()
                 duration = getSystemAnimationDuration().toLong()
-                doOnStart {
-                    changeSystemBarsColor()
-                }
+                doOnStart { changeSystemBarsColor() }
                 doOnEnd { splashScreenView.remove() }
                 start()
             }
