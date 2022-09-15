@@ -7,4 +7,20 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="paytm_credit_card_dark_blue_color">#5a7ad7</color>
+    <color name="paytm_credit_card_light_blue_color">#8cd9c1</color>
+    <color name="paytm_icon_dark_blue_color">#0e2855</color>
+    <color name="paytm_icon_light_blue_color">#00b0de</color>
+    <color name="paytm_icon_light_color">#c3e1f9</color>
+    <color name="paytm_net_banking_icon_color">#eaeaec</color>
+    <color name="googlepay_icon_black_color">#3c4043</color>
+    <color name="googlepay_icon_blue_color">#4285f4</color>
+    <color name="googlepay_icon_green_color">#34a853</color>
+    <color name="googlepay_icon_grey_color">#b8bfc4</color>
+    <color name="googlepay_icon_red_color">#ea4335</color>
+    <color name="googlepay_icon_yellow_color">#fbbc04</color>
+    <color name="ub__ui_core_v2_green100">#daf0e3</color>
+    <color name="ub__ui_core_v2_green200">#aeddc2</color>
+    <color name="ub__ui_core_v2_green300">#73c496</color>
+    <color name="ub__ui_core_v2_green400">#47b275</color>
 </resources>
