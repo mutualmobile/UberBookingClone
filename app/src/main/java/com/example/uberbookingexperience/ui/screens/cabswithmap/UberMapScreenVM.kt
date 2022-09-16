@@ -1,4 +1,4 @@
-package com.example.uberbookingexperience.ui.screen
+package com.example.uberbookingexperience.ui.screens.cabswithmap
 
 import android.location.Location
 import androidx.lifecycle.ViewModel

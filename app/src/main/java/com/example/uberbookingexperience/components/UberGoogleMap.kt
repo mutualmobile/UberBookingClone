@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
-import com.example.uberbookingexperience.ui.screen.UberMapScreenVM
+import com.example.uberbookingexperience.ui.screens.cabswithmap.UberMapScreenVM
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.LocationSource
 import com.google.android.gms.maps.model.CameraPosition
