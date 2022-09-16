@@ -8,17 +8,14 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PayeeType() {
-    var selectedItemTitle by remember { mutableStateOf("Personal") }
-
+fun PayeeType(
+    selectedItemTitle: String,
+    onItemSelected: (itemTitle: String) -> Unit
+) {
     LazyRow(
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
     ) {
@@ -29,7 +26,7 @@ fun PayeeType() {
                 isSelected = selectedItemTitle == "Personal",
                 icon = Icons.Filled.Person,
                 onClick = {
-                    selectedItemTitle = "Personal"
+                    onItemSelected("Personal")
                 }
             )
         }
@@ -40,7 +37,7 @@ fun PayeeType() {
                 isSelected = selectedItemTitle == "Business",
                 icon = Icons.Filled.Work,
                 onClick = {
-                    selectedItemTitle = "Business"
+                    onItemSelected("Business")
                 },
                 selectedBackgroundColor = MaterialTheme.colorScheme.secondary
             )
