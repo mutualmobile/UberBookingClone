@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -40,10 +39,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             UberBookingExperienceTheme {
-                val config = LocalConfiguration.current
                 val systemUiController = rememberSystemUiController()
 
-                LaunchedEffect(config) {
+                LaunchedEffect(Unit) {
                     systemUiController.changeSystemBarsColor()
                 }
 
