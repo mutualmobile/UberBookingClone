@@ -26,7 +26,7 @@ import com.example.uberbookingexperience.ui.util.systemTween
 
 @Composable
 fun SplashScreen(
-    onAnimationFinish: () -> Unit,
+    onAnimationFinish: () -> Unit
 ) {
     var circleHeight by remember { mutableStateOf(0f) }
     val animatedCircleHeight by animateFloatAsState(
@@ -50,7 +50,7 @@ fun SplashScreen(
                 drawContent()
                 drawCircle(
                     color = circleColor,
-                    radius = animatedCircleHeight,
+                    radius = animatedCircleHeight
                 )
             },
         contentAlignment = Alignment.Center

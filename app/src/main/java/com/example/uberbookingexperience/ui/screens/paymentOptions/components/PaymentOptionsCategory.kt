@@ -1,23 +1,18 @@
 package com.example.uberbookingexperience.ui.screens.paymentOptions.components
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOption
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
-import com.example.uberbookingexperience.ui.util.rememberActivity
+import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.accompanist.flowlayout.FlowRow
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun PaymentOptionsCategory(
     modifier: Modifier = Modifier,
@@ -27,8 +22,6 @@ fun PaymentOptionsCategory(
     footer: String? = null,
     useSwitchForSelected: Boolean = false
 ) {
-    val deviceType = calculateWindowSizeClass(activity = rememberActivity()).widthSizeClass
-
     val paddingModifier = remember { Modifier.padding(horizontal = 16.dp) }
     Column(modifier = modifier) {
         Text(
@@ -44,23 +37,21 @@ fun PaymentOptionsCategory(
                 MaterialTheme.typography.headlineMedium
             }
         )
-        Crossfade(targetState = deviceType == WindowWidthSizeClass.Compact) { isMobileDevice ->
-            if (isMobileDevice) {
-                Column {
-                    paymentOptions.forEach { paymentOption ->
-                        MobilePaymentOptionItem(
-                            paymentOption = paymentOption,
-                            useSwitchForSelected = useSwitchForSelected
-                        )
-                    }
+        if (rememberIsMobileDevice()) {
+            Column {
+                paymentOptions.forEach { paymentOption ->
+                    MobilePaymentOptionItem(
+                        paymentOption = paymentOption,
+                        useSwitchForSelected = useSwitchForSelected
+                    )
                 }
-            } else {
-                FlowRow(
-                    modifier = Modifier.padding(start = 16.dp)
-                ) {
-                    paymentOptions.forEach { paymentOption ->
-                        DesktopPaymentOptionItem(paymentOption = paymentOption)
-                    }
+            }
+        } else {
+            FlowRow(
+                modifier = Modifier.padding(start = 16.dp)
+            ) {
+                paymentOptions.forEach { paymentOption ->
+                    DesktopPaymentOptionItem(paymentOption = paymentOption)
                 }
             }
         }
