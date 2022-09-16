@@ -66,7 +66,9 @@ fun PaymentOptionsScreen() {
                 var isUberCashSelected by rememberSaveable { mutableStateOf(true) }
                 var currentPaymentOption by rememberSaveable { mutableStateOf("") }
 
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     item {
                         PaymentOptionsCategory(
                             title = "Uber Cash",
