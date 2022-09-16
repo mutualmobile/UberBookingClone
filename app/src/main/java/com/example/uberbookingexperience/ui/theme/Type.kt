@@ -17,6 +17,12 @@ val UberMove = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
+    displaySmall = TextStyle(
+        fontFamily = UberMove,
+        fontWeight = FontWeight.Medium,
+        fontSize = 28.sp,
+        letterSpacing = 0.75.sp
+    ),
     headlineLarge = TextStyle(
         fontFamily = UberMove,
         fontWeight = FontWeight.Medium,
@@ -42,5 +48,10 @@ val Typography = Typography(
         fontFamily = UberMove,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = UberMove,
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp
     )
 )

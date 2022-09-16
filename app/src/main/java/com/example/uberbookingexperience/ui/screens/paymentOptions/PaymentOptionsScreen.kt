@@ -1,6 +1,7 @@
 package com.example.uberbookingexperience.ui.screens.paymentOptions
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
+import com.example.uberbookingexperience.ui.screens.paymentOptions.components.BusinessPaymentOptionScreen
 import com.example.uberbookingexperience.ui.screens.paymentOptions.components.PayeeType
 import com.example.uberbookingexperience.ui.screens.paymentOptions.components.PaymentOptionsCategory
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
@@ -61,71 +63,86 @@ fun PaymentOptionsScreen() {
                     text = "Payment options",
                     style = MaterialTheme.typography.headlineLarge
                 )
-                PayeeType()
 
-                var isUberCashSelected by rememberSaveable { mutableStateOf(true) }
-                var currentPaymentOption by rememberSaveable { mutableStateOf("") }
+                var selectedPayeeType by rememberSaveable { mutableStateOf("Personal") }
+                PayeeType(selectedItemTitle = selectedPayeeType) { selectedItem ->
+                    selectedPayeeType = selectedItem
+                }
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    item {
-                        PaymentOptionsCategory(
-                            title = "Uber Cash",
-                            paymentOptions = listOf(
-                                PaymentOption(
-                                    R.drawable.ic_uber_logo,
-                                    name = "Uber Cash",
-                                    value = "$0.00",
-                                    selected = isUberCashSelected,
-                                    onClick = {
-                                        isUberCashSelected = !isUberCashSelected
-                                    }
-                                )
-                            ),
-                            useSwitchForSelected = true
-                        )
-                    }
-                    item {
-                        PaymentOptionsCategory(
-                            title = "Payment Method",
-                            paymentOptions = listOf(
-                                PaymentOption(
-                                    R.drawable.ic_paytm_logo,
-                                    name = "Paytm",
-                                    selected = currentPaymentOption == "Paytm",
-                                    onClick = {
-                                        currentPaymentOption = "Paytm"
-                                    }
-                                ),
-                                PaymentOption(
-                                    R.drawable.ic_google_pay_logo,
-                                    name = "www.mutualmobile.com@oksbi",
-                                    selected = currentPaymentOption == "www.mutualmobile.com@oksbi",
-                                    onClick = {
-                                        currentPaymentOption = "www.mutualmobile.com@oksbi"
-                                    }
-                                ),
-                                PaymentOption(
-                                    R.drawable.ic_cash_logo,
-                                    name = "Cash",
-                                    selected = currentPaymentOption == "Cash",
-                                    onClick = {
-                                        currentPaymentOption = "Cash"
-                                    }
-                                )
-                            ),
-                            footer = "Add Payment Method"
-                        )
-                    }
-                    item {
-                        PaymentOptionsCategory(
-                            modifier = Modifier.padding(top = 48.dp),
-                            title = "Vouchers",
-                            useBigTitle = true,
-                            paymentOptions = emptyList(),
-                            footer = "Add voucher code"
-                        )
+                Crossfade(targetState = selectedPayeeType) { payeeType ->
+                    when (payeeType) {
+                        "Personal" -> {
+                            var isUberCashSelected by rememberSaveable { mutableStateOf(true) }
+                            var currentPaymentOption by rememberSaveable { mutableStateOf("") }
+
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                item {
+                                    PaymentOptionsCategory(
+                                        title = "Uber Cash",
+                                        paymentOptions = listOf(
+                                            PaymentOption(
+                                                R.drawable.ic_uber_logo,
+                                                name = "Uber Cash",
+                                                value = "$0.00",
+                                                selected = isUberCashSelected,
+                                                onClick = {
+                                                    isUberCashSelected = !isUberCashSelected
+                                                }
+                                            )
+                                        ),
+                                        useSwitchForSelected = true
+                                    )
+                                }
+                                item {
+                                    PaymentOptionsCategory(
+                                        title = "Payment Method",
+                                        paymentOptions = listOf(
+                                            PaymentOption(
+                                                R.drawable.ic_paytm_logo,
+                                                name = "Paytm",
+                                                selected = currentPaymentOption == "Paytm",
+                                                onClick = {
+                                                    currentPaymentOption = "Paytm"
+                                                }
+                                            ),
+                                            PaymentOption(
+                                                R.drawable.ic_google_pay_logo,
+                                                name = "www.mutualmobile.com@oksbi",
+                                                selected = currentPaymentOption == "www.mutualmobile.com@oksbi",
+                                                onClick = {
+                                                    currentPaymentOption =
+                                                        "www.mutualmobile.com@oksbi"
+                                                }
+                                            ),
+                                            PaymentOption(
+                                                R.drawable.ic_cash_logo,
+                                                name = "Cash",
+                                                selected = currentPaymentOption == "Cash",
+                                                onClick = {
+                                                    currentPaymentOption = "Cash"
+                                                }
+                                            )
+                                        ),
+                                        footer = "Add Payment Method"
+                                    )
+                                }
+                                item {
+                                    PaymentOptionsCategory(
+                                        modifier = Modifier.padding(top = 48.dp),
+                                        title = "Vouchers",
+                                        useBigTitle = true,
+                                        paymentOptions = emptyList(),
+                                        footer = "Add voucher code"
+                                    )
+                                }
+                            }
+                        }
+                        "Business" -> {
+                            BusinessPaymentOptionScreen()
+                        }
+                        else -> Unit
                     }
                 }
             }
