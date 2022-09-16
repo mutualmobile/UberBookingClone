@@ -9,6 +9,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
@@ -18,6 +20,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.uberbookingexperience.ui.screens.cabswithmap.UberMapScreen
 import com.example.uberbookingexperience.ui.screens.Screens
 import com.example.uberbookingexperience.ui.screens.addPaymentMethod.AddPaymentMethodScreen
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
@@ -32,6 +35,7 @@ import com.example.uberbookingexperience.ui.util.getSystemAnimationDuration
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         setupSystemSplashScreen()
 
@@ -42,6 +46,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             UberBookingExperienceTheme {
                 val systemUiController = rememberSystemUiController()
+                val windowSize = calculateWindowSizeClass(this)
 
                 LaunchedEffect(Unit) {
                     systemUiController.changeSystemBarsColor()
@@ -69,18 +74,19 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screens.DashboardScreen()) {
-                            DashboardScreen(onNextClicked = {
-                                navController.clearAndNavigate(
-                                    clearDestination = Screens.DashboardScreen(),
-                                    navigateToDestination = Screens.WhereToScreen()
-                                )
-                            })
+                            DashboardScreen {
+                                navController.navigate(Screens.MapScreen())
+                            }
                         }
 
+                        composable(Screens.MapScreen()){
+                            UberMapScreen(windowSize) {
+                                navController.popBackStack()
+                            }
+                        }
                         composable(Screens.WhereToScreen()) {
                             WhereToScreen()
                         }
-
                         composable(Screens.PaymentOptionsScreen()) {
                             PaymentOptionsScreen { navController.navigateUp() }
                         }
