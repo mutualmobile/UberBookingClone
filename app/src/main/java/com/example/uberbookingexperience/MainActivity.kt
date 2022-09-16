@@ -9,8 +9,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -32,7 +30,6 @@ import com.example.uberbookingexperience.ui.util.getSystemAnimationDuration
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         setupSystemSplashScreen()
 
@@ -44,7 +41,6 @@ class MainActivity : ComponentActivity() {
             UberBookingExperienceTheme {
                 val config = LocalConfiguration.current
                 val systemUiController = rememberSystemUiController()
-                val deviceType = calculateWindowSizeClass(activity = this).widthSizeClass
 
                 LaunchedEffect(config) {
                     systemUiController.changeSystemBarsColor()
@@ -76,7 +72,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screens.PaymentOptionsScreen()) {
-                            PaymentOptionsScreen(deviceType = deviceType)
+                            PaymentOptionsScreen()
                         }
                     }
                 }
