@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screens.PaymentOptionsScreen()) {
-                            PaymentOptionsScreen()
+                            PaymentOptionsScreen { navController.navigateUp() }
                         }
                     }
                 }
