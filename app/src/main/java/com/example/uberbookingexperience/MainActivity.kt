@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -21,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.uberbookingexperience.ui.screens.Screens
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
+import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
 import com.example.uberbookingexperience.ui.screens.splash.SplashScreen
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.util.changeSystemBarsColor
@@ -38,20 +38,21 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             UberBookingExperienceTheme {
-                val config = LocalConfiguration.current
                 val systemUiController = rememberSystemUiController()
 
-                LaunchedEffect(config) {
+                LaunchedEffect(Unit) {
                     systemUiController.changeSystemBarsColor()
                 }
 
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.surface
                 ) {
                     val navController = rememberNavController()
 
                     NavHost(
-                        navController = navController, startDestination = Screens.SplashScreen()
+                        navController = navController,
+                        startDestination = Screens.SplashScreen()
                     ) {
                         composable(Screens.SplashScreen()) {
                             SplashScreen(onAnimationFinish = {
@@ -67,6 +68,10 @@ class MainActivity : ComponentActivity() {
                         composable(Screens.DashboardScreen()) {
                             DashboardScreen()
                         }
+
+                        composable(Screens.PaymentOptionsScreen()) {
+                            PaymentOptionsScreen()
+                        }
                     }
                 }
             }
@@ -79,7 +84,7 @@ class MainActivity : ComponentActivity() {
                 splashScreenView.view,
                 View.ALPHA,
                 1f,
-                0f,
+                0f
             )
 
             with(fadeAnim) {

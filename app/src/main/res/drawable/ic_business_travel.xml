@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="36dp"
+    android:viewportWidth="36"
+    android:viewportHeight="36">
+    <path
+        android:fillColor="@color/ub__ui_core_v2_blue500"
+        android:pathData="M35 8.85277V31.0232C35 32.1085 34.1114 32.9612 33.0682 32.9612H2.93182C1.85 32.9612 1 32.0697 1 31.0232V8.85277C1 7.7675 1.88864 6.91479 2.93182 6.91479H7.60682L9.19091 8.07758L10.775 6.91479H25.1477L26.7318 8.07758L28.3159 6.91479H33.0682C34.1114 6.91479 35 7.80626 35 8.85277Z" />
+    <path
+        android:fillColor="@color/ub__ui_core_v2_blue200"
+        android:pathData="M10.7751 6.91479H7.60693V32.9999H10.7751V6.91479Z" />
+    <path
+        android:fillColor="@color/ub__ui_core_v2_blue200"
+        android:pathData="M28.3547 6.91479H25.1865V32.9999H28.3547V6.91479Z" />
+    <path
+        android:fillColor="@color/ub__ui_core_v2_white"
+        android:pathData="M10.8138 21.876L9.22966 23.5039L7.60693 21.876V6.91479H10.8138V21.876Z" />
+    <path
+        android:fillColor="@color/ub__ui_core_v2_white"
+        android:pathData="M28.3933 21.876L26.7706 23.5039L25.1865 21.876V6.91479H28.3933V21.876Z" />
+    <path
+        android:fillColor="@color/ub__ui_core_v2_black"
+        android:pathData="M21.709 6.91471V4.89922C21.709 4.66666 21.5544 4.51162 21.3226 4.51162H14.6772C14.4454 4.51162 14.2908 4.66666 14.2908 4.89922V6.91471H10.7749L13.2863 3.62015C13.5954 3.23256 14.059 3 14.5226 3H21.4772C21.9794 3 22.4044 3.23256 22.7135 3.62015L25.2249 6.91471H21.709Z" />
+    <path
+        android:fillColor="@color/ub__ui_core_v2_black"
+        android:pathData="M5.17273 6.91479C5.17273 9.24036 3.27955 11.1008 1 11.1008V8.85277C1 7.7675 1.88864 6.91479 2.93182 6.91479H5.17273V6.91479Z" />
+    <path
+        android:fillColor="@color/ub__ui_core_v2_black"
+        android:pathData="M34.9999 11.1008C32.6817 11.1008 30.8271 9.20161 30.8271 6.91479H33.0681C34.1499 6.91479 34.9999 7.80626 34.9999 8.85277V11.1008Z" />
+    <path
+        android:fillColor="@color/ub__ui_core_v2_black"
+        android:pathData="M30.8271 33C30.8271 30.6744 32.7203 28.814 34.9999 28.814V31.062C34.9999 32.1473 34.1112 33 33.0681 33H30.8271Z" />
+    <path
+        android:fillColor="@color/ub__ui_core_v2_black"
+        android:pathData="M1 28.775C3.31818 28.775 5.17273 30.6742 5.17273 32.9611H2.93182C1.85 32.9611 1 32.0696 1 31.0231V28.775Z" />
+</vector>
