@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +34,9 @@ import com.example.uberbookingexperience.ui.util.limitWidth
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.example.uberbookingexperience.ui.util.uberFormattedDate
 import com.example.uberbookingexperience.ui.util.uberFormattedTime
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
@@ -56,6 +59,7 @@ fun SchedulePickupScreen(
     var currentTime by rememberSaveable { mutableStateOf(LocalTime.now()) }
 
     Column(
+        modifier = Modifier.systemBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         UberTopBar(
@@ -144,9 +148,35 @@ fun SchedulePickupScreen(
         )
     }
 
-    UberDateTimePicker(dialogState = datePickerDialogState) { datepicker { currentDate = it } }
+    UberDateTimePicker(dialogState = datePickerDialogState) {
+        datepicker(
+            colors = DatePickerDefaults.colors(
+                headerBackgroundColor = MaterialTheme.colorScheme.primary,
+                headerTextColor = MaterialTheme.colorScheme.onPrimary,
+                calendarHeaderTextColor = MaterialTheme.colorScheme.primary,
+                dateActiveBackgroundColor = MaterialTheme.colorScheme.primary,
+                dateInactiveBackgroundColor = MaterialTheme.colorScheme.onPrimary,
+                dateActiveTextColor = MaterialTheme.colorScheme.onPrimary,
+                dateInactiveTextColor = MaterialTheme.colorScheme.primary
+            )
+        ) { currentDate = it }
+    }
 
-    UberDateTimePicker(dialogState = timePickerDialogState) { timepicker { currentTime = it } }
+    UberDateTimePicker(dialogState = timePickerDialogState) {
+        timepicker(
+            colors = TimePickerDefaults.colors(
+                activeBackgroundColor = MaterialTheme.colorScheme.primary,
+                inactiveBackgroundColor = MaterialTheme.colorScheme.onPrimary,
+                activeTextColor = MaterialTheme.colorScheme.onPrimary,
+                inactiveTextColor = MaterialTheme.colorScheme.primary,
+                inactivePeriodBackground = MaterialTheme.colorScheme.onPrimary,
+                selectorColor = MaterialTheme.colorScheme.primary,
+                selectorTextColor = MaterialTheme.colorScheme.onPrimary,
+                headerTextColor = MaterialTheme.colorScheme.primary,
+                borderColor = MaterialTheme.colorScheme.onPrimary
+            )
+        ) { currentTime = it }
+    }
 }
 
 @Preview(showSystemUi = true, device = "spec:width=411dp,height=891dp")
