@@ -5,10 +5,10 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,11 +30,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.uberbookingexperience.R
+import com.example.uberbookingexperience.ui.common.UberButton
 import com.example.uberbookingexperience.ui.common.UberDivider
 import com.example.uberbookingexperience.ui.common.UberTopBar
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
+import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.UberIconSize
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
+import com.example.uberbookingexperience.ui.util.limitWidth
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
 @Composable
@@ -47,7 +50,7 @@ fun SchedulePickupScreen(
         UberTopBar(
             modifier = Modifier.align(Alignment.Start),
             title = "When do you want to be picked up?",
-            titleOffsetFromIcon = 8.dp,
+            titleOffsetFromIcon = MaterialTheme.spacing.small,
             iconOnClick = onNavigationIconClick
         )
         var currentDate by remember { mutableStateOf("Fri, 9 Sep") }
@@ -55,7 +58,8 @@ fun SchedulePickupScreen(
         val dateTimePicker: @Composable (Modifier) -> Unit = remember(currentDate, currentTime) {
             movableContentOf { modifier ->
                 Column(
-                    modifier = modifier.padding(horizontal = 32.dp).padding(top = 32.dp),
+                    modifier = modifier.padding(horizontal = MaterialTheme.spacing.extraLarge)
+                        .padding(top = MaterialTheme.spacing.extraLarge),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     SchedulePickupText(text = currentDate) {}
@@ -83,10 +87,10 @@ fun SchedulePickupScreen(
         val prebookingBenefitItems: @Composable (Modifier) -> Unit = remember(prebookingBenefits) {
             movableContentOf { modifier ->
                 Column(
-                    modifier = modifier.fillMaxWidth().padding(16.dp)
+                    modifier = modifier.fillMaxWidth().padding(MaterialTheme.spacing.medium)
                 ) {
                     Text(
-                        modifier = Modifier.padding(bottom = 16.dp),
+                        modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium),
                         text = "Added flexibility if you book 2 hours ahead",
                         style = MaterialTheme.typography.headlineSmall
                     )
@@ -97,7 +101,8 @@ fun SchedulePickupScreen(
                         )
                     }
                     Text(
-                        modifier = Modifier.padding(24.dp).clickableWithRipple {},
+                        modifier = Modifier.padding(MaterialTheme.spacing.large)
+                            .clickableWithRipple {},
                         text = "See terms",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium,
@@ -106,7 +111,8 @@ fun SchedulePickupScreen(
                 }
             }
         }
-        Crossfade(targetState = rememberIsMobileDevice()) { isMobileDevice ->
+        val isMobile = rememberIsMobileDevice()
+        Crossfade(targetState = isMobile) { isMobileDevice ->
             if (isMobileDevice) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -120,11 +126,20 @@ fun SchedulePickupScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    dateTimePicker(Modifier.widthIn(max = 400.dp))
-                    prebookingBenefitItems(Modifier.widthIn(max = 400.dp))
+                    dateTimePicker(Modifier.limitWidth())
+                    prebookingBenefitItems(Modifier.limitWidth())
                 }
             }
         }
+        if (isMobile) {
+            Spacer(modifier = Modifier.weight(1f))
+        }
+        UberButton(
+            modifier = Modifier
+                .padding(MaterialTheme.spacing.medium)
+                .limitWidth(),
+            text = "Set pickup time"
+        ) {}
     }
 }
 
@@ -135,7 +150,8 @@ private fun SchedulePickupText(
     onClick: () -> Unit
 ) {
     Text(
-        modifier = modifier.clickableWithRipple(onClick = onClick).padding(16.dp).fillMaxWidth(),
+        modifier = modifier.clickableWithRipple(onClick = onClick)
+            .padding(MaterialTheme.spacing.medium).fillMaxWidth(),
         text = text,
         textAlign = TextAlign.Center
     )

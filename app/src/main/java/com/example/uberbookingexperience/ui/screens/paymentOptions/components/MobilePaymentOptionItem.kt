@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOption
+import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.UberIconSize
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
 
@@ -36,7 +36,7 @@ fun MobilePaymentOptionItem(
     val optionIcon = remember(paymentOption.icon) {
         movableContentOf {
             Image(
-                modifier = Modifier.padding(vertical = 8.dp).size(UberIconSize.ListItem)
+                modifier = Modifier.padding(vertical = MaterialTheme.spacing.small).size(UberIconSize.ListItem)
                     .aspectRatio(1.5f).clip(shape = RoundedCornerShape(20)),
                 painter = painterResource(id = paymentOption.icon),
                 contentDescription = null,
