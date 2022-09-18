@@ -49,7 +49,7 @@ fun <T> systemTween(
  * A util function for easily changing systemBars colors.
  * */
 fun Activity.changeSystemBarsColor(
-    color: Color = Color.Transparent,
+    color: Color = Color.Transparent
 ) {
     if (window.statusBarColor != color.toArgb()) {
         window.statusBarColor = color.toArgb()
@@ -65,7 +65,7 @@ fun Activity.changeSystemBarsColor(
  * */
 fun SystemUiController.changeSystemBarsColor(
     color: Color = Color.Transparent,
-    darkIcons: Boolean = true,
+    darkIcons: Boolean = true
 ) {
     setSystemBarsColor(
         color = color,
@@ -86,6 +86,8 @@ private fun getAnimationDurationScale(): Float {
 
 private fun Activity.getAnimationDurationScale(): Float {
     return Settings.Global.getFloat(
-        contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1.0f
+        contentResolver,
+        Settings.Global.ANIMATOR_DURATION_SCALE,
+        1.0f
     )
 }
