@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOption
+import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.accompanist.flowlayout.FlowRow
@@ -22,7 +23,8 @@ fun PaymentOptionsCategory(
     footer: String? = null,
     useSwitchForSelected: Boolean = false
 ) {
-    val paddingModifier = remember { Modifier.padding(horizontal = 16.dp) }
+    val commonPadding = MaterialTheme.spacing.medium
+    val paddingModifier = remember { Modifier.padding(horizontal = commonPadding) }
     Column(modifier = modifier) {
         Text(
             modifier = paddingModifier.padding(vertical = 12.dp),
@@ -48,7 +50,7 @@ fun PaymentOptionsCategory(
             }
         } else {
             FlowRow(
-                modifier = Modifier.padding(start = 16.dp)
+                modifier = Modifier.padding(start = MaterialTheme.spacing.medium)
             ) {
                 paymentOptions.forEach { paymentOption ->
                     DesktopPaymentOptionItem(paymentOption = paymentOption)
@@ -57,7 +59,7 @@ fun PaymentOptionsCategory(
         }
         footer?.let { nnFooter ->
             Text(
-                modifier = paddingModifier.padding(vertical = 16.dp).clickableWithRipple {},
+                modifier = paddingModifier.padding(vertical = MaterialTheme.spacing.medium).clickableWithRipple {},
                 text = nnFooter,
                 style = MaterialTheme.typography.headlineSmall.copy(
                     color = MaterialTheme.colorScheme.tertiary

@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.uberbookingexperience.ui.theme.spacing
 
 @Composable
 fun PayeeType(
@@ -21,7 +22,7 @@ fun PayeeType(
     ) {
         item {
             UberSelectableChip(
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.padding(start = MaterialTheme.spacing.small),
                 title = "Personal",
                 isSelected = selectedItemTitle == "Personal",
                 icon = Icons.Filled.Person,
@@ -32,7 +33,7 @@ fun PayeeType(
         }
         item {
             UberSelectableChip(
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.padding(start = MaterialTheme.spacing.small),
                 title = "Business",
                 isSelected = selectedItemTitle == "Business",
                 icon = Icons.Filled.Work,
