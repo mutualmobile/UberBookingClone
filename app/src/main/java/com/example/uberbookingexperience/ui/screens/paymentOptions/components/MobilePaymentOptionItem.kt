@@ -14,6 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -29,6 +31,19 @@ fun MobilePaymentOptionItem(
     paymentOption: PaymentOption,
     useSwitchForSelected: Boolean
 ) {
+    // Extracted it out since it didn't need to be recomposed when either container or content
+    // color changed.
+    val optionIcon = remember(paymentOption.icon) {
+        movableContentOf {
+            Image(
+                modifier = Modifier.padding(vertical = 8.dp).size(UberIconSize.ListItem)
+                    .aspectRatio(1.5f).clip(shape = RoundedCornerShape(20)),
+                painter = painterResource(id = paymentOption.icon),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+        }
+    }
     ListItem(
         modifier = Modifier.clickableWithRipple(onClick = paymentOption.onClick),
         headlineText = {
@@ -49,15 +64,7 @@ fun MobilePaymentOptionItem(
                 )
             }
         },
-        leadingContent = {
-            Image(
-                modifier = Modifier.padding(vertical = 8.dp).size(UberIconSize.ListItem)
-                    .aspectRatio(1.5f).clip(shape = RoundedCornerShape(20)),
-                painter = painterResource(id = paymentOption.icon),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-        },
+        leadingContent = { optionIcon() },
         trailingContent = {
             if (useSwitchForSelected) {
                 Switch(

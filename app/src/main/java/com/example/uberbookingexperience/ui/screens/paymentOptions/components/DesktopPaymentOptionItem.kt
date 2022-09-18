@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,6 +47,25 @@ fun DesktopPaymentOptionItem(paymentOption: PaymentOption) {
         else MaterialTheme.colorScheme.onSurface
     )
 
+    // Extracted it out since it didn't need to be recomposed when either container or content
+    // color changed.
+    val optionIcon = remember(paymentOption.icon) {
+        movableContentOf {
+            Box(
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.6f),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Image(
+                    modifier = Modifier.fillMaxHeight(0.75f).aspectRatio(1f)
+                        .clip(CardDefaults.shape),
+                    painter = painterResource(id = paymentOption.icon),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+    }
+
     Card(
         modifier = Modifier.size(128.dp),
         colors = CardDefaults.cardColors(
@@ -54,17 +74,7 @@ fun DesktopPaymentOptionItem(paymentOption: PaymentOption) {
         ),
         onClick = paymentOption.onClick
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(0.6f),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            Image(
-                modifier = Modifier.fillMaxHeight(0.75f).aspectRatio(1f).clip(CardDefaults.shape),
-                painter = painterResource(id = paymentOption.icon),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-        }
+        optionIcon()
         Text(
             modifier = Modifier.fillMaxWidth().wrapContentSize().padding(horizontal = 8.dp)
                 .padding(top = 8.dp),
