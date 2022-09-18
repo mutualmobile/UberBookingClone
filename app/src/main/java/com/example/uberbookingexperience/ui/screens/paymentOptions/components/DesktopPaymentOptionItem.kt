@@ -34,18 +34,21 @@ import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOption
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.systemTween
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DesktopPaymentOptionItem(paymentOption: PaymentOption) {
     val containerColor by animateColorAsState(
         targetValue = if (paymentOption.selected) MaterialTheme.colorScheme.onSurface
-        else MaterialTheme.colorScheme.surface
+        else MaterialTheme.colorScheme.surface,
+        animationSpec = systemTween()
     )
 
     val contentColor by animateColorAsState(
         targetValue = if (paymentOption.selected) MaterialTheme.colorScheme.surface
-        else MaterialTheme.colorScheme.onSurface
+        else MaterialTheme.colorScheme.onSurface,
+        animationSpec = systemTween()
     )
 
     // Extracted it out since it didn't need to be recomposed when either container or content
