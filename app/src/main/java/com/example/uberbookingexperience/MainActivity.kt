@@ -21,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.uberbookingexperience.ui.screens.Screens
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
+import com.example.uberbookingexperience.ui.screens.schedulePickup.SchedulePickupScreen
 import com.example.uberbookingexperience.ui.screens.splash.SplashScreen
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.util.changeSystemBarsColor
@@ -71,6 +72,13 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screens.PaymentOptionsScreen()) {
                             PaymentOptionsScreen { navController.navigateUp() }
+                        }
+
+                        composable(Screens.SchedulePickupScreen()) {
+                            SchedulePickupScreen(
+                                onNavigationIconClick = { navController.navigateUp() },
+                                onScheduleButtonClick = { _, _ -> }
+                            )
                         }
                     }
                 }
