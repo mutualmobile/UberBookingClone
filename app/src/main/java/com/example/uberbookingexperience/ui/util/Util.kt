@@ -15,6 +15,8 @@ object UberIconSize {
     val MediumIcon = 32.dp
     val LargeButton = 42.dp
     val SmallIcon = 12.dp
+    val SizeButton = 42.dp
+
 }
 
 fun LocalDate.uberFormattedDate() =
