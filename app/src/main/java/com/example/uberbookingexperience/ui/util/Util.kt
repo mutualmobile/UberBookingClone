@@ -10,6 +10,8 @@ object UberIconSize {
     val ListItem = 36.dp
     val TrailingIconSize = 16.dp
     val LargeIcon = 64.dp
+    val SizeButton = 42.dp
+    val MediumImage = 110.dp
     val NormalIcon = 24.dp
     val SmallIcon = 12.dp
 }

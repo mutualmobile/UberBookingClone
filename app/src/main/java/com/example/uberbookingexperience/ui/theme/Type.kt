@@ -58,7 +58,7 @@ val Typography = Typography(
         fontFamily = UberMove,
         fontWeight = FontWeight.Normal,
         fontSize = 18.sp
-    ),,
+    ),
     titleLarge = TextStyle(
         fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp,
