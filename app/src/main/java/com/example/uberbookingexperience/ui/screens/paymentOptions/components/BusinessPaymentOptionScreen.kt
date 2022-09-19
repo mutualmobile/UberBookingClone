@@ -3,7 +3,6 @@ package com.example.uberbookingexperience.ui.screens.paymentOptions.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -15,8 +14,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -33,7 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
+import com.example.uberbookingexperience.ui.common.UberButton
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
+import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.UberIconSize
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
@@ -45,16 +43,16 @@ fun BusinessPaymentOptionScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(MaterialTheme.spacing.medium),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(
             modifier = requiredSizeModifier,
             color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(MaterialTheme.spacing.small)
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(MaterialTheme.spacing.medium)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -63,7 +61,7 @@ fun BusinessPaymentOptionScreen() {
                 ) {
                     Image(
                         modifier = Modifier
-                            .padding(start = 16.dp)
+                            .padding(start = MaterialTheme.spacing.medium)
                             .size(UberIconSize.LargeIcon)
                             .aspectRatio(1f),
                         painter = painterResource(id = R.drawable.ic_business_travel),
@@ -93,24 +91,11 @@ fun BusinessPaymentOptionScreen() {
         if (rememberIsMobileDevice()) {
             Spacer(modifier = Modifier.weight(1f))
         }
-        Button(
-            modifier = requiredSizeModifier
-                .padding(horizontal = 8.dp)
-                .padding(top = 32.dp)
-                .fillMaxWidth(),
-            onClick = {},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.onSurface,
-                contentColor = MaterialTheme.colorScheme.surface
-            ),
-            shape = RectangleShape,
-            contentPadding = PaddingValues(vertical = 16.dp)
-        ) {
-            Text(
-                text = "Turn on",
-                style = MaterialTheme.typography.headlineMedium
-            )
-        }
+        UberButton(
+            modifier = requiredSizeModifier,
+            text = "Turn on",
+            onClick = {}
+        )
     }
 }
 
@@ -121,10 +106,10 @@ private fun BusinessBannerText(
     value: String
 ) {
     Row(
-        modifier = Modifier.padding(top = 16.dp)
+        modifier = Modifier.padding(top = MaterialTheme.spacing.medium)
     ) {
         Image(
-            modifier = Modifier.padding(end = 16.dp),
+            modifier = Modifier.padding(end = MaterialTheme.spacing.medium),
             imageVector = imageVector,
             contentDescription = null
         )
@@ -134,7 +119,7 @@ private fun BusinessBannerText(
                 fontWeight = FontWeight.Medium
             )
             Text(
-                modifier = Modifier.padding(top = 8.dp).fillMaxWidth(0.8f),
+                modifier = Modifier.padding(top = MaterialTheme.spacing.small).fillMaxWidth(0.8f),
                 text = value,
                 style = MaterialTheme.typography.bodyLarge
             )

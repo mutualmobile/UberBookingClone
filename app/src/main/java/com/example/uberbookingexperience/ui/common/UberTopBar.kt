@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
+import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.UberIconSize
 
 /**
@@ -58,11 +59,11 @@ fun UberTopBar(
 private fun UberTopBarSample() {
     val goToPreviousScreen = {}
     UberTopBar(
-        modifier = Modifier.padding(horizontal = 8.dp),
+        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small),
         icon = Icons.Default.Close,
         iconOnClick = { goToPreviousScreen() },
         title = "Welcome to Uber",
-        titleOffsetFromIcon = 8.dp
+        titleOffsetFromIcon = MaterialTheme.spacing.small
     )
 }
 
@@ -75,7 +76,7 @@ private fun UberTopBarPreview() {
     UberBookingExperienceTheme {
         UberTopBar(
             title = "When do you want to be picked up?",
-            titleOffsetFromIcon = 8.dp
+            titleOffsetFromIcon = MaterialTheme.spacing.small
         ) {}
     }
 }
