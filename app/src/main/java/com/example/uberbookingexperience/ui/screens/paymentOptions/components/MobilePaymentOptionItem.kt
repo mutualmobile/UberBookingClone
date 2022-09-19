@@ -1,6 +1,7 @@
 package com.example.uberbookingexperience.ui.screens.paymentOptions.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,7 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOption
+import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.UberIconSize
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
@@ -29,7 +33,7 @@ import com.example.uberbookingexperience.ui.util.clickableWithRipple
 @OptIn(ExperimentalMaterial3Api::class)
 fun MobilePaymentOptionItem(
     paymentOption: PaymentOption,
-    useSwitchForSelected: Boolean
+    useSwitchForSelected: Boolean = false
 ) {
     // Extracted it out since it didn't need to be recomposed when either container or content
     // color changed.
@@ -83,4 +87,20 @@ fun MobilePaymentOptionItem(
             }
         }
     )
+}
+
+@Preview
+@Composable
+private fun MobilePaymentOptionItemPreview() {
+    UberBookingExperienceTheme {
+        Column {
+            MobilePaymentOptionItem(
+                paymentOption = PaymentOption(
+                    icon = R.drawable.ic_credit_card,
+                    name = "Credit Card",
+                    selected = false
+                ) {}
+            )
+        }
+    }
 }
