@@ -150,6 +150,7 @@ fun SchedulePickupScreen(
 
     UberDateTimePicker(dialogState = datePickerDialogState) {
         datepicker(
+            initialDate = currentDate,
             colors = DatePickerDefaults.colors(
                 headerBackgroundColor = MaterialTheme.colorScheme.primary,
                 headerTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -164,6 +165,7 @@ fun SchedulePickupScreen(
 
     UberDateTimePicker(dialogState = timePickerDialogState) {
         timepicker(
+            initialTime = currentTime,
             colors = TimePickerDefaults.colors(
                 activeBackgroundColor = MaterialTheme.colorScheme.primary,
                 inactiveBackgroundColor = MaterialTheme.colorScheme.onPrimary,
