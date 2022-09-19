@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
@@ -20,8 +19,9 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.uberbookingexperience.ui.screens.cabswithmap.UberMapScreen
 import com.example.uberbookingexperience.ui.screens.Screens
+import com.example.uberbookingexperience.ui.screens.cabswithmap.UberMapScreen
+import com.example.uberbookingexperience.ui.screens.cabswithmap.UberMapScreenVM
 import com.example.uberbookingexperience.ui.screens.addPaymentMethod.AddPaymentMethodScreen
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
@@ -45,8 +45,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             UberBookingExperienceTheme {
                 val systemUiController = rememberSystemUiController()
-                val windowSize = calculateWindowSizeClass(this)
-
                 LaunchedEffect(Unit) {
                     systemUiController.changeSystemBarsColor()
                 }
@@ -78,8 +76,9 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        composable(Screens.MapScreen()){
-                            UberMapScreen(windowSize) {
+                        composable(Screens.MapScreen()) {
+                            val uberMapScreenVM = UberMapScreenVM()
+                            UberMapScreen(uberMapScreenVM) {
                                 navController.popBackStack()
                             }
                         }
