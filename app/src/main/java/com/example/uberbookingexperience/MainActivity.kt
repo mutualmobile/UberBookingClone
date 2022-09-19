@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.uberbookingexperience.ui.screens.Screens
+import com.example.uberbookingexperience.ui.screens.addPaymentMethod.AddPaymentMethodScreen
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
 import com.example.uberbookingexperience.ui.screens.schedulePickup.SchedulePickupScreen
@@ -89,6 +90,10 @@ class MainActivity : ComponentActivity() {
                                 onNavigationIconClick = { navController.navigateUp() },
                                 onScheduleButtonClick = { _, _ -> }
                             )
+                        }
+
+                        composable(Screens.AddPaymentMethodScreen()) {
+                            AddPaymentMethodScreen { navController.navigateUp() }
                         }
                     }
                 }
