@@ -56,6 +56,7 @@ fun UberMapScreen(
     val isSelected by uberMapScreenViewModel.isItemSelected.collectAsState(false)
 //    var isSelected by remember{ mutableStateOf(uberMapScreenViewModel.isItemSelected) }
 
+    //TODO: make savable and full screen issue
     val stateListBottomSheet = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         confirmStateChange = { false })
@@ -197,7 +198,7 @@ fun UberMapScreen(
 
                 }
                 DefaultAppIconButton(
-                    R.drawable.baseline_schedule_24, modifier =
+                    R.drawable.schedule_button_icon, modifier =
                     Modifier.padding(vertical = 6.dp, horizontal = 4.dp)
                 ) {}
             }
