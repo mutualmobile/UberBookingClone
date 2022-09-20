@@ -7,7 +7,6 @@ import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
@@ -40,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
+import com.example.uberbookingexperience.ui.util.systemTween
 
 private val UberLoaderEasing = CubicBezierEasing(0.4f, 0.0f, 0.0f, 0.4f)
 
@@ -88,7 +88,7 @@ fun UberLoader(
         initialValue = loaderStartPositionPx,
         targetValue = loaderEndPositionPx,
         animationSpec = infiniteRepeatable(
-            animation = tween(
+            animation = systemTween(
                 durationMillis = animationDurationMillis,
                 easing = animationEasing
             ),
@@ -99,7 +99,7 @@ fun UberLoader(
         initialValue = loaderMinSize.value,
         targetValue = loaderMaxSize.value,
         animationSpec = infiniteRepeatable(
-            animation = tween(
+            animation = systemTween(
                 durationMillis = animationDurationMillis.div(2),
                 easing = animationEasing
             ),

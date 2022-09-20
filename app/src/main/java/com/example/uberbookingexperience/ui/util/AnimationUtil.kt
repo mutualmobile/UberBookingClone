@@ -3,6 +3,8 @@ package com.example.uberbookingexperience.ui.util
 import android.app.Activity
 import android.provider.Settings
 import androidx.compose.animation.core.AnimationConstants
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -42,8 +44,12 @@ fun getSystemAnimationDuration(
  * */
 @Composable
 fun <T> systemTween(
-    durationMillis: Int = AnimationConstants.DefaultDurationMillis
-): TweenSpec<T> = tween(durationMillis = durationMillis.times(getAnimationDurationScale()).toInt())
+    durationMillis: Int = AnimationConstants.DefaultDurationMillis,
+    easing: Easing = FastOutSlowInEasing
+): TweenSpec<T> = tween(
+    durationMillis = durationMillis.times(getAnimationDurationScale()).toInt(),
+    easing = easing
+)
 
 /**
  * A util function for easily changing systemBars colors.
