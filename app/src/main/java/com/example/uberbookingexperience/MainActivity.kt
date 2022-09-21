@@ -78,7 +78,12 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screens.MapScreen()) {
                             val uberMapScreenVM = UberMapScreenVM()
-                            UberMapScreen(uberMapScreenVM) {
+                            UberMapScreen(uberMapScreenVM, onPaymentOptionClick = {
+                                navController.navigate(Screens.PaymentOptionsScreen())
+                            },
+                                onSchedulePickupOption = {
+                                    navController.navigate(Screens.SchedulePickupScreen())
+                                }) {
                                 navController.popBackStack()
                             }
                         }
