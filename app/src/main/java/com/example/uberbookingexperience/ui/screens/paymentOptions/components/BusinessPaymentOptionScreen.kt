@@ -1,16 +1,7 @@
 package com.example.uberbookingexperience.ui.screens.paymentOptions.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -92,7 +83,9 @@ fun BusinessPaymentOptionScreen() {
             Spacer(modifier = Modifier.weight(1f))
         }
         UberButton(
-            modifier = requiredSizeModifier,
+            modifier = requiredSizeModifier
+                .padding(horizontal = MaterialTheme.spacing.small)
+                .padding(top = MaterialTheme.spacing.extraLarge),
             text = "Turn on",
             onClick = {}
         )
@@ -119,7 +112,9 @@ private fun BusinessBannerText(
                 fontWeight = FontWeight.Medium
             )
             Text(
-                modifier = Modifier.padding(top = MaterialTheme.spacing.small).fillMaxWidth(0.8f),
+                modifier = Modifier
+                    .padding(top = MaterialTheme.spacing.small)
+                    .fillMaxWidth(0.8f),
                 text = value,
                 style = MaterialTheme.typography.bodyLarge
             )
