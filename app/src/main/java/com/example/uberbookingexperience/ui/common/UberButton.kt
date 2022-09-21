@@ -2,7 +2,6 @@ package com.example.uberbookingexperience.ui.common
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -26,8 +25,6 @@ fun UberButton(
 ) {
     Button(
         modifier = modifier
-            .padding(horizontal = MaterialTheme.spacing.small)
-            .padding(top = MaterialTheme.spacing.extraLarge)
             .fillMaxWidth(),
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
