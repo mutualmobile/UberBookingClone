@@ -38,8 +38,15 @@ fun rememberIsMobileDevice(): Boolean {
     val config = LocalConfiguration.current
     return remember { derivedStateOf { config.screenWidthDp < 600 } }.value
 }
+
 @Composable
-fun rememberIsDeviceUnfoldedFoldable(): Boolean {
+fun rememberDeviceHeight(): Int {
     val config = LocalConfiguration.current
-    return remember { derivedStateOf { config.screenWidthDp in 600..700 } }.value
+    return remember { derivedStateOf { config.screenHeightDp }.value }
+}
+
+@Composable
+fun rememberDeviceWidth(): Int {
+    val config = LocalConfiguration.current
+    return remember { derivedStateOf { config.screenWidthDp }.value }
 }
