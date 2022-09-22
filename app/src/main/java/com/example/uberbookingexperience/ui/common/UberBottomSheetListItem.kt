@@ -1,6 +1,8 @@
-package com.example.uberbookingexperience.ui.screens.finalisingDriver.components
+package com.example.uberbookingexperience.ui.common
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DividerDefaults
@@ -16,24 +18,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import com.example.uberbookingexperience.ui.common.UberDivider
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.UberIconSize
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FinalisingDriverScreenListItem(
+fun UberBottomSheetListItem(
     icon: ImageVector,
+    iconSize: Dp = UberIconSize.NormalIcon,
     iconTint: Color? = null,
     title: String? = null,
     subtitle: String? = null,
     actionTitle: String? = null,
-    actionColor: Color = MaterialTheme.colorScheme.secondary
+    actionColor: Color = MaterialTheme.colorScheme.secondary,
+    useFullSizeDivider: Boolean = false,
+    dividerPadding: PaddingValues = PaddingValues()
 ) {
     Column {
         ListItem(
             leadingContent = {
                 Icon(
-                    modifier = Modifier.size(UberIconSize.NormalIcon),
+                    modifier = Modifier.size(iconSize),
                     imageVector = icon,
                     contentDescription = null,
                     tint = iconTint ?: LocalContentColor.current
@@ -75,7 +82,16 @@ fun FinalisingDriverScreenListItem(
             }
         )
         UberDivider(
-            thickness = DividerDefaults.Thickness
+            thickness = DividerDefaults.Thickness,
+            modifier = Modifier
+                .padding(
+                    start = if (useFullSizeDivider) {
+                        0.dp
+                    } else {
+                        iconSize + MaterialTheme.spacing.extraLarge
+                    }
+                )
+                .padding(dividerPadding)
         )
     }
 }
