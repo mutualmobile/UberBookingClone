@@ -14,16 +14,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
+import com.example.uberbookingexperience.ui.theme.spacing
 
 @Composable
-fun UberMapInfoWindowTextView(
+fun UberMapInfoWindowText(
     labelTextId: String,
     @DrawableRes icon: Int,
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
             text = labelTextId,
@@ -35,7 +36,7 @@ fun UberMapInfoWindowTextView(
             painter = painterResource(id = icon),
             contentDescription = stringResource(id = R.string.next),
             modifier = Modifier
-                .padding(4.dp)
+                .padding(MaterialTheme.spacing.extraSmall)
         )
     }
 }

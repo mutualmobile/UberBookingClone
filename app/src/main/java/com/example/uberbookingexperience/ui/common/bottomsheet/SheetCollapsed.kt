@@ -38,18 +38,4 @@ fun SheetCollapsed(
             content()
         }
     }
-    /*Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(sheetCollapsedFraction)
-            .background(backgroundColor)
-            //.graphicsLayer(alpha = 1f - currentFraction)
-            .noRippleClickable(
-                onClick = onSheetClick,
-                enabled = isCollapsed
-            ),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        content()
-    }*/
 }

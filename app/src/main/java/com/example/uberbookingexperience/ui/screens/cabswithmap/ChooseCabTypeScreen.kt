@@ -16,6 +16,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -38,7 +39,6 @@ import com.example.uberbookingexperience.ui.theme.colorWhite
 import com.example.uberbookingexperience.ui.util.*
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @SuppressLint("SuspiciousIndentation")
@@ -48,7 +48,7 @@ fun ChooseCabTypeScreen(
     uberMapScreenViewModel: UberMapScreenVM,
     onPaymentOptionClick: () -> Unit,
     onSchedulePickupOption: () -> Unit,
-    onChooseUberClick: (UberCabInfo) -> Unit,
+    onChooseUberClick: (UberCabInfo?) -> Unit,
     onNavigationBack: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -65,15 +65,12 @@ fun ChooseCabTypeScreen(
 
     /*==Google maps related properties*/
     var selectedUberCab: UberCabInfo? = null
-    val isItemSelected = MutableStateFlow(false)
+    var isItemSelected by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     /*==Bottom sheet related properties*/
     val isDeviceMobileType = rememberIsMobileDevice()
-    //TODO: make savable and full screen issue
-    val isSelected by isItemSelected.collectAsState(false)
-    var selectedIndexState by remember {
-        mutableStateOf(1)
-    }
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed)
     )
@@ -112,34 +109,19 @@ fun ChooseCabTypeScreen(
                             scope.launch {
                                 scaffoldState.bottomSheetState.collapse()
                                 selectedUberCab = it
-                                isItemSelected.value = true
+                                isItemSelected = true
                             }
                         }
                     }
                     SheetCollapsed(
                         isCollapsed = scaffoldState.bottomSheetState.isCollapsed,
-                        isDetailsOpen = isSelected,
-                        currentFraction = scaffoldState.currentFraction,
+                        isDetailsOpen = isItemSelected,
+                        currentFraction = scaffoldState.rememberScaffoldStateFraction(),
                         sheetCollapsedFraction = 0.4f,
                         onSheetClick = sheetToggle
                     ) {
                         AnimatedVisibility(
-                            visible = !isSelected,
-                            enter = slideInVertically() + expandVertically(
-                                // Expand from the top.
-                                expandFrom = Alignment.Top
-                            ),
-                            exit = slideOutVertically() + shrinkVertically(shrinkTowards = Alignment.Top)
-                        ) {
-                            UberCabsListing(uberMapScreenViewModel) {
-                                selectedUberCab = it
-                                isItemSelected.value = true
-                                val current = selectedIndexState
-                                selectedIndexState = if (current == 1) 2 else 1
-                            }
-                        }
-                        AnimatedVisibility(
-                            visible = isSelected,
+                            visible = isItemSelected,
                             enter = slideInVertically() + expandVertically(
                                 // Expand from the top.
                                 expandFrom = Alignment.Top
@@ -160,6 +142,19 @@ fun ChooseCabTypeScreen(
                                         UberCabsListItemDetails(it1)
                                     }
                                 }
+                            }
+                        }
+                        AnimatedVisibility(
+                            visible = !isItemSelected,
+                            enter = slideInVertically() + expandVertically(
+                                // Expand from the top.
+                                expandFrom = Alignment.Top
+                            ),
+                            exit = slideOutVertically() + shrinkVertically(shrinkTowards = Alignment.Top)
+                        ) {
+                            UberCabsListing(uberMapScreenViewModel) {
+                                selectedUberCab = it
+                                isItemSelected = true
                             }
                         }
                         Spacer(modifier = Modifier.padding(1.dp))
@@ -190,8 +185,8 @@ fun ChooseCabTypeScreen(
                                     scope.launch {
                                         scaffoldState.bottomSheetState.collapse()
                                     }
-                                } else if (isSelected) {
-                                    isItemSelected.value = false
+                                } else if (isItemSelected) {
+                                    isItemSelected = false
                                 } else {
                                     onNavigationBack()
                                 }
@@ -209,7 +204,7 @@ fun ChooseCabTypeScreen(
                 modifier = Modifier
                     .fillMaxWidth(dynamicWidth)
                     .wrapContentHeight()
-                    .graphicsLayer(alpha = 1f - scaffoldState.currentFraction)
+                    .graphicsLayer(alpha = 1f - scaffoldState.rememberScaffoldStateFraction())
                     .background(colorWhite)
             ) {
                 Divider(
@@ -258,7 +253,7 @@ fun ChooseCabTypeScreen(
                             .weight(1f)
                             .padding(horizontal = 14.dp, vertical = 12.dp)
                     ) {
-                        selectedUberCab?.let { onChooseUberClick(it) }
+                        onChooseUberClick(selectedUberCab)
                     }
                     UberIconButton(
                         iconId = R.drawable.schedule_button_icon,
@@ -288,8 +283,8 @@ fun ChooseCabTypeScreen(
                         scope.launch {
                             scaffoldState.bottomSheetState.collapse()
                         }
-                    } else if (isSelected) {
-                        isItemSelected.value = false
+                    } else if (isItemSelected) {
+                        isItemSelected = false
                     } else {
                         onNavigationBack()
                     }
@@ -302,8 +297,8 @@ fun ChooseCabTypeScreen(
             scope.launch {
                 scaffoldState.bottomSheetState.collapse()
             }
-        } else if (isSelected) {
-            isItemSelected.value = false
+        } else if (isItemSelected) {
+            isItemSelected = false
         } else {
             onNavigationBack()
         }
@@ -353,13 +348,13 @@ fun ShowGoogleMap(modifier: Modifier = Modifier) {
             MarkerState(pathLatLongsFirst.first()),
             icon = BitmapDescriptorFactory.fromResource(R.drawable.ub__ic_marker_destination)
         ) {
-            UberMapInfoWindowTextView("My start Location", R.drawable.baseline_navigate_next_24)
+            UberMapInfoWindowText("My start Location", R.drawable.baseline_navigate_next_24)
         }
         MarkerInfoWindowContent(
             MarkerState(pathLatLongsFirst.last()),
             icon = BitmapDescriptorFactory.fromResource(R.drawable.ub__ic_marker_pickup)
         ) {
-            UberMapInfoWindowTextView("My end Location", R.drawable.baseline_navigate_next_24)
+            UberMapInfoWindowText("My end Location", R.drawable.baseline_navigate_next_24)
         }
         Polyline(
             points = pathLatLongsFirst,

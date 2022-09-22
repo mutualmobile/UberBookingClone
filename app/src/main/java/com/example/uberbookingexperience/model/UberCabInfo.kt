@@ -1,8 +1,10 @@
 package com.example.uberbookingexperience.model
 
 import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Immutable
 
 
+@Immutable
 data class UberCabInfo(
     val cabInfo: String,
     val cabPrice: Float,
