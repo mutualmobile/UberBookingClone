@@ -1,12 +1,11 @@
 package com.example.uberbookingexperience.ui.common
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import com.example.uberbookingexperience.ui.util.rememberDeviceWidth
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -30,7 +29,7 @@ import com.google.maps.android.compose.*
 fun UberGoogleMap(
     modifier: Modifier = Modifier,
     cameraPositionState: CameraPositionState = rememberCameraPositionState(),
-    mapProperties: MapProperties = MapProperties(isMyLocationEnabled = true),
+    mapProperties: MapProperties = MapProperties(isMyLocationEnabled = false),
     cameraPositionDefault: CameraPosition? = null,
     latLngBounds: LatLngBounds? = null,
     locationSource: LocationSource? = null,
@@ -40,7 +39,7 @@ fun UberGoogleMap(
 ) {
 
 
-    val isMapReady = remember {
+    val isMapReady = rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -70,10 +69,7 @@ fun UberGoogleMap(
     // Detect when the map starts moving and print the reason
     LaunchedEffect(cameraPositionState.isMoving) {
         if (cameraPositionState.isMoving) {
-            Log.d(
-                "GoogleMap",
-                "Map camera started moving due to ${cameraPositionState.cameraMoveStartedReason.name}"
-            )
+            // use "${cameraPositionState.cameraMoveStartedReason.name}" to see reason for moving
         }
     }
 

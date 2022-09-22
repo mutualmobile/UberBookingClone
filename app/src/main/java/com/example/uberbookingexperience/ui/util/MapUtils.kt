@@ -4,10 +4,10 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 
 
-val zoom = 8f
+val zoom = 12f
 val zoomAnimationDuration = 1_000
 val mmLocation = LatLng(23.117983, 72.537436)
-val defaultCameraPosition = CameraPosition.fromLatLngZoom(mmLocation, zoom)
+
 
 // For one location related path and cab pin location
 val testCabLocation = LatLng(23.068085, 72.523016)
@@ -26,6 +26,7 @@ val pathLatLongsFirst = listOf(
     LatLng(23.068085, 72.523016), LatLng(23.042497, 72.513747),
     LatLng(23.003948, 72.501044), endLocation,
 )
+val defaultCameraPosition = CameraPosition.fromLatLngZoom(startLocation, zoom)
 
 // For second location related path and cab pin location
 val pathLatLongsTwo = listOf(
