@@ -29,10 +29,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.model.UberCabInfo
-import com.example.uberbookingexperience.ui.common.UberButton
-import com.example.uberbookingexperience.ui.common.UberGoogleMap
-import com.example.uberbookingexperience.ui.common.UberIconButton
-import com.example.uberbookingexperience.ui.common.UberMapInfoWindowTextView
+import com.example.uberbookingexperience.ui.common.*
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetCollapsed
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetExpanded
 import com.example.uberbookingexperience.ui.common.bottomsheet.UberBottomSheetScaffold
@@ -47,7 +44,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun UberMapScreen(
+fun ChooseCabTypeScreen(
     uberMapScreenViewModel: UberMapScreenVM,
     onPaymentOptionClick: () -> Unit,
     onSchedulePickupOption: () -> Unit,
@@ -169,14 +166,37 @@ fun UberMapScreen(
                     }
                 }, bodyContent = {
                     if (isDeviceMobileType) {
-                        Column(
+                        Box(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(0.55f)
+                                .fillMaxSize(1f)
                         ) {
-                            ShowGoogleMap(
-                                modifier = Modifier.weight(1f)
-                            )
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight(0.55f)
+                            ) {
+                                ShowGoogleMap(
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+
+                            UberBackButton(
+                                modifier = Modifier.padding(
+                                    vertical = 22.dp,
+                                    horizontal = 8.dp
+                                ), iconId = R.drawable.baseline_arrow_back_24
+                            ) {
+                                if (scaffoldState.bottomSheetState.isExpanded) {
+                                    scope.launch {
+                                        scaffoldState.bottomSheetState.collapse()
+                                    }
+                                } else if (isSelected) {
+                                    isItemSelected.value = false
+                                } else {
+                                    onNavigationBack()
+                                }
+                            }
+
                         }
                     } else {
                         Spacer(modifier = Modifier.padding(1.dp))
@@ -252,11 +272,28 @@ fun UberMapScreen(
         }
         if (!isDeviceMobileType) {
             Box(
+                contentAlignment = Alignment.TopStart,
                 modifier = Modifier
                     .weight(1f)
                     .padding(bottom = dynamicPadding)
             ) {
                 ShowGoogleMap()
+                UberBackButton(
+                    modifier = Modifier.padding(
+                        vertical = 22.dp,
+                        horizontal = 8.dp
+                    ), iconId = R.drawable.baseline_arrow_back_24
+                ) {
+                    if (scaffoldState.bottomSheetState.isExpanded) {
+                        scope.launch {
+                            scaffoldState.bottomSheetState.collapse()
+                        }
+                    } else if (isSelected) {
+                        isItemSelected.value = false
+                    } else {
+                        onNavigationBack()
+                    }
+                }
             }
         }
     }
@@ -342,6 +379,6 @@ fun ShowGoogleMap(modifier: Modifier = Modifier) {
 @Composable
 private fun UberMapScreenScreenPreview() {
     UberBookingExperienceTheme {
-        UberMapScreen(UberMapScreenVM(), {}, {}, {}) {}
+        ChooseCabTypeScreen(UberMapScreenVM(), {}, {}, {}) {}
     }
 }
