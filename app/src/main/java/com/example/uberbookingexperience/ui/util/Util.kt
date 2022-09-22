@@ -11,6 +11,7 @@ object UberIconSize {
     val TrailingIconSize = 16.dp
     val LargeIcon = 64.dp
     val NormalIcon = 24.dp
+    val SmallIcon = 12.dp
 }
 
 fun LocalDate.uberFormattedDate() =
