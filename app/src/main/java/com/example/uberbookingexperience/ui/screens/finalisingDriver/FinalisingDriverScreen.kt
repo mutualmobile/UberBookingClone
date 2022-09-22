@@ -23,8 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
+import com.example.uberbookingexperience.ui.common.UberBottomSheetListItem
 import com.example.uberbookingexperience.ui.common.UberDivider
-import com.example.uberbookingexperience.ui.screens.finalisingDriver.components.FinalisingDriverScreenListItem
 import com.example.uberbookingexperience.ui.screens.finalisingDriver.components.HighlightItem
 import com.example.uberbookingexperience.ui.screens.finalisingDriver.components.ProgressBarAnimation
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
@@ -78,19 +78,19 @@ fun FinalisingDriverScreen(
                 title = "Dropoff by 17:26"
             )
             UberDivider()
-            FinalisingDriverScreenListItem(
+            UberBottomSheetListItem(
                 icon = Icons.Filled.LocationOn,
                 title = "Dev Arc Commercial Complex",
                 subtitle = null,
                 actionTitle = "Add or Change"
             )
-            FinalisingDriverScreenListItem(
+            UberBottomSheetListItem(
                 icon = Icons.Outlined.Person,
                 title = "$7.58",
                 subtitle = "Personal \u00B7 Payment",
                 actionTitle = "Switch"
             )
-            FinalisingDriverScreenListItem(
+            UberBottomSheetListItem(
                 icon = Icons.Outlined.Error,
                 iconTint = MaterialTheme.colorScheme.error,
                 title = null,
