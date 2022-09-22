@@ -30,8 +30,8 @@ data class PaymentOption(
     @DrawableRes val icon: Int,
     val name: String,
     val value: String? = null,
-    val selected: Boolean,
-    val onClick: () -> Unit
+    val selected: Boolean = false,
+    val onClick: () -> Unit = {}
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +73,7 @@ fun PaymentOptionsScreen(onNavigationBack: () -> Unit) {
                                                 }
                                             )
                                         ),
-                                        useSwitchForSelected = true
+                                        mobileUseSwitchForSelected = true
                                     )
                                 }
                                 item {
