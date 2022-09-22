@@ -20,9 +20,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.uberbookingexperience.ui.screens.Screens
+import com.example.uberbookingexperience.ui.screens.addPaymentMethod.AddPaymentMethodScreen
 import com.example.uberbookingexperience.ui.screens.cabswithmap.UberMapScreen
 import com.example.uberbookingexperience.ui.screens.cabswithmap.UberMapScreenVM
-import com.example.uberbookingexperience.ui.screens.addPaymentMethod.AddPaymentMethodScreen
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
 import com.example.uberbookingexperience.ui.screens.schedulePickup.SchedulePickupScreen
@@ -84,7 +84,11 @@ class MainActivity : ComponentActivity() {
                             },
                                 onSchedulePickupOption = {
                                     navController.navigate(Screens.SchedulePickupScreen())
-                                }) {
+                                },
+                                onChooseUberClick = {
+                                    //proceed to confirm location screen
+                                }
+                            ) {
                                 navController.popBackStack()
                             }
                         }

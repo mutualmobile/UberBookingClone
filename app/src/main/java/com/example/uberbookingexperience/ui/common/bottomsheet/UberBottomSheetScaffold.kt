@@ -12,7 +12,18 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import com.example.uberbookingexperience.ui.theme.colorWhite
-
+/**
+ * Common bottom sheet Scaffold composable for the app to integrated bottom sheet with required body and bottomsheet content
+ * @param modifier Used to modify the overall look and behavior of the BottomSheetScaffold
+ * @param scaffoldState Defines the bottom sheet scaffold State to manage state like we need to make sheet collapsed, expanded etc
+ * @param sheetShape Bottom sheet shape
+ * @param sheetBackgroundColor Background color of bottom sheet content
+ * @param sheetPeekHeight The height of the bottom sheet when it is collapsed. If the peek height
+ * equals the sheet's full height, the sheet will only have a collapsed state.
+ * @param bottomSheetBodyContentHeightFraction bottom sheet body's content height, by default it cover available height
+ * @param sheetContent Composable with box scope that we want to display in bottom sheet content
+ * @param bodyContent Composable with box scope that we want to display in bottom sheet body content
+ * */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun UberBottomSheetScaffold(
@@ -23,7 +34,6 @@ fun UberBottomSheetScaffold(
     ),
     sheetShape: Shape = RectangleShape,
     sheetBackgroundColor: Color = colorWhite,
-    sheetContentColor: Color = Color.Transparent,
     sheetPeekHeight: Dp = BottomSheetScaffoldDefaults.SheetPeekHeight,
     bottomSheetBodyContentHeightFraction: Float = 1f,
     sheetContent: @Composable BoxScope.() -> Unit,
@@ -34,7 +44,6 @@ fun UberBottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetShape = sheetShape,
         sheetBackgroundColor = sheetBackgroundColor,
-        sheetContentColor = sheetContentColor,
         sheetContent = {
             Box(
                 modifier = Modifier

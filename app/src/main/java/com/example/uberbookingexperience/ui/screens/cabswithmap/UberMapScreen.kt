@@ -1,7 +1,6 @@
 package com.example.uberbookingexperience.ui.screens.cabswithmap
 
 import android.annotation.SuppressLint
-import android.location.Location
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -29,32 +28,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
-import com.example.uberbookingexperience.components.TextViewWithEndIcon
-import com.example.uberbookingexperience.components.UberGoogleMap
 import com.example.uberbookingexperience.model.UberCabInfo
 import com.example.uberbookingexperience.ui.common.UberButton
+import com.example.uberbookingexperience.ui.common.UberGoogleMap
 import com.example.uberbookingexperience.ui.common.UberIconButton
+import com.example.uberbookingexperience.ui.common.UberMapInfoWindowTextView
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetCollapsed
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetExpanded
 import com.example.uberbookingexperience.ui.common.bottomsheet.UberBottomSheetScaffold
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.colorWhite
-import com.example.uberbookingexperience.ui.util.currentFraction
-import com.example.uberbookingexperience.ui.util.rememberDeviceHeight
-import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
+import com.example.uberbookingexperience.ui.util.*
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
-import kotlin.random.Random
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @SuppressLint("SuspiciousIndentation")
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun UberMapScreen(
     uberMapScreenViewModel: UberMapScreenVM,
     onPaymentOptionClick: () -> Unit,
     onSchedulePickupOption: () -> Unit,
+    onChooseUberClick: (UberCabInfo) -> Unit,
     onNavigationBack: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -71,7 +68,7 @@ fun UberMapScreen(
 
     /*==Google maps related properties*/
     var selectedUberCab: UberCabInfo? = null
-    var isItemSelected = MutableStateFlow(false)
+    val isItemSelected = MutableStateFlow(false)
 
     /*==Bottom sheet related properties*/
     val isDeviceMobileType = rememberIsMobileDevice()
@@ -92,8 +89,8 @@ fun UberMapScreen(
             }
         }
     }
+    //define dynamic height so we can show atlease 2 list item of cabs in different screen sizes
     val sheetPeekHeight = rememberDeviceHeight().div(if (isDeviceMobileType) 2f else 1.5f)
-    val mapHeight = rememberDeviceHeight().minus(sheetPeekHeight).dp
     Row(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = if (isDeviceMobileType) Modifier.fillMaxWidth() else Modifier,
@@ -106,7 +103,6 @@ fun UberMapScreen(
                 scaffoldState = scaffoldState,
                 sheetShape = RectangleShape,
                 sheetBackgroundColor = Color.Transparent,
-                sheetContentColor = Color.Transparent,
                 sheetPeekHeight = sheetPeekHeight.dp,
                 sheetContent = {
                     SheetExpanded(
@@ -179,8 +175,7 @@ fun UberMapScreen(
                                 .fillMaxHeight(0.55f)
                         ) {
                             ShowGoogleMap(
-                                modifier = Modifier.weight(1f),
-                                itemSelectedIndex = selectedIndexState
+                                modifier = Modifier.weight(1f)
                             )
                         }
                     } else {
@@ -243,7 +238,7 @@ fun UberMapScreen(
                             .weight(1f)
                             .padding(horizontal = 14.dp, vertical = 12.dp)
                     ) {
-
+                        selectedUberCab?.let { onChooseUberClick(it) }
                     }
                     UberIconButton(
                         iconId = R.drawable.schedule_button_icon,
@@ -261,7 +256,7 @@ fun UberMapScreen(
                     .weight(1f)
                     .padding(bottom = dynamicPadding)
             ) {
-                ShowGoogleMap(itemSelectedIndex = selectedIndexState)
+                ShowGoogleMap()
             }
         }
     }
@@ -279,7 +274,7 @@ fun UberMapScreen(
 }
 
 @Composable
-fun ShowGoogleMap(modifier: Modifier = Modifier, itemSelectedIndex: Int = 0) {
+fun ShowGoogleMap(modifier: Modifier = Modifier) {
     val positionBuilder = LatLngBounds.Builder()
     positionBuilder.include(pathLatLongsFirst.first())
     positionBuilder.include(pathLatLongsFirst.last())
@@ -300,7 +295,6 @@ fun ShowGoogleMap(modifier: Modifier = Modifier, itemSelectedIndex: Int = 0) {
             position = defaultCameraPosition
         },
         latLngBounds = positionBuilder.build(),
-        defaultZoom = 75f,
         cameraPositionDefault = CameraPosition.fromLatLngZoom(pathLatLongsFirst.first(), 25f)
     ) {
 
@@ -322,13 +316,13 @@ fun ShowGoogleMap(modifier: Modifier = Modifier, itemSelectedIndex: Int = 0) {
             MarkerState(pathLatLongsFirst.first()),
             icon = BitmapDescriptorFactory.fromResource(R.drawable.ub__ic_marker_destination)
         ) {
-            TextViewWithEndIcon("My start Location", R.drawable.baseline_navigate_next_24)
+            UberMapInfoWindowTextView("My start Location", R.drawable.baseline_navigate_next_24)
         }
         MarkerInfoWindowContent(
             MarkerState(pathLatLongsFirst.last()),
             icon = BitmapDescriptorFactory.fromResource(R.drawable.ub__ic_marker_pickup)
         ) {
-            TextViewWithEndIcon("My end Location", R.drawable.baseline_navigate_next_24)
+            UberMapInfoWindowTextView("My end Location", R.drawable.baseline_navigate_next_24)
         }
         Polyline(
             points = pathLatLongsFirst,
@@ -341,65 +335,6 @@ fun ShowGoogleMap(modifier: Modifier = Modifier, itemSelectedIndex: Int = 0) {
     }
 }
 
-val zoom = 8f
-val zoomAnimationDuration = 1_000
-val mmLocation = LatLng(23.117983, 72.537436)
-val defaultCameraPosition = CameraPosition.fromLatLngZoom(mmLocation, zoom)
-
-// For one location related path and cab pin location
-val testCabLocation = LatLng(23.068085, 72.523016)
-val testCabLocationTwo = LatLng(23.056713, 72.528510)
-val testCabLocationThree = LatLng(23.068085, 72.507567)
-
-/*val pathLatLongsFirst = listOf(LatLng(23.117983, 72.537436),LatLng(23.117668, 72.538123)
-    ,testCabLocation, LatLng(23.129807, 72.541251),
-    LatLng(23.003948, 72.501044), LatLng(22.9985471,72.4468048),
-)*/
-val cabsForPathOne = listOf(testCabLocation, testCabLocationThree, testCabLocationTwo)
-var startLocation: LatLng = LatLng(23.117983, 72.537436)
-var endLocation: LatLng = LatLng(22.979615, 72.492701)
-val pathLatLongsFirst = listOf(
-    startLocation, LatLng(23.117668, 72.538123),
-    LatLng(23.068085, 72.523016), LatLng(23.042497, 72.513747),
-    LatLng(23.003948, 72.501044), endLocation,
-)
-
-// For second location related path and cab pin location
-val pathLatLongsTwo = listOf(
-    LatLng(23.1526849, 72.5126409), LatLng(23.220379, 72.634520),
-    LatLng(23.209967, 72.619071),
-    LatLng(23.189260, 72.608210),
-    LatLng(23.172397, 72.578137),
-    LatLng(23.160581, 72.556924),
-    LatLng(23.132514, 72.541643),
-)
-val testCab2Location = LatLng(23.202101, 72.622791)
-val testCab2LocationTwo = LatLng(23.193286, 72.599712)
-val testCab2LocationThree = LatLng(23.184194, 72.577533)
-val testCab2LocationFour = LatLng(23.147544, 72.542165)
-val cabsForPathTwo =
-    listOf(testCab2Location, testCab2LocationThree, testCab2LocationTwo, testCab2LocationFour)
-
-//var startLocation: LatLng = pathLatLongsFirst.first()
-//var endLocation: LatLng =  pathLatLongsFirst.last()
-fun newLocation(): Location {
-    val location = Location("MyLocationProvider")
-    location.apply {
-        latitude = mmLocation.latitude + Random.nextFloat()
-        longitude = mmLocation.longitude + Random.nextFloat()
-    }
-    return location
-}
-
-@Composable
-fun dynamicPercentageHeight(): Float {
-    return if (rememberIsMobileDevice()) {
-        0.35f
-    } else {
-        0.45f
-    }
-}
-
 @Preview(showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Preview(showSystemUi = true, device = "spec:width=673.5dp,height=841dp,dpi=480")
 @Preview(showSystemUi = true, device = "spec:width=1280dp,height=800dp,dpi=480")
@@ -407,6 +342,6 @@ fun dynamicPercentageHeight(): Float {
 @Composable
 private fun UberMapScreenScreenPreview() {
     UberBookingExperienceTheme {
-        UberMapScreen(UberMapScreenVM(), {}, {}) {}
+        UberMapScreen(UberMapScreenVM(), {}, {}, {}) {}
     }
 }
