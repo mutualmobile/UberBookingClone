@@ -223,7 +223,7 @@ fun WhereToScreen() {
     RiderIconWithGradient()
     Text(
       text = "Switch Rider",
-      style = Typography.bodySmall,
+      style = Typography.bodyMedium,
       modifier = Modifier.padding(horizontal = 12.dp)
     )
     Icon(Icons.Filled.KeyboardArrowDown, contentDescription = "Switch rider dropdown button")

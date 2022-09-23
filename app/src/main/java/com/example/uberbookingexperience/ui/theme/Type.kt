@@ -53,15 +53,15 @@ val Typography = Typography(
         fontFamily = UberMove,
         fontWeight = FontWeight.Normal,
         fontSize = 18.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = UberMove,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
     )
 )
 
 val Typography.bodyMedium_gray: TextStyle
     get() = bodyMedium.copy(
-        color = TextGrey,
-    )
-
-val Typography.bodyLarge_gray: TextStyle
-    get() = bodyLarge.copy(
         color = TextGrey,
     )

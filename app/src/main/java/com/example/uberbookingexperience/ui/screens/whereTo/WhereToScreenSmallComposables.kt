@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.theme.Typography
-import com.example.uberbookingexperience.ui.theme.titleSmall_gray
+import com.example.uberbookingexperience.ui.theme.bodyMedium_gray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +53,7 @@ fun ListTile(icon: ImageVector?, contentDesc: String?, title: String?, subtitle:
       subtitle?.let { nnSubtitle ->
         Text(
           text = nnSubtitle,
-          style = Typography.titleSmall_gray
+          style = Typography.bodyMedium_gray
         )
       }
     },
