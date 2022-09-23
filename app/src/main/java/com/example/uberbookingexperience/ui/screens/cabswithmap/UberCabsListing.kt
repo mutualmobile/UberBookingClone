@@ -89,11 +89,9 @@ fun UberCabsListing(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun UberCabsListItem(uberCabInfo: UberCabInfo, onItemSelected: (UberCabInfo) -> Unit) {
-    val isItemChecked by remember {
-        mutableStateOf(uberCabInfo.isChecked)
-    }
-    val requiredSize = if (isItemChecked) 90.dp else 80.dp
-    val animateasDp: Dp by animateDpAsState(targetValue = requiredSize)
+    val requiredSize =
+        remember(uberCabInfo.isChecked) { mutableStateOf(if (uberCabInfo.isChecked) 90.dp else 80.dp) }
+    val animateasDp: Dp by animateDpAsState(targetValue = requiredSize.value)
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
