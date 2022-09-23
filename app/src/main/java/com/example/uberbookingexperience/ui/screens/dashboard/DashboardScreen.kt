@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalPagerApi::class)
+
 package com.example.uberbookingexperience.ui.screens.dashboard
 
 import androidx.compose.foundation.background
@@ -20,24 +22,30 @@ import com.example.uberbookingexperience.ui.screens.dashboard.components.QuickOp
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
+import com.google.accompanist.pager.ExperimentalPagerApi
 
 @Composable
 fun DashboardScreen() {
     val isMobile = rememberIsMobileDevice()
-    Column(modifier = Modifier
-        .verticalScroll(rememberScrollState())
-        .background(color = Color.White)
-    ) {
-        //header
-        HorizontalPagerWithIndicator(isMobile)
-        //options
-        QuickOptions(isMobile)
-        //start/end location
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-        PickupSelection(Modifier.align(Alignment.CenterHorizontally))
-        DestinationSelection(Modifier.align(Alignment.CenterHorizontally))
-        //around you
-        AroundYou(isMobile)
+    Column {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .background(color = Color.White)
+        ) {
+            //header
+            HorizontalPagerWithIndicator(isMobile)
+            //options
+            QuickOptions(isMobile)
+            //start/end location
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            PickupSelection(Modifier.align(Alignment.CenterHorizontally))
+            DestinationSelection(Modifier.align(Alignment.CenterHorizontally))
+            //around you
+            AroundYou(isMobile)
+        }
+        BottomTabs()
     }
 }
 
