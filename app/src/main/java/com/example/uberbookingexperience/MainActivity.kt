@@ -28,6 +28,7 @@ import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
 import com.example.uberbookingexperience.ui.screens.schedulePickup.SchedulePickupScreen
 import com.example.uberbookingexperience.ui.screens.splash.SplashScreen
+import com.example.uberbookingexperience.ui.screens.whereTo.WhereToScreen
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.util.changeSystemBarsColor
 import com.example.uberbookingexperience.ui.util.clearAndNavigate
@@ -76,7 +77,9 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(Screens.MapScreen())
                             }
                         }
-
+                        composable(Screens.WhereToScreen()) {
+                            WhereToScreen()
+                        }
                         composable(Screens.MapScreen()) {
                             val uberMapScreenVM = UberMapScreenVM()
                             ChooseCabTypeScreen(uberMapScreenVM, onPaymentOptionClick = {

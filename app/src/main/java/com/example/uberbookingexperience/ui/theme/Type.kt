@@ -4,7 +4,10 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextAlign.Companion
 import androidx.compose.ui.unit.sp
 import com.example.uberbookingexperience.R
 
@@ -74,3 +77,13 @@ val Typography = Typography(
         fontFamily = UberMove
     )
 )
+
+val Typography.titleSmall_gray: TextStyle
+    get() = titleSmall.copy(
+        color = TextGrey,
+    )
+
+val Typography.bodyLarge_gray: TextStyle
+    get() = bodyLarge.copy(
+        color = TextGrey,
+    )

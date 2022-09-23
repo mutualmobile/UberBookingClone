@@ -7,7 +7,7 @@ enum class Screens(private val route: String) {
     SchedulePickupScreen("schedulePickupScreen"),
     AddPaymentMethodScreen("addPaymentMethodScreen"),
     MapScreen("MapScreen"),
-    ConfirmPickUpLocation("ConfirmPickUpLocation");
-
+    ConfirmPickUpLocation("ConfirmPickUpLocation"),
+    WhereToScreen("whereToScreen");
     operator fun invoke() = route
 }
