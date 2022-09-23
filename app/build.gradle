@@ -85,4 +85,7 @@ dependencies {
 
     // navigation
     implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    // jetLime
+    implementation("io.github.pushpalroy:jetlime:1.0.3")
 }

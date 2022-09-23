@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.uberbookingexperience.ui.screens.Screens
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
 import com.example.uberbookingexperience.ui.screens.splash.SplashScreen
+import com.example.uberbookingexperience.ui.screens.whereTo.WhereToScreen
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.util.changeSystemBarsColor
 import com.example.uberbookingexperience.ui.util.clearAndNavigate
@@ -65,7 +66,16 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screens.DashboardScreen()) {
-                            DashboardScreen()
+                            DashboardScreen(onNextClicked = {
+                                navController.clearAndNavigate(
+                                    clearDestination = Screens.DashboardScreen(),
+                                    navigateToDestination = Screens.WhereToScreen()
+                                )
+                            })
+                        }
+
+                        composable(Screens.WhereToScreen()) {
+                            WhereToScreen()
                         }
                     }
                 }
