@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
@@ -20,6 +21,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.uberbookingexperience.ui.screens.Screens
 import com.example.uberbookingexperience.ui.screens.addPaymentMethod.AddPaymentMethodScreen
+import com.example.uberbookingexperience.ui.screens.cabswithmap.ChooseCabTypeScreen
+import com.example.uberbookingexperience.ui.screens.cabswithmap.UberMapScreenVM
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
 import com.example.uberbookingexperience.ui.screens.schedulePickup.SchedulePickupScreen
@@ -31,6 +34,7 @@ import com.example.uberbookingexperience.ui.util.getSystemAnimationDuration
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         setupSystemSplashScreen()
 
@@ -41,7 +45,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             UberBookingExperienceTheme {
                 val systemUiController = rememberSystemUiController()
-
                 LaunchedEffect(Unit) {
                     systemUiController.changeSystemBarsColor()
                 }
@@ -68,7 +71,25 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screens.DashboardScreen()) {
-                            DashboardScreen()
+                            DashboardScreen {
+                                navController.navigate(Screens.MapScreen())
+                            }
+                        }
+
+                        composable(Screens.MapScreen()) {
+                            val uberMapScreenVM = UberMapScreenVM()
+                            ChooseCabTypeScreen(uberMapScreenVM, onPaymentOptionClick = {
+                                navController.navigate(Screens.PaymentOptionsScreen())
+                            },
+                                onSchedulePickupOption = {
+                                    navController.navigate(Screens.SchedulePickupScreen())
+                                },
+                                onChooseUberClick = {
+                                    //proceed to confirm location screen
+                                }
+                            ) {
+                                navController.popBackStack()
+                            }
                         }
 
                         composable(Screens.PaymentOptionsScreen()) {
