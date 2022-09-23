@@ -75,6 +75,7 @@ dependencies {
 
     //accompanist
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
 
     //window size
     implementation "androidx.compose.material3:material3:$material3_version"
@@ -86,6 +87,6 @@ dependencies {
     // navigation
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
-    // jetLime
-    implementation("io.github.pushpalroy:jetlime:1.0.3")
+    // material icons extended
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
 }

@@ -4,72 +4,60 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextAlign.Companion
 import androidx.compose.ui.unit.sp
 import com.example.uberbookingexperience.R
 
-val uberMove = FontFamily(
-    Font(R.font.uber_move_light, FontWeight.W300),
-    Font(R.font.uber_move_regular, FontWeight.W400),
-    Font(R.font.uber_move_medium, FontWeight.W600),
-    Font(R.font.uber_move_bold, FontWeight.W700),
+val UberMove = FontFamily(
+    Font(R.font.uber_move_light, FontWeight.Light),
+    Font(R.font.uber_move_regular, FontWeight.Normal),
+    Font(R.font.uber_move_medium, FontWeight.Medium),
+    Font(R.font.uber_move_bold, FontWeight.Bold)
 )
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-
+    displaySmall = TextStyle(
+        fontFamily = UberMove,
+        fontWeight = FontWeight.Medium,
+        fontSize = 28.sp,
+        letterSpacing = 0.75.sp
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = UberMove,
+        fontWeight = FontWeight.Medium,
+        fontSize = 32.sp
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = UberMove,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = UberMove,
+        fontWeight = FontWeight.Medium,
+        fontSize = 13.sp
+    ),
     bodySmall = TextStyle(
-        fontFamily = uberMove,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.W400,
-        lineHeight = 20.sp,
-    ) ,
-    bodyMedium = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = UberMove,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 12.sp,
+        letterSpacing = 0.75.sp
     ),
-
-    titleMedium = TextStyle(
-        fontFamily = uberMove,
-        fontSize = 16.sp,
-        fontWeight = FontWeight.W400,
-        lineHeight = 24.sp,
-    ),
-
-    titleSmall = TextStyle(
-        fontFamily = uberMove,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.W400,
-        lineHeight = 20.sp,
-    ),
-
-    bodyLarge = TextStyle(
-        fontFamily = uberMove,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.W400,
-        textAlign = TextAlign.Center,
-    )
-
-    /* Other default text styles to override
-    button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
+    bodyMedium = TextStyle(
+        fontFamily = UberMove,
+        fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
+    bodyLarge = TextStyle(
+        fontFamily = UberMove,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+        fontSize = 18.sp
     )
-    */
 )
 
-val Typography.titleSmall_gray: TextStyle
-    get() = titleSmall.copy(
+val Typography.bodyMedium_gray: TextStyle
+    get() = bodyMedium.copy(
         color = TextGrey,
     )
 
