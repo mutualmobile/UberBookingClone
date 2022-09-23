@@ -35,9 +35,9 @@ fun UberBackButton(
 ) {
     IconButton(
         modifier = modifier
-            .size(48.dp)
+            .size(44.dp)
             .background(backgroundColor, CircleShape)
-            .padding(2.dp),
+            .padding(4.dp),
         onClick = onClick
     ) {
         Icon(

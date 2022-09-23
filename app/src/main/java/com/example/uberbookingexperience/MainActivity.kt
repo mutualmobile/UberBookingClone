@@ -95,7 +95,9 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screens.PaymentOptionsScreen()) {
-                            PaymentOptionsScreen { navController.navigateUp() }
+                            PaymentOptionsScreen(onAddedPaymentOptionClick = {
+                                navController.navigate(Screens.AddPaymentMethodScreen())
+                            }) { navController.navigateUp() }
                         }
 
                         composable(Screens.SchedulePickupScreen()) {

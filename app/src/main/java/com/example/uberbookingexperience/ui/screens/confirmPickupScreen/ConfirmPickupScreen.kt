@@ -30,6 +30,7 @@ import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.common.*
 import com.example.uberbookingexperience.ui.common.bottomsheet.UberBottomSheetScaffold
 import com.example.uberbookingexperience.ui.screens.finalisingDriver.FinalisingDriverScreen
+import com.example.uberbookingexperience.ui.screens.rideConfirmed.RideConfirmedScreen
 import com.example.uberbookingexperience.ui.theme.colorLocationUI
 import com.example.uberbookingexperience.ui.theme.colorUberGrayBg
 import com.example.uberbookingexperience.ui.theme.colorWhite
@@ -73,8 +74,8 @@ fun ConfirmPickupScreen(
 
     var scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
-            BottomSheetValue.Collapsed,
-            confirmStateChange = { false })
+            BottomSheetValue.Collapsed
+        )
     )
     val sheetToggle: () -> Unit = {
         scope.launch {
@@ -90,7 +91,9 @@ fun ConfirmPickupScreen(
     var sheetPeekHeight by rememberSaveable {
         mutableStateOf(screenHeight.div(if (isDeviceMobileType) 3f else 2.4f))
     }
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .navigationBarsPadding()) {
         Box(
             modifier = if (isDeviceMobileType) Modifier
                 .fillMaxWidth()
@@ -109,10 +112,22 @@ fun ConfirmPickupScreen(
                 sheetContent = {
 
                     if (bottomSheetCase == 2) {
-                        FinalisingDriverScreen()
+                        // case to show finalising bottom sheet with animation
+                        FinalisingDriverScreen(
+                            onAnimationFinished = {
+                                val deviceHeight = screenHeight.div(1.25f)
+                                sheetPeekHeight = deviceHeight
+                                bottomSheetCase = 3
+                            }
+                        ) {
+                            // on cancel click
+                            onNavigationBack()
+                        }
                     } else if (bottomSheetCase == 3) {
                         //case for ride confirm screen
+                        RideConfirmedScreen(scaffoldState.bottomSheetState.isExpanded)
                     } else {
+                        // normal bottom sheet content for choose pickup spot
                         Column(
                             modifier = Modifier
                                 .systemBarsPadding()
@@ -259,7 +274,8 @@ fun ConfirmPickupScreen(
             )
             val deviceHeight = screenHeight.div(1.35f)
             LaunchedEffect(isLocationConfirmed) {
-                delay(5000)
+
+            delay(5000)
                 sheetPeekHeight = deviceHeight
                 bottomSheetCase = 2
                 isLocationConfirmed = false

@@ -1,6 +1,7 @@
 package com.example.uberbookingexperience.ui.screens.addPaymentMethod
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -45,6 +46,7 @@ fun AddPaymentMethodScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
         UberTopBar(
             title = "Add Payment",
             icon = Icons.Default.ArrowBack,

@@ -1,12 +1,7 @@
 package com.example.uberbookingexperience.ui.screens.rideConfirmed
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -37,17 +32,18 @@ import com.example.uberbookingexperience.ui.util.DevicePreviews
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
 @Composable
-fun RideConfirmedScreen() {
+fun RideConfirmedScreen(shouldScroll: Boolean = false) {
     Column(
-        modifier = Modifier.then(
-            if (rememberIsMobileDevice()) {
-                Modifier.fillMaxWidth()
-            } else {
-                Modifier.width(300.dp)
-            }
-        )
+        modifier = Modifier
+            .then(
+                if (rememberIsMobileDevice()) {
+                    Modifier.fillMaxWidth()
+                } else {
+                    Modifier.width(300.dp)
+                }
+            )
             .wrapContentSize()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState(), enabled = shouldScroll),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface {
@@ -74,7 +70,9 @@ fun RideConfirmedScreen() {
                 )
                 UberDivider()
                 Image(
-                    modifier = Modifier.padding(MaterialTheme.spacing.medium).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(MaterialTheme.spacing.medium)
+                        .fillMaxWidth()
                         .clip(RoundedCornerShape(10)),
                     painter = painterResource(id = R.drawable.travel_responsibly),
                     contentDescription = null,
@@ -82,7 +80,8 @@ fun RideConfirmedScreen() {
                 )
                 UberDivider()
                 Image(
-                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.medium)
+                    modifier = Modifier
+                        .padding(vertical = MaterialTheme.spacing.medium)
                         .width(200.dp)
                         .aspectRatio(2f)
                         .clip(RoundedCornerShape(10)),
