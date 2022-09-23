@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.theme.spacing
 
@@ -24,7 +23,10 @@ fun UberMapInfoWindowText(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+        modifier = Modifier.padding(
+            horizontal = MaterialTheme.spacing.small,
+            vertical = MaterialTheme.spacing.extraSmall
+        )
     ) {
         Text(
             text = labelTextId,
