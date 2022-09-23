@@ -22,11 +22,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
+import com.example.uberbookingexperience.ui.screens.dashboard.RideOptions
+import com.example.uberbookingexperience.ui.screens.dashboard.getRideOptions
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun QuickOptions(isMobile: Boolean) {
+    val options = getRideOptions()
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -38,8 +41,8 @@ fun QuickOptions(isMobile: Boolean) {
             )
     ) {
         if (isMobile) {
-            QuickOptionsLargeTile(modifier = Modifier.weight(1f))
-            QuickOptionsLargeTile(modifier = Modifier.weight(1f))
+            QuickOptionsLargeTile(modifier = Modifier.weight(1f), options[0])
+            QuickOptionsLargeTile(modifier = Modifier.weight(1f), options[1])
         }
     }
 
@@ -48,33 +51,29 @@ fun QuickOptions(isMobile: Boolean) {
             .fillMaxWidth()
             .padding(start = MaterialTheme.spacing.medium)
     ) {
-        QuickOptionsTile(modifier = Modifier)
-        QuickOptionsTile(modifier = Modifier)
-        QuickOptionsTile(modifier = Modifier)
-        QuickOptionsTile(modifier = Modifier)
-        QuickOptionsTile(modifier = Modifier)
-        QuickOptionsTile(modifier = Modifier)
-        QuickOptionsTile(modifier = Modifier)
+        options.map {
+            QuickOptionsTile(modifier = Modifier, it)
+        }
     }
 }
 
 @Composable
-fun QuickOptionsLargeTile(modifier: Modifier) {
+fun QuickOptionsLargeTile(modifier: Modifier, rideOption: RideOptions) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
             .padding(end = MaterialTheme.spacing.medium)
             .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
-            .background(color = Color.LightGray)
+            .background(color = Color(0XFFEFEFEF))
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ub__mode_nav_ride),
+            painter = painterResource(id = rideOption.image),
             contentDescription = "option image",
             modifier = Modifier.requiredSize(94.dp).align(Alignment.TopEnd)
         )
         Text(
-            "Option",
+            text = rideOption.title,
             style = MaterialTheme.typography.titleMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -84,21 +83,21 @@ fun QuickOptionsLargeTile(modifier: Modifier) {
 }
 
 @Composable
-fun QuickOptionsTile(modifier: Modifier) {
+fun QuickOptionsTile(modifier: Modifier, rideOption: RideOptions) {
         Box(
             modifier = modifier
                 .size(84.dp)
                 .padding(end = MaterialTheme.spacing.medium, bottom = MaterialTheme.spacing.medium)
                 .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
-                .background(color = Color.LightGray),
+                .background(color = Color(0XFFEFEFEF)),
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ub__mode_nav_ride),
+                painter = painterResource(id = rideOption.image),
                 contentDescription = "option image",
                 modifier = Modifier.requiredSize(60.dp).align(Alignment.TopCenter)
             )
             Text(
-                "option",
+                text = rideOption.title,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

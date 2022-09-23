@@ -37,7 +37,7 @@ fun PickupSelection(modifier: Modifier) {
             .widthIn(max = 400.dp)
             .padding(horizontal = MaterialTheme.spacing.medium)
             .clip(RoundedCornerShape(50.dp))
-            .background(color = Color.LightGray),
+            .background(color = Color(0XFFEFEFEF)),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
@@ -108,7 +108,7 @@ fun DestinationSelection(modifier: Modifier) {
                 .padding(MaterialTheme.spacing.medium)
                 .drawBehind {
                     drawCircle(
-                        color = Color.LightGray,
+                        color = Color(0XFFEFEFEF),
                         radius = this.size.maxDimension
                     )
                 }
