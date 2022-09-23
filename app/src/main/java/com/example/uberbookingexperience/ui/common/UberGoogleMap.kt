@@ -1,5 +1,6 @@
 package com.example.uberbookingexperience.ui.common
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -34,7 +35,9 @@ fun UberGoogleMap(
     latLngBounds: LatLngBounds? = null,
     locationSource: LocationSource? = null,
     mapZoomAnimationDuration: Int = 1_000,
+    isClickEnable: Boolean = true,
     mapZoomPadding: Int = ((rememberDeviceWidth() * 5) / 50),
+    onMapClick: () -> Unit = {},
     content: (@Composable @GoogleMapComposable () -> Unit)? = null
 ) {
 
@@ -74,7 +77,10 @@ fun UberGoogleMap(
     }
 
 
-    Box(modifier.fillMaxSize()) {
+    Box(
+        modifier
+            .fillMaxSize()
+    ) {
         GoogleMap(
             modifier = Modifier.matchParentSize(),
             cameraPositionState = cameraPositionState,
@@ -89,6 +95,13 @@ fun UberGoogleMap(
                 content()
             }
 
+        }
+        if (!isClickEnable) {
+            Box(modifier = Modifier
+                .matchParentSize()
+                .clickable {
+                    onMapClick()
+                })
         }
     }
 }

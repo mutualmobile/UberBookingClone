@@ -12,21 +12,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.uberbookingexperience.ui.screens.dashboard.components.AroundYou
-import com.example.uberbookingexperience.ui.screens.dashboard.components.DestinationSelection
-import com.example.uberbookingexperience.ui.screens.dashboard.components.HorizontalPagerWithIndicator
-import com.example.uberbookingexperience.ui.screens.dashboard.components.PickupSelection
-import com.example.uberbookingexperience.ui.screens.dashboard.components.QuickOptions
+import com.example.uberbookingexperience.ui.screens.dashboard.components.*
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(onGotoMap: () -> Unit) {
     val isMobile = rememberIsMobileDevice()
-    Column(modifier = Modifier
-        .verticalScroll(rememberScrollState())
-        .background(color = Color.White)
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .background(color = Color.White)
     ) {
         //header
         HorizontalPagerWithIndicator(isMobile)
@@ -37,7 +34,7 @@ fun DashboardScreen() {
         PickupSelection(Modifier.align(Alignment.CenterHorizontally))
         DestinationSelection(Modifier.align(Alignment.CenterHorizontally))
         //around you
-        AroundYou(isMobile)
+        AroundYou(isMobile, onGotoMap)
     }
 }
 
@@ -45,6 +42,6 @@ fun DashboardScreen() {
 @Composable
 private fun DashboardScreenPreview() {
     UberBookingExperienceTheme {
-        DashboardScreen()
+        DashboardScreen() {}
     }
 }
