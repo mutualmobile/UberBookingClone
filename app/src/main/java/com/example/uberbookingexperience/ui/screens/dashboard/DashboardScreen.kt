@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -18,21 +19,25 @@ import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
 @Composable
-fun DashboardScreen(onGotoMap: () -> Unit) {
+fun DashboardScreen(
+    onGotoWhereScreen: () -> Unit,
+    onGotoMap: () -> Unit
+) {
     val isMobile = rememberIsMobileDevice()
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .background(color = Color.White)
     ) {
+        Spacer(modifier = Modifier.statusBarsPadding())
         //header
         HorizontalPagerWithIndicator(isMobile)
         //options
         QuickOptions(isMobile)
         //start/end location
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-        PickupSelection(Modifier.align(Alignment.CenterHorizontally))
-        DestinationSelection(Modifier.align(Alignment.CenterHorizontally))
+        PickupSelection(Modifier.align(Alignment.CenterHorizontally), onGotoWhereScreen)
+        DestinationSelection(Modifier.align(Alignment.CenterHorizontally), onGotoWhereScreen)
         //around you
         AroundYou(isMobile, onGotoMap)
     }
@@ -42,6 +47,6 @@ fun DashboardScreen(onGotoMap: () -> Unit) {
 @Composable
 private fun DashboardScreenPreview() {
     UberBookingExperienceTheme {
-        DashboardScreen() {}
+        DashboardScreen({}) {}
     }
 }

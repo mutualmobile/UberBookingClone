@@ -1,23 +1,13 @@
 package com.example.uberbookingexperience.ui.screens.dashboard.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.PinDrop
-import androidx.compose.material.icons.filled.PunchClock
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,16 +18,20 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.clickableWithRipple
 
 @Composable
-fun PickupSelection(modifier: Modifier) {
+fun PickupSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
     Row(
         modifier = modifier
             .height(60.dp)
             .widthIn(max = 400.dp)
             .padding(horizontal = MaterialTheme.spacing.medium)
             .clip(RoundedCornerShape(50.dp))
-            .background(color = Color(0XFFEFEFEF)),
+            .background(color = Color(0XFFEFEFEF))
+            .clickableWithRipple {
+                onGotoWhereScreen()
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
@@ -92,12 +86,15 @@ fun PickupSelection(modifier: Modifier) {
 }
 
 @Composable
-fun DestinationSelection(modifier: Modifier) {
+fun DestinationSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
     Row(
         modifier = modifier
             .padding(MaterialTheme.spacing.medium)
             .heightIn(max = 50.dp)
-            .widthIn(max = 360.dp),
+            .widthIn(max = 360.dp)
+            .clickableWithRipple {
+                onGotoWhereScreen()
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(

@@ -73,12 +73,20 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screens.DashboardScreen()) {
-                            DashboardScreen {
+                            DashboardScreen(onGotoWhereScreen = {
+                                navController.navigate(Screens.WhereToScreen())
+                            }) {
                                 navController.navigate(Screens.MapScreen())
                             }
                         }
                         composable(Screens.WhereToScreen()) {
-                            WhereToScreen()
+                            WhereToScreen(
+                                onGotoWhereScreen = {
+                                    navController.navigate(Screens.MapScreen())
+                                }
+                            ) {
+                                navController.popBackStack()
+                            }
                         }
                         composable(Screens.MapScreen()) {
                             val uberMapScreenVM = UberMapScreenVM()
