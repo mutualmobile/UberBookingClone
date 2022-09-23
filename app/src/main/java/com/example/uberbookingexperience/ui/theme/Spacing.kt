@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 class Spacing internal constructor(
-    val none: Dp = 0.dp,
     val extraSmall: Dp = 4.dp,
     val small: Dp = 8.dp,
     val medium: Dp = 16.dp,
@@ -21,7 +20,6 @@ class Spacing internal constructor(
         if (this === other) return true
         if (other == null || other !is Spacing) return false
 
-        if (none != other.none) return false
         if (extraSmall != other.extraSmall) return false
         if (small != other.small) return false
         if (medium != other.medium) return false
@@ -32,8 +30,7 @@ class Spacing internal constructor(
     }
 
     override fun hashCode(): Int {
-        var result = none.hashCode()
-        result = 31 * result + extraSmall.hashCode()
+        var result = extraSmall.hashCode()
         result = 31 * result + small.hashCode()
         result = 31 * result + medium.hashCode()
         result = 31 * result + large.hashCode()
@@ -42,8 +39,8 @@ class Spacing internal constructor(
     }
 
     override fun toString(): String {
-        return "Spacing(none=$none, extraSmall=$extraSmall, small=$small, medium=$medium," +
-            " large=$large, extraLarge=$extraLarge)"
+        return "Spacing(extraSmall=$extraSmall, small=$small, medium=$medium," +
+                " large=$large, extraLarge=$extraLarge)"
     }
 }
 
