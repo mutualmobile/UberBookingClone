@@ -33,7 +33,10 @@ fun UberButton(
             contentColor = MaterialTheme.colorScheme.surface
         ),
         shape = RectangleShape,
-        contentPadding = PaddingValues(vertical = MaterialTheme.spacing.medium)
+        contentPadding = PaddingValues(
+            vertical = MaterialTheme.spacing.medium,
+            horizontal = MaterialTheme.spacing.extraSmall
+        )
     ) {
         Text(
             text = text,

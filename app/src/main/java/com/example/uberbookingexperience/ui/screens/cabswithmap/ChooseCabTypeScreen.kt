@@ -12,9 +12,7 @@ import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -26,6 +24,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -37,10 +36,7 @@ import com.example.uberbookingexperience.ui.common.*
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetCollapsed
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetExpanded
 import com.example.uberbookingexperience.ui.common.bottomsheet.UberBottomSheetScaffold
-import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
-import com.example.uberbookingexperience.ui.theme.colorGrayExtraLight
-import com.example.uberbookingexperience.ui.theme.colorWhite
-import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.theme.*
 import com.example.uberbookingexperience.ui.util.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.JointType
@@ -67,9 +63,8 @@ fun ChooseCabTypeScreen(
             Modifier.width(MaterialTheme.spacing.minWidth)
         }
     )
-    val dynamicPadding: Dp
 
-    dynamicPadding = if (rememberIsMobileDevice()) {
+    val dynamicPadding: Dp = if (rememberIsMobileDevice()) {
         //dynamicWidth = 1f
         10.dp
     } else {
@@ -88,6 +83,9 @@ fun ChooseCabTypeScreen(
     val uberButtonText by remember { derivedStateOf { "Choose " + selectedUberCab.cabInfo } }
 
 
+    val translationDp = (36.dp + ButtonDefaults.ContentPadding.calculateTopPadding()
+            + ButtonDefaults.ContentPadding.calculateBottomPadding()
+            + 30.dp + dynamicPadding).value + 130f
     /*==Bottom sheet related properties*/
     val isDeviceMobileType = rememberIsMobileDevice()
     val scaffoldState = rememberBottomSheetScaffoldState(
@@ -112,7 +110,8 @@ fun ChooseCabTypeScreen(
                 .padding(
                     vertical = MaterialTheme.spacing.extraLarge,
                     horizontal = MaterialTheme.spacing.medium
-                ),
+                )
+                .graphicsLayer(alpha = 1f - scaffoldState.rememberScaffoldStateFraction()),
             iconId = R.drawable.baseline_arrow_back_24,
             backgroundColor = if (rememberIsMobileDevice()) {
                 colorWhite
@@ -128,6 +127,43 @@ fun ChooseCabTypeScreen(
                 isItemSelected = false
             } else {
                 onNavigationBack()
+            }
+        }
+        val currentFraction = scaffoldState.rememberScaffoldStateFraction()
+        Box(
+            modifier = dynamicWidth
+                .background(colorBlack.copy(alpha = currentFraction))
+                .zIndex(2f)
+                .graphicsLayer(alpha = currentFraction)
+        ) {
+            Box(
+                contentAlignment = Alignment.CenterStart,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+            ) {
+
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+                    contentDescription = "",
+                    Modifier
+                        .graphicsLayer(rotationZ = currentFraction * -90f)
+                        .clickableWithRipple {
+                            scope.launch {
+                                scaffoldState.bottomSheetState.collapse()
+                            }
+                        }
+                        .padding(horizontal = MaterialTheme.spacing.small),
+                    tint = colorWhite.copy(alpha = 0.4f)
+                )
+                Text(
+                    "Choose a ride",
+                    style = MaterialTheme.typography.titleMedium.copy(textAlign = TextAlign.Center),
+                    color = colorWhite.copy(alpha = 0.8f),
+                    modifier = Modifier
+                        .padding(MaterialTheme.spacing.medium)
+                        .fillMaxWidth(1f)
+                )
             }
         }
         if (!isDeviceMobileType) {
@@ -158,6 +194,7 @@ fun ChooseCabTypeScreen(
                         UberCabsListing(
                             isVisibleDivider = false,
                             uberMapScreenVM = uberMapScreenViewModel,
+                            currentFraction = scaffoldState.rememberScaffoldStateFraction(),
                             onItemChecked = {
                                 selectedUberCab = it
                             }
@@ -240,12 +277,13 @@ fun ChooseCabTypeScreen(
                     }
                 })
 
+
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = dynamicWidth
                     .wrapContentHeight()
-                    .graphicsLayer(alpha = 1f - scaffoldState.rememberScaffoldStateFraction())
+                    .graphicsLayer(translationY = translationDp * scaffoldState.rememberScaffoldStateFraction())
                     .background(colorWhite)
             ) {
                 Divider(

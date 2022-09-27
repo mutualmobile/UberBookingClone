@@ -1,7 +1,11 @@
 package com.example.uberbookingexperience.ui.screens.cabswithmap
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -34,10 +38,12 @@ import com.example.uberbookingexperience.ui.util.UberIconSize.SmallImage
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
 import com.example.uberbookingexperience.ui.util.toINRString
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UberCabsListing(
     uberMapScreenVM: UberMapScreenVM,
     isVisibleDivider: Boolean = true,
+    currentFraction: Float = 1f,
     onItemChecked: (UberCabInfo) -> Unit,
     onItemSelected: (UberCabInfo) -> Unit
 ) {
@@ -47,7 +53,11 @@ fun UberCabsListing(
             .background(colorWhite)
             .fillMaxSize()
     ) {
-        if (isVisibleDivider) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.graphicsLayer(alpha = if (isVisibleDivider) currentFraction else 1f - currentFraction)
+        ) {
             Spacer(modifier = Modifier.padding(MaterialTheme.spacing.extraSmall))
             val dividerColor = colorGrayExtraLight
             Divider(
@@ -68,11 +78,52 @@ fun UberCabsListing(
                 modifier = Modifier.padding(MaterialTheme.spacing.extraSmall)
             )
             Spacer(modifier = Modifier.padding(MaterialTheme.spacing.extraSmall))
-        } else {
-            Spacer(modifier = Modifier.padding(MaterialTheme.spacing.large))
         }
 
+        //}
+        /*else {
+            Spacer(modifier = Modifier.padding(MaterialTheme.spacing.large))
+        }*/
+
+        /*Box(modifier = Modifier.
+        background(colorBlack.copy(alpha = currentFraction)).
+        graphicsLayer(alpha = currentFraction)){
+            Box(contentAlignment = Alignment.CenterStart,
+                modifier = Modifier.fillMaxWidth().statusBarsPadding()) {
+
+                Icon(painter = painterResource(id = R.drawable.baseline_arrow_downward_24), contentDescription = ""
+                    ,Modifier.graphicsLayer(rotationZ = currentFraction*90f), tint = colorWhite.copy(alpha = 0.4f)
+                )
+                Text(
+                    "Choose a ride",
+                    style = MaterialTheme.typography.titleMedium.copy(textAlign = TextAlign.Center),
+                    color = colorWhite.copy(alpha = 0.8f),
+                    modifier = Modifier.padding(MaterialTheme.spacing.medium).fillMaxWidth(1f)
+                )
+            }
+        }*/
         LazyColumn {
+            stickyHeader {
+                AnimatedVisibility(
+                    visible = !isVisibleDivider,
+                    enter = slideInVertically(), exit = slideOutVertically()
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier.statusBarsPadding())
+                        Text(
+                            "Popular",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(MaterialTheme.spacing.medium)
+                                .graphicsLayer(alpha = currentFraction)
+                        )
+                    }
+                }
+            }
             itemsIndexed(uberMapScreenVM.cabListing) { index, cabs ->
                 UberCabsListItem(uberCabInfo = cabs) {
                     if (!isVisibleDivider) {
