@@ -38,6 +38,11 @@ val Typography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = 13.sp
     ),
+    titleMedium = TextStyle(
+        fontFamily = UberMove,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp
+    ),
     bodySmall = TextStyle(
         fontFamily = UberMove,
         fontWeight = FontWeight.Normal,
@@ -54,14 +59,25 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 18.sp
     ),
+    titleLarge = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp,
+        fontFamily = UberMove
+    ),
     titleMedium = TextStyle(
-        fontFamily = UberMove,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.15.sp,
+        fontFamily = UberMove
+    ),
+    titleSmall = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 12.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp,
+        fontFamily = UberMove
     )
 )
-
-val Typography.bodyMedium_gray: TextStyle
-    get() = bodyMedium.copy(
-        color = TextGrey,
-    )

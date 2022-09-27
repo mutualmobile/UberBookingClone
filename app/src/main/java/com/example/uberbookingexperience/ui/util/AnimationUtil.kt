@@ -3,6 +3,8 @@ package com.example.uberbookingexperience.ui.util
 import android.app.Activity
 import android.provider.Settings
 import androidx.compose.animation.core.AnimationConstants
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -42,14 +44,18 @@ fun getSystemAnimationDuration(
  * */
 @Composable
 fun <T> systemTween(
-    durationMillis: Int = AnimationConstants.DefaultDurationMillis
-): TweenSpec<T> = tween(durationMillis = durationMillis.times(getAnimationDurationScale()).toInt())
+    durationMillis: Int = AnimationConstants.DefaultDurationMillis,
+    easing: Easing = FastOutSlowInEasing
+): TweenSpec<T> = tween(
+    durationMillis = durationMillis.times(getAnimationDurationScale()).toInt(),
+    easing = easing
+)
 
 /**
  * A util function for easily changing systemBars colors.
  * */
 fun Activity.changeSystemBarsColor(
-    color: Color = Color.Transparent,
+    color: Color = Color.Transparent
 ) {
     if (window.statusBarColor != color.toArgb()) {
         window.statusBarColor = color.toArgb()
@@ -65,7 +71,7 @@ fun Activity.changeSystemBarsColor(
  * */
 fun SystemUiController.changeSystemBarsColor(
     color: Color = Color.Transparent,
-    darkIcons: Boolean = true,
+    darkIcons: Boolean = true
 ) {
     setSystemBarsColor(
         color = color,
@@ -86,6 +92,8 @@ private fun getAnimationDurationScale(): Float {
 
 private fun Activity.getAnimationDurationScale(): Float {
     return Settings.Global.getFloat(
-        contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1.0f
+        contentResolver,
+        Settings.Global.ANIMATOR_DURATION_SCALE,
+        1.0f
     )
 }

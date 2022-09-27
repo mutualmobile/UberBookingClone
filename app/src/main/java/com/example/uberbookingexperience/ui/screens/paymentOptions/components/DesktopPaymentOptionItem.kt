@@ -33,18 +33,22 @@ import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOption
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
+import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.systemTween
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DesktopPaymentOptionItem(paymentOption: PaymentOption) {
     val containerColor by animateColorAsState(
         targetValue = if (paymentOption.selected) MaterialTheme.colorScheme.onSurface
-        else MaterialTheme.colorScheme.surface
+        else MaterialTheme.colorScheme.surface,
+        animationSpec = systemTween()
     )
 
     val contentColor by animateColorAsState(
         targetValue = if (paymentOption.selected) MaterialTheme.colorScheme.surface
-        else MaterialTheme.colorScheme.onSurface
+        else MaterialTheme.colorScheme.onSurface,
+        animationSpec = systemTween()
     )
 
     // Extracted it out since it didn't need to be recomposed when either container or content
@@ -76,8 +80,8 @@ fun DesktopPaymentOptionItem(paymentOption: PaymentOption) {
     ) {
         optionIcon()
         Text(
-            modifier = Modifier.fillMaxWidth().wrapContentSize().padding(horizontal = 8.dp)
-                .padding(top = 8.dp),
+            modifier = Modifier.fillMaxWidth().wrapContentSize().padding(horizontal = MaterialTheme.spacing.small)
+                .padding(top = MaterialTheme.spacing.small),
             text = paymentOption.name,
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 2,
@@ -87,7 +91,7 @@ fun DesktopPaymentOptionItem(paymentOption: PaymentOption) {
         paymentOption.value?.let { nnValue ->
             Text(
                 modifier = Modifier.alpha(0.5f).fillMaxWidth().wrapContentSize()
-                    .padding(horizontal = 8.dp),
+                    .padding(horizontal = MaterialTheme.spacing.small),
                 text = nnValue,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,

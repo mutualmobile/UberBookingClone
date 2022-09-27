@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.uberbookingexperience.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,7 +28,7 @@ fun UberSelectableChip(
     title: String,
     isSelected: Boolean,
     icon: ImageVector,
-    chipPadding: PaddingValues = PaddingValues(start = 8.dp),
+    chipPadding: PaddingValues = PaddingValues(start = MaterialTheme.spacing.small),
     contentPadding: PaddingValues = PaddingValues(10.dp),
     selectedBackgroundColor: Color = MaterialTheme.colorScheme.onSurface,
     elevation: Dp = 2.dp,
