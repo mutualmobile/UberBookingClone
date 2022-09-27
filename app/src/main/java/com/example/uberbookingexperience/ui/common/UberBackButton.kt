@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.theme.colorWhite
+import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.UberIconSize.LargeButton
 
 /**
@@ -35,9 +37,9 @@ fun UberBackButton(
 ) {
     IconButton(
         modifier = modifier
-            .size(44.dp)
+            .size(42.dp)
             .background(backgroundColor, CircleShape)
-            .padding(4.dp),
+            .padding(MaterialTheme.spacing.small),
         onClick = onClick
     ) {
         Icon(

@@ -1,7 +1,7 @@
 package com.example.uberbookingexperience.ui.screens.cabswithmap
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,17 +14,15 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.model.UberCabInfo
 import com.example.uberbookingexperience.ui.theme.colorGrayExtraLight
@@ -32,6 +30,7 @@ import com.example.uberbookingexperience.ui.theme.colorGrayLight
 import com.example.uberbookingexperience.ui.theme.colorWhite
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.UberIconSize.MediumImage
+import com.example.uberbookingexperience.ui.util.UberIconSize.SmallImage
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
 import com.example.uberbookingexperience.ui.util.toINRString
 
@@ -39,6 +38,7 @@ import com.example.uberbookingexperience.ui.util.toINRString
 fun UberCabsListing(
     uberMapScreenVM: UberMapScreenVM,
     isVisibleDivider: Boolean = true,
+    onItemChecked: (UberCabInfo) -> Unit,
     onItemSelected: (UberCabInfo) -> Unit
 ) {
     Column(
@@ -62,7 +62,7 @@ fun UberCabsListing(
             Spacer(modifier = Modifier.padding(8.dp))
             Text(
                 "Choose a ride, or swipe up for more",
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.bodyMedium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(MaterialTheme.spacing.extraSmall)
@@ -75,10 +75,17 @@ fun UberCabsListing(
         LazyColumn {
             itemsIndexed(uberMapScreenVM.cabListing) { index, cabs ->
                 UberCabsListItem(uberCabInfo = cabs) {
-                    if (it.isChecked) {
-                        onItemSelected(it)
-                    } else {
+                    if (!isVisibleDivider) {
                         uberMapScreenVM.selectItem(index)
+                        onItemSelected(it)
+                        onItemChecked(it)
+                    } else {
+                        if (it.isChecked) {
+                            onItemSelected(it)
+                        } else {
+                            onItemChecked(it)
+                            uberMapScreenVM.selectItem(index)
+                        }
                     }
                 }
             }
@@ -89,9 +96,8 @@ fun UberCabsListing(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun UberCabsListItem(uberCabInfo: UberCabInfo, onItemSelected: (UberCabInfo) -> Unit) {
-    val requiredSize =
-        remember(uberCabInfo.isChecked) { mutableStateOf(if (uberCabInfo.isChecked) 90.dp else 80.dp) }
-    val animateasDp: Dp by animateDpAsState(targetValue = requiredSize.value)
+    val scaleX by animateFloatAsState(targetValue = if (uberCabInfo.isChecked) 1.1f else 1f)
+    val scaleY by animateFloatAsState(targetValue = if (uberCabInfo.isChecked) 1.1f else 1f)
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -111,46 +117,51 @@ fun UberCabsListItem(uberCabInfo: UberCabInfo, onItemSelected: (UberCabInfo) -> 
                 painter = painterResource(id = uberCabInfo.cabIcon),
                 contentDescription = uberCabInfo.cabInfo,
                 modifier = Modifier
-                    .padding(8.dp)
-                    .requiredSize(animateasDp)
+                    .requiredSize(SmallImage)
+                    .graphicsLayer(
+                        scaleX = scaleX,
+                        scaleY = scaleY
+                    )
 
             )
 
-            Column() {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(modifier = Modifier.padding(start = MaterialTheme.spacing.small)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Text(
-                        uberCabInfo.cabInfo, style = MaterialTheme.typography.titleMedium,
+                        uberCabInfo.cabInfo, style = MaterialTheme.typography.titleLarge,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
-                            .padding(4.dp)
+                            .padding(MaterialTheme.spacing.extraSmall)
                             .weight(1f)
                     )
                     Text(
                         uberCabInfo.cabPrice.toINRString(),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(MaterialTheme.spacing.extraSmall)
                     )
 
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     UberCabsListItemText(
                         uberCabInfo.carTime,
-                        textStyle = MaterialTheme.typography.labelSmall,
+                        textStyle = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier
-                            .padding(MaterialTheme.spacing.small)
+                            .padding(MaterialTheme.spacing.extraSmall)
                             .weight(1f)
                     )
                     uberCabInfo.cabPriceAlter?.let {
                         UberCabsListItemText(
                             it.toINRString(),
-                            textStyle = MaterialTheme.typography.labelSmall.copy(
+                            textStyle = MaterialTheme.typography.bodyMedium.copy(
                                 textAlign = TextAlign.End,
                                 textDecoration = TextDecoration.LineThrough
                             ),
-                            modifier = Modifier.padding(4.dp)
+                            modifier = Modifier.padding(MaterialTheme.spacing.extraSmall)
                         )
                     }
                 }
@@ -181,7 +192,7 @@ fun UberCabsListItemDetails(uberCabInfo: UberCabInfo) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(horizontal = 12.dp, vertical = 4.dp)
+            .padding(horizontal = 12.dp, vertical = MaterialTheme.spacing.extraSmall)
             .fillMaxWidth()
 
     ) {
@@ -212,7 +223,7 @@ fun UberCabsListItemDetails(uberCabInfo: UberCabInfo) {
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    uberCabInfo.carTime, style = MaterialTheme.typography.labelMedium,
+                    uberCabInfo.carTime, style = MaterialTheme.typography.titleSmall,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier

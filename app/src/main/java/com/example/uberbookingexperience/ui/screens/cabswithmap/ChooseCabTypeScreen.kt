@@ -23,21 +23,29 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.model.UberCabInfo
+import com.example.uberbookingexperience.model.UberCabInfoSaver
 import com.example.uberbookingexperience.ui.common.*
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetCollapsed
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetExpanded
 import com.example.uberbookingexperience.ui.common.bottomsheet.UberBottomSheetScaffold
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
+import com.example.uberbookingexperience.ui.theme.colorGrayExtraLight
 import com.example.uberbookingexperience.ui.theme.colorWhite
+import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.*
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.JointType
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.RoundCap
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
 
@@ -52,22 +60,33 @@ fun ChooseCabTypeScreen(
     onNavigationBack: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    val dynamicWidth: Float
+    val dynamicWidth = Modifier.then(
+        if (rememberIsMobileDevice()) {
+            Modifier.fillMaxWidth()
+        } else {
+            Modifier.width(MaterialTheme.spacing.minWidth)
+        }
+    )
     val dynamicPadding: Dp
 
-    if (rememberIsMobileDevice()) {
-        dynamicWidth = 1f
-        dynamicPadding = 10.dp
+    dynamicPadding = if (rememberIsMobileDevice()) {
+        //dynamicWidth = 1f
+        10.dp
     } else {
-        dynamicWidth = 0.35f
-        dynamicPadding = 60.dp
+        //dynamicWidth = 0.35f
+        60.dp
     }
 
     /*==Google maps related properties*/
-    var selectedUberCab: UberCabInfo? = null
+    var selectedUberCab by rememberSaveable(stateSaver = UberCabInfoSaver) {
+        mutableStateOf(uberMapScreenViewModel.selectedItem())
+    }
     var isItemSelected by rememberSaveable {
         mutableStateOf(false)
     }
+
+    val uberButtonText by remember { derivedStateOf { "Choose " + selectedUberCab.cabInfo } }
+
 
     /*==Bottom sheet related properties*/
     val isDeviceMobileType = rememberIsMobileDevice()
@@ -85,15 +104,49 @@ fun ChooseCabTypeScreen(
     }
     //define dynamic height so we can show atlease 2 list item of cabs in different screen sizes
     val sheetPeekHeight = rememberDeviceHeight().div(if (isDeviceMobileType) 2f else 1.5f)
-    Row(modifier = Modifier.fillMaxSize()) {
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        UberBackButton(
+            modifier = Modifier
+                .zIndex(2f)
+                .padding(
+                    vertical = MaterialTheme.spacing.extraLarge,
+                    horizontal = MaterialTheme.spacing.medium
+                ),
+            iconId = R.drawable.baseline_arrow_back_24,
+            backgroundColor = if (rememberIsMobileDevice()) {
+                colorWhite
+            } else {
+                colorGrayExtraLight
+            }
+        ) {
+            if (scaffoldState.bottomSheetState.isExpanded) {
+                scope.launch {
+                    scaffoldState.bottomSheetState.collapse()
+                }
+            } else if (isItemSelected) {
+                isItemSelected = false
+            } else {
+                onNavigationBack()
+            }
+        }
+        if (!isDeviceMobileType) {
+            Box(
+                contentAlignment = Alignment.TopStart,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = dynamicPadding)
+            ) {
+                ShowGoogleMap()
+            }
+        }
         Box(
             modifier = if (isDeviceMobileType) Modifier.fillMaxWidth() else Modifier,
             contentAlignment = Alignment.BottomCenter
         ) {
-            UberBottomSheetScaffold(modifier = Modifier
-                .fillMaxWidth(dynamicWidth)
-                .fillMaxHeight(),
-                bottomSheetDynamicWidthFraction = dynamicWidth,
+            UberBottomSheetScaffold(
+                modifier = dynamicWidth
+                    .fillMaxHeight(),
                 scaffoldState = scaffoldState,
                 sheetShape = RectangleShape,
                 sheetBackgroundColor = Color.Transparent,
@@ -104,7 +157,10 @@ fun ChooseCabTypeScreen(
                     ) {
                         UberCabsListing(
                             isVisibleDivider = false,
-                            uberMapScreenVM = uberMapScreenViewModel
+                            uberMapScreenVM = uberMapScreenViewModel,
+                            onItemChecked = {
+                                selectedUberCab = it
+                            }
                         ) {
                             scope.launch {
                                 scaffoldState.bottomSheetState.collapse()
@@ -117,7 +173,7 @@ fun ChooseCabTypeScreen(
                         isCollapsed = scaffoldState.bottomSheetState.isCollapsed,
                         isDetailsOpen = isItemSelected,
                         currentFraction = scaffoldState.rememberScaffoldStateFraction(),
-                        sheetCollapsedFraction = 0.4f,
+                        sheetCollapsedFraction = 1f,
                         onSheetClick = sheetToggle
                     ) {
                         AnimatedVisibility(
@@ -133,7 +189,7 @@ fun ChooseCabTypeScreen(
                                 modifier = Modifier
                                     .background(colorWhite)
                             ) {
-                                uberMapScreenViewModel.selectedUberCab?.let { it1 ->
+                                uberMapScreenViewModel.selectedItem().let { it1 ->
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier
@@ -152,7 +208,10 @@ fun ChooseCabTypeScreen(
                             ),
                             exit = slideOutVertically() + shrinkVertically(shrinkTowards = Alignment.Top)
                         ) {
-                            UberCabsListing(uberMapScreenViewModel) {
+                            UberCabsListing(uberMapScreenViewModel,
+                                onItemChecked = {
+                                    selectedUberCab = it
+                                }) {
                                 selectedUberCab = it
                                 isItemSelected = true
                             }
@@ -175,23 +234,6 @@ fun ChooseCabTypeScreen(
                                 )
                             }
 
-                            UberBackButton(
-                                modifier = Modifier.padding(
-                                    vertical = 22.dp,
-                                    horizontal = 8.dp
-                                ), iconId = R.drawable.baseline_arrow_back_24
-                            ) {
-                                if (scaffoldState.bottomSheetState.isExpanded) {
-                                    scope.launch {
-                                        scaffoldState.bottomSheetState.collapse()
-                                    }
-                                } else if (isItemSelected) {
-                                    isItemSelected = false
-                                } else {
-                                    onNavigationBack()
-                                }
-                            }
-
                         }
                     } else {
                         Spacer(modifier = Modifier.padding(1.dp))
@@ -201,8 +243,7 @@ fun ChooseCabTypeScreen(
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth(dynamicWidth)
+                modifier = dynamicWidth
                     .wrapContentHeight()
                     .graphicsLayer(alpha = 1f - scaffoldState.rememberScaffoldStateFraction())
                     .background(colorWhite)
@@ -248,7 +289,7 @@ fun ChooseCabTypeScreen(
                     modifier = Modifier.padding(bottom = dynamicPadding)
                 ) {
                     UberButton(
-                        text = stringResource(id = R.string.choose_uber), modifier =
+                        text = uberButtonText, modifier =
                         Modifier
                             .weight(1f)
                             .padding(horizontal = 14.dp, vertical = 12.dp)
@@ -257,7 +298,7 @@ fun ChooseCabTypeScreen(
                     }
                     UberIconButton(
                         iconId = R.drawable.schedule_button_icon,
-                        modifier = Modifier.padding(end = 8.dp)
+                        modifier = Modifier.padding(MaterialTheme.spacing.small)
                     ) {
                         onSchedulePickupOption()
                     }
@@ -265,32 +306,7 @@ fun ChooseCabTypeScreen(
 
             }
         }
-        if (!isDeviceMobileType) {
-            Box(
-                contentAlignment = Alignment.TopStart,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(bottom = dynamicPadding)
-            ) {
-                ShowGoogleMap()
-                UberBackButton(
-                    modifier = Modifier.padding(
-                        vertical = 22.dp,
-                        horizontal = 8.dp
-                    ), iconId = R.drawable.baseline_arrow_back_24
-                ) {
-                    if (scaffoldState.bottomSheetState.isExpanded) {
-                        scope.launch {
-                            scaffoldState.bottomSheetState.collapse()
-                        }
-                    } else if (isItemSelected) {
-                        isItemSelected = false
-                    } else {
-                        onNavigationBack()
-                    }
-                }
-            }
-        }
+
     }
     BackHandler {
         if (scaffoldState.bottomSheetState.isExpanded) {
@@ -326,8 +342,7 @@ fun ShowGoogleMap(modifier: Modifier = Modifier) {
         modifier = modifier, cameraPositionState = rememberCameraPositionState {
             position = defaultCameraPosition
         },
-        latLngBounds = positionBuilder.build(),
-        cameraPositionDefault = CameraPosition.fromLatLngZoom(pathLatLongsFirst.first(), 25f)
+        latLngBounds = positionBuilder.build()
     ) {
 
         cabsForPathOne.forEach {
@@ -346,13 +361,13 @@ fun ShowGoogleMap(modifier: Modifier = Modifier) {
 
         MarkerInfoWindowContent(
             MarkerState(pathLatLongsFirst.first()),
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.ub__ic_marker_destination)
+            icon = bitmapDescriptorFromVector(LocalContext.current, R.drawable.ic_location_end)
         ) {
             UberMapInfoWindowText("My start Location", R.drawable.baseline_navigate_next_24)
         }
         MarkerInfoWindowContent(
             MarkerState(pathLatLongsFirst.last()),
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.ub__ic_marker_pickup)
+            icon = bitmapDescriptorFromVector(LocalContext.current, R.drawable.ic_location_start)
         ) {
             UberMapInfoWindowText("My end Location", R.drawable.baseline_navigate_next_24)
         }

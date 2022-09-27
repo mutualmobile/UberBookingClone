@@ -52,15 +52,18 @@ fun ConfirmPickupScreen(
     onChooseConfirmLocationClick: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
-    val dynamicWidth: Float
-    val dynamicPadding: Dp
+    val dynamicWidth = Modifier.then(
+        if (rememberIsMobileDevice()) {
+            Modifier.fillMaxWidth()
+        } else {
+            Modifier.width(MaterialTheme.spacing.minWidth)
+        }
+    )
 
-    if (rememberIsMobileDevice()) {
-        dynamicWidth = 1f
-        dynamicPadding = 10.dp
+    val dynamicPadding: Dp = if (rememberIsMobileDevice()) {
+        10.dp
     } else {
-        dynamicWidth = 0.35f
-        dynamicPadding = 60.dp
+        60.dp
     }
 
     var isLocationConfirmed by rememberSaveable {
@@ -89,11 +92,12 @@ fun ConfirmPickupScreen(
     val screenHeight = rememberDeviceHeight()
     //define dynamic height so we can show atlease 2 list item of cabs in different screen sizes
     var sheetPeekHeight by rememberSaveable {
-        mutableStateOf(screenHeight.div(if (isDeviceMobileType) 3f else 2.4f))
+        mutableStateOf(screenHeight.div(if (isDeviceMobileType) 3f else 2.8f))
     }
     Box(modifier = Modifier
         .fillMaxSize()
         .navigationBarsPadding()) {
+
         Box(
             modifier = if (isDeviceMobileType) Modifier
                 .fillMaxWidth()
@@ -101,86 +105,89 @@ fun ConfirmPickupScreen(
             contentAlignment = Alignment.BottomCenter
         ) {
             UberBottomSheetScaffold(
-                modifier = Modifier
-                    .fillMaxWidth(dynamicWidth)
+                modifier =
+                dynamicWidth
                     .fillMaxHeight(),
-                bottomSheetDynamicWidthFraction = dynamicWidth,
                 scaffoldState = scaffoldState,
                 sheetShape = RectangleShape,
-                sheetBackgroundColor = Color.Transparent,
+                sheetBackgroundColor = colorWhite,
                 sheetPeekHeight = sheetPeekHeight.dp,
                 sheetContent = {
 
-                    if (bottomSheetCase == 2) {
-                        // case to show finalising bottom sheet with animation
-                        FinalisingDriverScreen(
-                            onAnimationFinished = {
-                                val deviceHeight = screenHeight.div(1.25f)
-                                sheetPeekHeight = deviceHeight
-                                bottomSheetCase = 3
+                    when (bottomSheetCase) {
+                        2 -> {
+                            // case to show finalising bottom sheet with animation
+                            FinalisingDriverScreen(
+                                onAnimationFinished = {
+                                    val deviceHeight = screenHeight.div(1.25f)
+                                    sheetPeekHeight = deviceHeight
+                                    bottomSheetCase = 3
+                                }
+                            ) {
+                                // on cancel click
+                                onNavigationBack()
                             }
-                        ) {
-                            // on cancel click
-                            onNavigationBack()
                         }
-                    } else if (bottomSheetCase == 3) {
-                        //case for ride confirm screen
-                        RideConfirmedScreen(scaffoldState.bottomSheetState.isExpanded)
-                    } else {
-                        // normal bottom sheet content for choose pickup spot
-                        Column(
-                            modifier = Modifier
-                                .systemBarsPadding()
-                                .background(colorWhite),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(MaterialTheme.spacing.medium),
-                                text = "Choose you pickup spot",
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            UberDivider()
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(
-                                    horizontal = MaterialTheme.spacing.medium,
-                                    vertical = MaterialTheme.spacing.large
-                                )
+                        3 -> {
+                            //case for ride confirm screen
+                            RideConfirmedScreen(scaffoldState.bottomSheetState.isExpanded)
+                        }
+                        else -> {
+                            // normal bottom sheet content for choose pickup spot
+                            Column(
+                                modifier = Modifier
+                                    .systemBarsPadding()
+                                    .background(colorWhite),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    modifier = Modifier
-                                        .padding(vertical = MaterialTheme.spacing.medium)
-                                        .weight(1f),
-                                    text = "Near Home",
+                                    modifier = Modifier.padding(MaterialTheme.spacing.medium),
+                                    text = "Choose you pickup spot",
                                     style = MaterialTheme.typography.titleLarge
                                 )
-                                Text(
-                                    modifier = Modifier
-                                        .wrapContentHeight()
-                                        .wrapContentWidth()
-                                        .background(
-                                            colorUberGrayBg,
-                                            RoundedCornerShape(MaterialTheme.spacing.extraLarge)
-                                        )
-                                        .padding(
-                                            horizontal = MaterialTheme.spacing.large,
-                                            vertical = MaterialTheme.spacing.small
-                                        )
-                                        .clickable {
-                                            onSearchClick()
-                                        },
-                                    text = "Search",
-                                    style = MaterialTheme.typography.titleLarge.copy(textAlign = TextAlign.Center)
-                                )
+                                UberDivider()
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(
+                                        horizontal = MaterialTheme.spacing.medium,
+                                        vertical = MaterialTheme.spacing.large
+                                    )
+                                ) {
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(vertical = MaterialTheme.spacing.medium)
+                                            .weight(1f),
+                                        text = "Near Home",
+                                        style = MaterialTheme.typography.titleLarge
+                                    )
+                                    Text(
+                                        modifier = Modifier
+                                            .wrapContentHeight()
+                                            .wrapContentWidth()
+                                            .background(
+                                                colorUberGrayBg,
+                                                RoundedCornerShape(MaterialTheme.spacing.extraLarge)
+                                            )
+                                            .padding(
+                                                horizontal = MaterialTheme.spacing.large,
+                                                vertical = MaterialTheme.spacing.small
+                                            )
+                                            .clickable {
+                                                onSearchClick()
+                                            },
+                                        text = "Search",
+                                        style = MaterialTheme.typography.titleLarge.copy(textAlign = TextAlign.Center)
+                                    )
+                                }
+                                UberButton(
+                                    text = "Confirm Pickup",
+                                    modifier = Modifier.padding(MaterialTheme.spacing.medium)
+                                ) {
+                                    //onChooseConfirmLocationClick()
+                                    isLocationConfirmed = true
+                                }
+                                Spacer(modifier = Modifier.padding(22.dp))
                             }
-                            UberButton(
-                                text = "Confirm Pickup",
-                                modifier = Modifier.padding(MaterialTheme.spacing.medium)
-                            ) {
-                                //onChooseConfirmLocationClick()
-                                isLocationConfirmed = true
-                            }
-                            Spacer(modifier = Modifier.padding(22.dp))
                         }
                     }
 
@@ -205,17 +212,8 @@ fun ConfirmPickupScreen(
                                     )
                                 }
 
-                                UberBackButton(
-                                    modifier = Modifier.padding(
-                                        vertical = 22.dp,
-                                        horizontal = 8.dp
-                                    ), iconId = R.drawable.baseline_arrow_back_24
-                                ) {
-                                    onNavigationBack()
-                                }
-
                             }
-                            ShowCurrentLocationUI()
+                            ShowCurrentLocationUI(Modifier.padding(bottom = MaterialTheme.spacing.minWidth))
                         }
 
                     } else {
@@ -231,27 +229,12 @@ fun ConfirmPickupScreen(
                     .fillMaxSize(1f)
                     .padding(bottom = dynamicPadding)
             ) {
-                Box(
-                    contentAlignment = Alignment.TopStart,
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    ShowConfirmLocationGoogleMap()
-                    UberBackButton(
-                        modifier = Modifier.padding(
-                            vertical = 22.dp,
-                            horizontal = 8.dp
-                        ), iconId = R.drawable.baseline_arrow_back_24
-                    ) {
-                        onNavigationBack()
-                    }
-                }
+                ShowConfirmLocationGoogleMap()
                 if (bottomSheetCase == 1) {
-                    ShowCurrentLocationUI()
+                    ShowCurrentLocationUI(Modifier.padding(start = MaterialTheme.spacing.minWidth))
                 }
             }
         }
-
         if (isLocationConfirmed) {
 
             Box(
@@ -275,13 +258,23 @@ fun ConfirmPickupScreen(
             val deviceHeight = screenHeight.div(1.35f)
             LaunchedEffect(isLocationConfirmed) {
 
-            delay(5000)
+                delay(5000)
                 sheetPeekHeight = deviceHeight
                 bottomSheetCase = 2
                 isLocationConfirmed = false
                 scaffoldState.bottomSheetState.collapse()
             }
 
+        }
+        UberBackButton(
+            modifier = Modifier
+                .padding(
+                    vertical = 22.dp,
+                    horizontal = 8.dp
+                )
+                .zIndex(2f), iconId = R.drawable.baseline_arrow_back_24
+        ) {
+            onNavigationBack()
         }
     }
     BackHandler {
@@ -315,8 +308,9 @@ fun ShowConfirmLocationGoogleMap(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ShowCurrentLocationUI() {
+fun ShowCurrentLocationUI(modifier: Modifier = Modifier) {
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

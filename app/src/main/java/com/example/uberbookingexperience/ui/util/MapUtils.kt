@@ -4,7 +4,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 
 
-val zoom = 12f
+val zoom = 11f
 val zoomAnimationDuration = 1_000
 val mmLocation = LatLng(23.117983, 72.537436)
 
