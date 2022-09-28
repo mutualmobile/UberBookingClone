@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.theme.spacing
 
 @Composable
-fun AroundYou(isMobile: Boolean) {
+fun AroundYou(isMobile: Boolean, onGotoMap: () -> Unit) {
     val mapHeightForLargerSize = LocalConfiguration.current.screenHeightDp.dp / 2
 
     Column(

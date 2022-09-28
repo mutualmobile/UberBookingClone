@@ -68,7 +68,11 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screens.DashboardScreen()) {
-                            DashboardScreen()
+                            DashboardScreen(onGotoWhereScreen = {
+                                navController.navigate(Screens.WhereToScreen())
+                            }) {
+                                navController.navigate(Screens.MapScreen())
+                            }
                         }
 
                         composable(Screens.PaymentOptionsScreen()) {
