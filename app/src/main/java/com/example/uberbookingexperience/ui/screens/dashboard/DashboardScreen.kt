@@ -4,6 +4,7 @@ package com.example.uberbookingexperience.ui.screens.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
@@ -27,25 +28,32 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 @Composable
 fun DashboardScreen() {
     val isMobile = rememberIsMobileDevice()
-    Column {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-                .background(color = Color.White)
-        ) {
-            //header
-            HorizontalPagerWithIndicator(isMobile)
-            //options
-            QuickOptions(isMobile)
-            //start/end location
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-            PickupSelection(Modifier.align(Alignment.CenterHorizontally))
-            DestinationSelection(Modifier.align(Alignment.CenterHorizontally))
-            //around you
-            AroundYou(isMobile)
+    Row {
+        if(isMobile.not()) {
+            SideBar()
         }
-        BottomTabs()
+        Column {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .background(color = Color.White)
+            ) {
+                //header
+                HorizontalPagerWithIndicator(isMobile)
+                //options
+                QuickOptions(isMobile)
+                //start/end location
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                PickupSelection(Modifier.align(Alignment.CenterHorizontally))
+                DestinationSelection(Modifier.align(Alignment.CenterHorizontally))
+                //around you
+                AroundYou(isMobile)
+            }
+            if (isMobile) {
+                BottomTabs()
+            }
+        }
     }
 }
 
