@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,7 +24,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.screens.dashboard.Offer
+import com.example.uberbookingexperience.ui.screens.dashboard.OfferForBiggerScreen
 import com.example.uberbookingexperience.ui.screens.dashboard.getOffers
+import com.example.uberbookingexperience.ui.screens.dashboard.getOffersForBiggerScreen
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -36,10 +39,11 @@ fun HorizontalPagerWithIndicator(isMobile: Boolean) {
     val pagerState = rememberPagerState()
     val pagerHeightForLargerSize = LocalConfiguration.current.screenHeightDp.dp / 2
     val offers = getOffers()
+    val offersForBiggerScreen = getOffersForBiggerScreen()
 
     Box {
         HorizontalPager(
-            count = offers.size,
+            count = if(isMobile) offers.size else offersForBiggerScreen.size,
             state = pagerState,
             contentPadding = PaddingValues(
                 top = MaterialTheme.spacing.medium,
@@ -48,7 +52,14 @@ fun HorizontalPagerWithIndicator(isMobile: Boolean) {
         ) { page ->
             // Our page content
             val pageHeight = if (isMobile) 150.dp else pagerHeightForLargerSize
-            Page(pageHeight, offers[page])
+            if (isMobile) {
+                Page(pageHeight, offers[page], modifier = Modifier.fillMaxWidth())
+            } else {
+                Row {
+                   Page(pageHeight = pageHeight, offer = offersForBiggerScreen[page].offerFirst, modifier = Modifier.weight(1f))
+                   Page(pageHeight = pageHeight, offer = offersForBiggerScreen[page].offerSecond, modifier = Modifier.weight(1f))
+                }
+            }
         }
 
         HorizontalPagerIndicator(
@@ -61,11 +72,10 @@ fun HorizontalPagerWithIndicator(isMobile: Boolean) {
 }
 
 @Composable
-fun Page(pageHeight: Dp, offer: Offer) {
+fun Page(pageHeight: Dp, offer: Offer, modifier: Modifier) {
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .height(pageHeight)
             .padding(end = MaterialTheme.spacing.medium)
             .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
@@ -74,7 +84,9 @@ fun Page(pageHeight: Dp, offer: Offer) {
         Image(
             painter = painterResource(id = offer.image),
             contentDescription = "offer image",
-            modifier = Modifier.requiredSize(pageHeight).align(Alignment.CenterEnd)
+            modifier = Modifier
+                .requiredSize(pageHeight)
+                .align(Alignment.CenterEnd)
         )
         Text(
             text = offer.title,
@@ -82,7 +94,8 @@ fun Page(pageHeight: Dp, offer: Offer) {
             style = MaterialTheme.typography.titleMedium,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
                 .align(Alignment.CenterStart)
                 .widthIn(max = LocalConfiguration.current.screenWidthDp.dp / 2)
         )
