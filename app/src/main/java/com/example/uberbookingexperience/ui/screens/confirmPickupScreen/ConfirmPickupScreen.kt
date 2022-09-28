@@ -1,11 +1,27 @@
 package com.example.uberbookingexperience.ui.screens.confirmPickupScreen
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetValue
@@ -15,22 +31,32 @@ import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.uberbookingexperience.R
-import com.example.uberbookingexperience.ui.common.*
+import com.example.uberbookingexperience.ui.common.UberBackButton
+import com.example.uberbookingexperience.ui.common.UberButton
+import com.example.uberbookingexperience.ui.common.UberDivider
+import com.example.uberbookingexperience.ui.common.UberGoogleMap
+import com.example.uberbookingexperience.ui.common.UberLoader
 import com.example.uberbookingexperience.ui.common.bottomsheet.UberBottomSheetScaffold
 import com.example.uberbookingexperience.ui.screens.finalisingDriver.FinalisingDriverScreen
 import com.example.uberbookingexperience.ui.screens.rideConfirmed.RideConfirmedScreen
+import com.example.uberbookingexperience.ui.theme.colorGrayExtraLight
 import com.example.uberbookingexperience.ui.theme.colorLocationUI
 import com.example.uberbookingexperience.ui.theme.colorUberGrayBg
 import com.example.uberbookingexperience.ui.theme.colorWhite
@@ -60,10 +86,10 @@ fun ConfirmPickupScreen(
         }
     )
 
-    val dynamicPadding: Dp = if (rememberIsMobileDevice()) {
-        10.dp
-    } else {
-        60.dp
+    val currentDen = LocalDensity.current
+    val navBottom = WindowInsets.Companion.navigationBars.getBottom(currentDen)
+    val dynamicPadding by remember {
+        mutableStateOf(navBottom)
     }
 
     var isLocationConfirmed by rememberSaveable {
@@ -90,18 +116,19 @@ fun ConfirmPickupScreen(
         }
     }
     val screenHeight = rememberDeviceHeight()
-    //define dynamic height so we can show atlease 2 list item of cabs in different screen sizes
+    // define dynamic height so we can show atlease 2 list item of cabs in different screen sizes
     var sheetPeekHeight by rememberSaveable {
         mutableStateOf(screenHeight.div(if (isDeviceMobileType) 3f else 2.8f))
     }
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .navigationBarsPadding()) {
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+    ) {
         Box(
-            modifier = if (isDeviceMobileType) Modifier
-                .fillMaxWidth()
-                .zIndex(2f) else Modifier.zIndex(2f),
+            modifier = Modifier
+                .then(if (isDeviceMobileType) Modifier.fillMaxWidth() else Modifier)
+                .zIndex(2f),
             contentAlignment = Alignment.BottomCenter
         ) {
             UberBottomSheetScaffold(
@@ -110,10 +137,9 @@ fun ConfirmPickupScreen(
                     .fillMaxHeight(),
                 scaffoldState = scaffoldState,
                 sheetShape = RectangleShape,
-                sheetBackgroundColor = colorWhite,
+                sheetBackgroundColor = MaterialTheme.colorScheme.onPrimary,
                 sheetPeekHeight = sheetPeekHeight.dp,
                 sheetContent = {
-
                     when (bottomSheetCase) {
                         2 -> {
                             // case to show finalising bottom sheet with animation
@@ -129,7 +155,7 @@ fun ConfirmPickupScreen(
                             }
                         }
                         3 -> {
-                            //case for ride confirm screen
+                            // case for ride confirm screen
                             RideConfirmedScreen(scaffoldState.bottomSheetState.isExpanded)
                         }
                         else -> {
@@ -183,15 +209,15 @@ fun ConfirmPickupScreen(
                                     text = "Confirm Pickup",
                                     modifier = Modifier.padding(MaterialTheme.spacing.medium)
                                 ) {
-                                    //onChooseConfirmLocationClick()
+                                    // onChooseConfirmLocationClick()
                                     isLocationConfirmed = true
                                 }
                                 Spacer(modifier = Modifier.padding(22.dp))
                             }
                         }
                     }
-
-                }, bodyContent = {
+                },
+                bodyContent = {
                     if (isDeviceMobileType) {
                         Box(
                             contentAlignment = Alignment.Center,
@@ -207,40 +233,38 @@ fun ConfirmPickupScreen(
                                     modifier = Modifier
                                         .fillMaxSize()
                                 ) {
-                                    ShowConfirmLocationGoogleMap(
+                                    ConfirmPickupGoogleMap(
                                         modifier = Modifier.weight(1f)
                                     )
                                 }
-
                             }
-                            ShowCurrentLocationUI(Modifier.padding(bottom = MaterialTheme.spacing.minWidth))
+                            GoogleMapCurrentLocationUI(Modifier.padding(bottom = MaterialTheme.spacing.minWidth))
                         }
-
                     } else {
                         Spacer(modifier = Modifier.padding(1.dp))
                     }
-                })
-
+                }
+            )
         }
         if (!isDeviceMobileType) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize(1f)
-                    .padding(bottom = dynamicPadding)
+                    .padding(bottom = dynamicPadding.dp)
             ) {
-                ShowConfirmLocationGoogleMap()
+                ConfirmPickupGoogleMap()
                 if (bottomSheetCase == 1) {
-                    ShowCurrentLocationUI(Modifier.padding(start = MaterialTheme.spacing.minWidth))
+                    GoogleMapCurrentLocationUI(Modifier.padding(start = MaterialTheme.spacing.minWidth))
                 }
             }
         }
         if (isLocationConfirmed) {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .zIndex(2f), contentAlignment = Alignment.Center
+                    .zIndex(2f),
+                contentAlignment = Alignment.Center
             ) {
                 UberLoader(
                     modifier = Modifier
@@ -257,22 +281,23 @@ fun ConfirmPickupScreen(
             )
             val deviceHeight = screenHeight.div(1.35f)
             LaunchedEffect(isLocationConfirmed) {
-
                 delay(5000)
                 sheetPeekHeight = deviceHeight
                 bottomSheetCase = 2
                 isLocationConfirmed = false
                 scaffoldState.bottomSheetState.collapse()
             }
-
         }
         UberBackButton(
             modifier = Modifier
-                .padding(
-                    vertical = 22.dp,
-                    horizontal = 8.dp
-                )
-                .zIndex(2f), iconId = R.drawable.baseline_arrow_back_24
+                .statusBarsPadding()
+                .zIndex(2f),
+            iconId = R.drawable.baseline_arrow_back_24,
+            backgroundColor = if (rememberIsMobileDevice()) {
+                MaterialTheme.colorScheme.onPrimary
+            } else {
+                colorGrayExtraLight
+            }
         ) {
             onNavigationBack()
         }
@@ -283,32 +308,19 @@ fun ConfirmPickupScreen(
 }
 
 @Composable
-fun ShowConfirmLocationGoogleMap(modifier: Modifier = Modifier) {
-    val infiniteTransition = rememberInfiniteTransition()
-    val animateColor by infiniteTransition.animateColor(
-        initialValue = Color(0xFFF4F4F4),
-        targetValue = Color(0xFF000000),
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 2000,
-                easing = LinearEasing
-            ),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
+fun ConfirmPickupGoogleMap(modifier: Modifier = Modifier) {
     UberGoogleMap(
-        modifier = modifier, cameraPositionState = rememberCameraPositionState {
+        modifier = modifier,
+        cameraPositionState = rememberCameraPositionState {
             position = defaultCameraPosition
         },
         cameraPositionDefault = CameraPosition.fromLatLngZoom(pathLatLongsFirst.first(), 25f)
     ) {
-
-
     }
 }
 
 @Composable
-fun ShowCurrentLocationUI(modifier: Modifier = Modifier) {
+fun GoogleMapCurrentLocationUI(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -331,7 +343,8 @@ fun ShowCurrentLocationUI(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.titleMedium.copy(textAlign = TextAlign.Center)
         )
         Divider(
-            color = colorLocationUI, modifier = Modifier
+            color = colorLocationUI,
+            modifier = Modifier
                 .width(2.dp)
                 .height(26.dp)
         )
@@ -345,15 +358,16 @@ fun ShowCurrentLocationUI(modifier: Modifier = Modifier) {
                 Modifier
                     .size(10.dp)
                     .background(colorWhite, RectangleShape)
-                    .zIndex(2f))
+                    .zIndex(2f)
+            )
         }
     }
 }
 
 @Preview
 @Composable
-fun ShowCurrentLocationUIPreview() {
-    ShowCurrentLocationUI()
+fun GoogleMapCurrentLocationUIPreview() {
+    GoogleMapCurrentLocationUI()
 }
 
 @Preview

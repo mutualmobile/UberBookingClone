@@ -1,7 +1,12 @@
 package com.example.uberbookingexperience.ui.screens.rideConfirmed
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -39,7 +44,7 @@ fun RideConfirmedScreen(shouldScroll: Boolean = false) {
                 if (rememberIsMobileDevice()) {
                     Modifier.fillMaxWidth()
                 } else {
-                    Modifier.width(300.dp)
+                    Modifier.width(MaterialTheme.spacing.minWidth)
                 }
             )
             .wrapContentSize()

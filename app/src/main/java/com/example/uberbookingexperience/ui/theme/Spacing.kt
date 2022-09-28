@@ -26,6 +26,7 @@ class Spacing internal constructor(
         if (medium != other.medium) return false
         if (large != other.large) return false
         if (extraLarge != other.extraLarge) return false
+        if (minWidth != other.minWidth) return false
 
         return true
     }
@@ -36,12 +37,13 @@ class Spacing internal constructor(
         result = 31 * result + medium.hashCode()
         result = 31 * result + large.hashCode()
         result = 31 * result + extraLarge.hashCode()
+        result = 31 * result + minWidth.hashCode()
         return result
     }
 
     override fun toString(): String {
         return "Spacing(extraSmall=$extraSmall, small=$small, medium=$medium," +
-                " large=$large, extraLarge=$extraLarge)"
+            " large=$large, extraLarge=$extraLarge, minWidth=$minWidth)"
     }
 }
 

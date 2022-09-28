@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
@@ -46,7 +47,7 @@ fun AddPaymentMethodScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
+        Spacer(modifier = Modifier.systemBarsPadding())
         UberTopBar(
             title = "Add Payment",
             icon = Icons.Default.ArrowBack,

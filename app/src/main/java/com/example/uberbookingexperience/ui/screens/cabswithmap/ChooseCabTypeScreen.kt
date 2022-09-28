@@ -84,9 +84,9 @@ import com.example.uberbookingexperience.ui.util.cabsForPathTwo
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
 import com.example.uberbookingexperience.ui.util.defaultCameraPosition
 import com.example.uberbookingexperience.ui.util.pathLatLongsFirst
+import com.example.uberbookingexperience.ui.util.rememberBottomSheetProgress
 import com.example.uberbookingexperience.ui.util.rememberDeviceHeight
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
-import com.example.uberbookingexperience.ui.util.rememberScaffoldStateFraction
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.JointType
 import com.google.android.gms.maps.model.LatLngBounds
@@ -127,19 +127,16 @@ fun ChooseCabTypeScreen(
 
     val uberButtonText by remember { derivedStateOf { "Choose " + selectedUberCab.cabInfo } }
 
-    /*val translationDp = (36.dp + ButtonDefaults.ContentPadding.calculateTopPadding()
-            + ButtonDefaults.ContentPadding.calculateBottomPadding()
-            + 30.dp + dynamicPadding).value + 130f*/
-    val paddingBottom by remember {
-        mutableStateOf(Modifier.navigationBarsPadding())
-    }
-    // TODO: add bottom padding value in translationPx count to properly hide button on y axix translation
     val currentDen = LocalDensity.current
     val navBottom = WindowInsets.Companion.navigationBars.getBottom(currentDen)
+    /*val paddingBottom by remember {
+        mutableStateOf(navBottom)
+    }*/
+    // TODO: add bottom padding value in translationPx count to properly hide button on y axix translation
     val translationPx by remember {
         mutableStateOf(
             with(currentDen) {
-                (ButtonDefaults.MinHeight + 18.dp).toPx() + navBottom
+                (ButtonDefaults.MinHeight + 24.dp).toPx() + navBottom
             }
         )
     }
@@ -163,30 +160,34 @@ fun ChooseCabTypeScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         UberBackButton(
             modifier = Modifier
-                .zIndex(2f)
+                .zIndex(3f)
                 .padding(
                     vertical = MaterialTheme.spacing.extraLarge,
                     horizontal = MaterialTheme.spacing.medium
                 )
-                .graphicsLayer(alpha = 1f - scaffoldState.rememberScaffoldStateFraction()),
+                .graphicsLayer(alpha = 1f - scaffoldState.rememberBottomSheetProgress()),
             iconId = R.drawable.baseline_arrow_back_24,
             backgroundColor = if (rememberIsMobileDevice()) {
-                colorWhite
+                MaterialTheme.colorScheme.onPrimary
             } else {
                 colorGrayExtraLight
             }
         ) {
-            if (scaffoldState.bottomSheetState.isExpanded) {
-                scope.launch {
-                    scaffoldState.bottomSheetState.collapse()
+            when {
+                scaffoldState.bottomSheetState.isExpanded -> {
+                    scope.launch {
+                        scaffoldState.bottomSheetState.collapse()
+                    }
                 }
-            } else if (isItemSelected) {
-                isItemSelected = false
-            } else {
-                onNavigationBack()
+                isItemSelected -> {
+                    isItemSelected = false
+                }
+                else -> {
+                    onNavigationBack()
+                }
             }
         }
-        val currentFraction = scaffoldState.rememberScaffoldStateFraction()
+        val currentFraction = scaffoldState.rememberBottomSheetProgress()
         Box(
             modifier = dynamicWidth
                 .background(colorBlack.copy(alpha = currentFraction))
@@ -215,7 +216,7 @@ fun ChooseCabTypeScreen(
                 Text(
                     "Choose a ride",
                     style = MaterialTheme.typography.titleMedium.copy(textAlign = TextAlign.Center),
-                    color = colorWhite.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.medium)
                         .fillMaxWidth(1f)
@@ -228,7 +229,7 @@ fun ChooseCabTypeScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                ShowGoogleMap()
+                CabTypeGoogleMap()
             }
         }
         Box(
@@ -249,7 +250,7 @@ fun ChooseCabTypeScreen(
                         UberCabsListing(
                             isVisibleDivider = false,
                             uberMapScreenVM = uberMapScreenViewModel,
-                            currentFraction = scaffoldState.rememberScaffoldStateFraction(),
+                            currentFraction = scaffoldState.rememberBottomSheetProgress(),
                             onItemChecked = {
                                 selectedUberCab = it
                             }
@@ -264,7 +265,7 @@ fun ChooseCabTypeScreen(
                     SheetCollapsed(
                         isCollapsed = scaffoldState.bottomSheetState.isCollapsed,
                         isDetailsOpen = isItemSelected,
-                        currentFraction = scaffoldState.rememberScaffoldStateFraction(),
+                        currentFraction = scaffoldState.rememberBottomSheetProgress(),
                         sheetCollapsedFraction = 1f,
                         onSheetClick = sheetToggle
                     ) {
@@ -281,13 +282,13 @@ fun ChooseCabTypeScreen(
                                 modifier = Modifier
                                     .background(colorWhite)
                             ) {
-                                uberMapScreenViewModel.selectedItem().let { it1 ->
+                                uberMapScreenViewModel.selectedItem().let { uberCabInfo ->
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier
                                             .padding(horizontal = 14.dp, vertical = 6.dp)
                                     ) {
-                                        UberCabsListItemDetails(it1)
+                                        UberCabsListItemDetails(uberCabInfo)
                                     }
                                 }
                             }
@@ -324,7 +325,7 @@ fun ChooseCabTypeScreen(
                                     .fillMaxWidth()
                                     .fillMaxHeight(0.55f)
                             ) {
-                                ShowGoogleMap(
+                                CabTypeGoogleMap(
                                     modifier = Modifier.weight(1f)
                                 )
                             }
@@ -335,7 +336,7 @@ fun ChooseCabTypeScreen(
                 }
             )
 
-            val bottomSheetProgress = scaffoldState.rememberScaffoldStateFraction()
+            val bottomSheetProgress = scaffoldState.rememberBottomSheetProgress()
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -382,7 +383,8 @@ fun ChooseCabTypeScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = paddingBottom
+                    // modifier = Modifier.padding(bottom = paddingBottom.dp)
+                    modifier = Modifier.navigationBarsPadding()
                 ) {
                     UberButton(
                         text = uberButtonText,
@@ -417,7 +419,7 @@ fun ChooseCabTypeScreen(
 }
 
 @Composable
-fun ShowGoogleMap(modifier: Modifier = Modifier) {
+fun CabTypeGoogleMap(modifier: Modifier = Modifier) {
     val positionBuilder = LatLngBounds.Builder()
     positionBuilder.include(pathLatLongsFirst.first())
     positionBuilder.include(pathLatLongsFirst.last())
