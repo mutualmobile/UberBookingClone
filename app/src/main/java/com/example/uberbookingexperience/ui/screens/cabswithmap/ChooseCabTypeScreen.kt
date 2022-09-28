@@ -2,19 +2,52 @@ package com.example.uberbookingexperience.ui.screens.cabswithmap
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -22,27 +55,47 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.model.UberCabInfo
 import com.example.uberbookingexperience.model.UberCabInfoSaver
-import com.example.uberbookingexperience.ui.common.*
+import com.example.uberbookingexperience.ui.common.UberBackButton
+import com.example.uberbookingexperience.ui.common.UberButton
+import com.example.uberbookingexperience.ui.common.UberGoogleMap
+import com.example.uberbookingexperience.ui.common.UberIconButton
+import com.example.uberbookingexperience.ui.common.UberMapInfoWindowText
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetCollapsed
 import com.example.uberbookingexperience.ui.common.bottomsheet.SheetExpanded
 import com.example.uberbookingexperience.ui.common.bottomsheet.UberBottomSheetScaffold
-import com.example.uberbookingexperience.ui.theme.*
-import com.example.uberbookingexperience.ui.util.*
+import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
+import com.example.uberbookingexperience.ui.theme.colorBlack
+import com.example.uberbookingexperience.ui.theme.colorGrayExtraLight
+import com.example.uberbookingexperience.ui.theme.colorWhite
+import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.bitmapDescriptorFromVector
+import com.example.uberbookingexperience.ui.util.cabsForPathOne
+import com.example.uberbookingexperience.ui.util.cabsForPathTwo
+import com.example.uberbookingexperience.ui.util.clickableWithRipple
+import com.example.uberbookingexperience.ui.util.defaultCameraPosition
+import com.example.uberbookingexperience.ui.util.pathLatLongsFirst
+import com.example.uberbookingexperience.ui.util.rememberDeviceHeight
+import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
+import com.example.uberbookingexperience.ui.util.rememberScaffoldStateFraction
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.JointType
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.RoundCap
-import com.google.maps.android.compose.*
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerInfoWindowContent
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 
 @SuppressLint("SuspiciousIndentation")
@@ -64,14 +117,6 @@ fun ChooseCabTypeScreen(
         }
     )
 
-    val dynamicPadding: Dp = if (rememberIsMobileDevice()) {
-        //dynamicWidth = 1f
-        10.dp
-    } else {
-        //dynamicWidth = 0.35f
-        60.dp
-    }
-
     /*==Google maps related properties*/
     var selectedUberCab by rememberSaveable(stateSaver = UberCabInfoSaver) {
         mutableStateOf(uberMapScreenViewModel.selectedItem())
@@ -82,10 +127,22 @@ fun ChooseCabTypeScreen(
 
     val uberButtonText by remember { derivedStateOf { "Choose " + selectedUberCab.cabInfo } }
 
-
-    val translationDp = (36.dp + ButtonDefaults.ContentPadding.calculateTopPadding()
+    /*val translationDp = (36.dp + ButtonDefaults.ContentPadding.calculateTopPadding()
             + ButtonDefaults.ContentPadding.calculateBottomPadding()
-            + 30.dp + dynamicPadding).value + 130f
+            + 30.dp + dynamicPadding).value + 130f*/
+    val paddingBottom by remember {
+        mutableStateOf(Modifier.navigationBarsPadding())
+    }
+    // TODO: add bottom padding value in translationPx count to properly hide button on y axix translation
+    val currentDen = LocalDensity.current
+    val navBottom = WindowInsets.Companion.navigationBars.getBottom(currentDen)
+    val translationPx by remember {
+        mutableStateOf(
+            with(currentDen) {
+                (ButtonDefaults.MinHeight + 18.dp).toPx() + navBottom
+            }
+        )
+    }
     /*==Bottom sheet related properties*/
     val isDeviceMobileType = rememberIsMobileDevice()
     val scaffoldState = rememberBottomSheetScaffoldState(
@@ -100,7 +157,7 @@ fun ChooseCabTypeScreen(
             }
         }
     }
-    //define dynamic height so we can show atlease 2 list item of cabs in different screen sizes
+    // define dynamic height so we can show atlease 2 list item of cabs in different screen sizes
     val sheetPeekHeight = rememberDeviceHeight().div(if (isDeviceMobileType) 2f else 1.5f)
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -142,7 +199,6 @@ fun ChooseCabTypeScreen(
                     .fillMaxWidth()
                     .statusBarsPadding()
             ) {
-
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_arrow_back_24),
                     contentDescription = "",
@@ -171,7 +227,6 @@ fun ChooseCabTypeScreen(
                 contentAlignment = Alignment.TopStart,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = dynamicPadding)
             ) {
                 ShowGoogleMap()
             }
@@ -245,17 +300,20 @@ fun ChooseCabTypeScreen(
                             ),
                             exit = slideOutVertically() + shrinkVertically(shrinkTowards = Alignment.Top)
                         ) {
-                            UberCabsListing(uberMapScreenViewModel,
+                            UberCabsListing(
+                                uberMapScreenViewModel,
                                 onItemChecked = {
                                     selectedUberCab = it
-                                }) {
+                                }
+                            ) {
                                 selectedUberCab = it
                                 isItemSelected = true
                             }
                         }
                         Spacer(modifier = Modifier.padding(1.dp))
                     }
-                }, bodyContent = {
+                },
+                bodyContent = {
                     if (isDeviceMobileType) {
                         Box(
                             modifier = Modifier
@@ -270,20 +328,20 @@ fun ChooseCabTypeScreen(
                                     modifier = Modifier.weight(1f)
                                 )
                             }
-
                         }
                     } else {
                         Spacer(modifier = Modifier.padding(1.dp))
                     }
-                })
+                }
+            )
 
-
+            val bottomSheetProgress = scaffoldState.rememberScaffoldStateFraction()
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = dynamicWidth
                     .wrapContentHeight()
-                    .graphicsLayer(translationY = translationDp * scaffoldState.rememberScaffoldStateFraction())
+                    .graphicsLayer { translationY = translationPx * bottomSheetProgress }
                     .background(colorWhite)
             ) {
                 Divider(
@@ -307,7 +365,7 @@ fun ChooseCabTypeScreen(
                             .padding(horizontal = 4.dp, vertical = 10.dp)
                             .fillMaxWidth(0.1f)
                     )
-                    androidx.compose.material3.Text(
+                    Text(
                         text = stringResource(id = R.string.upi),
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier
@@ -324,10 +382,11 @@ fun ChooseCabTypeScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(bottom = dynamicPadding)
+                    modifier = paddingBottom
                 ) {
                     UberButton(
-                        text = uberButtonText, modifier =
+                        text = uberButtonText,
+                        modifier =
                         Modifier
                             .weight(1f)
                             .padding(horizontal = 14.dp, vertical = 12.dp)
@@ -341,10 +400,8 @@ fun ChooseCabTypeScreen(
                         onSchedulePickupOption()
                     }
                 }
-
             }
         }
-
     }
     BackHandler {
         if (scaffoldState.bottomSheetState.isExpanded) {
@@ -377,25 +434,24 @@ fun ShowGoogleMap(modifier: Modifier = Modifier) {
         )
     )
     UberGoogleMap(
-        modifier = modifier, cameraPositionState = rememberCameraPositionState {
+        modifier = modifier,
+        cameraPositionState = rememberCameraPositionState {
             position = defaultCameraPosition
         },
         latLngBounds = positionBuilder.build()
     ) {
-
         cabsForPathOne.forEach {
             Marker(
                 MarkerState(it),
-                icon = BitmapDescriptorFactory.fromResource(R.mipmap.ub__marker_vehicle_fallback),
+                icon = BitmapDescriptorFactory.fromResource(R.mipmap.ub__marker_vehicle_fallback)
             )
         }
         cabsForPathTwo.forEach {
             Marker(
                 MarkerState(it),
-                icon = BitmapDescriptorFactory.fromResource(R.mipmap.ub__marker_vehicle_fallback),
+                icon = BitmapDescriptorFactory.fromResource(R.mipmap.ub__marker_vehicle_fallback)
             )
         }
-
 
         MarkerInfoWindowContent(
             MarkerState(pathLatLongsFirst.first()),
