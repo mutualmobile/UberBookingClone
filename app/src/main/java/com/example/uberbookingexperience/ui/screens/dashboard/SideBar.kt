@@ -6,6 +6,7 @@ import androidx.compose.material.NavigationRail
 import androidx.compose.material.NavigationRailItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SupervisedUserCircle
@@ -20,7 +21,7 @@ fun SideBar() {
     var selectedItem by remember { mutableStateOf(0) }
     val tabsList = listOf(
         "Home" to Icons.Default.Home,
-        "Account" to Icons.Default.SupervisedUserCircle,
+        "Account" to Icons.Default.AccountBox,
         "Settings" to Icons.Default.Settings,
     )
     Row {

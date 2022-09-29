@@ -38,11 +38,6 @@ val Typography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = 13.sp
     ),
-    titleMedium = TextStyle(
-        fontFamily = UberMove,
-        fontWeight = FontWeight.Medium,
-        fontSize = 16.sp
-    ),
     bodySmall = TextStyle(
         fontFamily = UberMove,
         fontWeight = FontWeight.Normal,

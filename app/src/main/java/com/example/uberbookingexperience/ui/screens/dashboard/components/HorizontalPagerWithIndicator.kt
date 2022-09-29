@@ -17,7 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,7 +40,7 @@ import com.google.accompanist.pager.rememberPagerState
 @Composable
 fun HorizontalPagerWithIndicator(isMobile: Boolean) {
     val pagerState = rememberPagerState()
-    val pagerHeightForLargerSize = LocalConfiguration.current.screenHeightDp.dp / 2
+    val pagerHeightForLargerSize = LocalConfiguration.current.screenHeightDp.dp / 3
     val offers = getOffers()
     val offersForBiggerScreen = getOffersForBiggerScreen()
 
@@ -53,11 +56,11 @@ fun HorizontalPagerWithIndicator(isMobile: Boolean) {
             // Our page content
             val pageHeight = if (isMobile) 150.dp else pagerHeightForLargerSize
             if (isMobile) {
-                Page(pageHeight, offers[page], modifier = Modifier.fillMaxWidth())
+                Page(pageHeight, offers[page], modifier = Modifier.fillMaxWidth(), isMobile)
             } else {
                 Row {
-                   Page(pageHeight = pageHeight, offer = offersForBiggerScreen[page].offerFirst, modifier = Modifier.weight(1f))
-                   Page(pageHeight = pageHeight, offer = offersForBiggerScreen[page].offerSecond, modifier = Modifier.weight(1f))
+                   Page(pageHeight = pageHeight, offer = offersForBiggerScreen[page].offerFirst, modifier = Modifier.weight(1f), isMobile)
+                   Page(pageHeight = pageHeight, offer = offersForBiggerScreen[page].offerSecond, modifier = Modifier.weight(1f), isMobile)
                 }
             }
         }
@@ -72,8 +75,10 @@ fun HorizontalPagerWithIndicator(isMobile: Boolean) {
 }
 
 @Composable
-fun Page(pageHeight: Dp, offer: Offer, modifier: Modifier) {
-
+fun Page(pageHeight: Dp, offer: Offer, modifier: Modifier, isMobile: Boolean) {
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val textWidthForMobile = screenWidth / 2
+    val textWidthForLargerSize = screenWidth / 6
     Box(
         modifier = modifier
             .height(pageHeight)
@@ -97,7 +102,7 @@ fun Page(pageHeight: Dp, offer: Offer, modifier: Modifier) {
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.CenterStart)
-                .widthIn(max = LocalConfiguration.current.screenWidthDp.dp / 2)
+                .widthIn(max = if (isMobile) textWidthForMobile else textWidthForLargerSize),
         )
     }
 }
