@@ -86,8 +86,8 @@ fun UberTextField(
           .weight(5f)
           .padding(contentPadding)
           .onFocusChanged {
-            isTfFocused = it.isFocused
-            onFocus()
+            isTfFocused = it.isFocused || it.hasFocus
+            if (isTfFocused) { onFocus() }
           },
         value = value,
         onValueChange = onValueChange,

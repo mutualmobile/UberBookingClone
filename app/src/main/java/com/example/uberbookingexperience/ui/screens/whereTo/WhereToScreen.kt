@@ -124,13 +124,6 @@ fun WhereTo(
 
     LaunchedEffect(Unit) { pickupLocationTfFocusRequester.requestFocus() }
 
-    LaunchedEffect(state.bottomSheetState.isCollapsed) {
-        if (state.bottomSheetState.isCollapsed) {
-            keyboardManager?.hide()
-            focusManager.clearFocus()
-        }
-    }
-
     LaunchedEffect(state.bottomSheetState.isExpanded) {
         if (state.bottomSheetState.isExpanded) {
             when {
@@ -141,6 +134,9 @@ fun WhereTo(
                     whereToTfRequester.requestFocus()
                 }
             }
+        } else {
+            keyboardManager?.hide()
+            focusManager.clearFocus()
         }
     }
 
@@ -315,7 +311,7 @@ fun WhereTo(
                 sheetContent = {
                     LazyColumn(
                         modifier = Modifier
-                            .padding(horizontal = 32.dp.times(1 - swipeProgress))
+                            .padding(horizontal = MaterialTheme.spacing.extraLarge.times(1 - swipeProgress))
                             .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                             .fillMaxHeight()
                             .background(Color.White),
