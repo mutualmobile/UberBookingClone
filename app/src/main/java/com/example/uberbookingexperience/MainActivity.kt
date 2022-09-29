@@ -79,14 +79,16 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screens.MapScreen()) {
                             val uberMapScreenVM = UberMapScreenVM()
-                            ChooseCabTypeScreen(uberMapScreenVM, onPaymentOptionClick = {
-                                navController.navigate(Screens.PaymentOptionsScreen())
-                            },
+                            ChooseCabTypeScreen(
+                                uberMapScreenVM,
+                                onPaymentOptionClick = {
+                                    navController.navigate(Screens.PaymentOptionsScreen())
+                                },
                                 onSchedulePickupOption = {
                                     navController.navigate(Screens.SchedulePickupScreen())
                                 },
                                 onChooseUberClick = {
-                                    //proceed to confirm location screen
+                                    // proceed to confirm location screen
                                     navController.navigate(Screens.ConfirmPickUpLocation())
                                 }
                             ) {
@@ -103,7 +105,9 @@ class MainActivity : ComponentActivity() {
                         composable(Screens.SchedulePickupScreen()) {
                             SchedulePickupScreen(
                                 onNavigationIconClick = { navController.navigateUp() },
-                                onScheduleButtonClick = { _, _ -> }
+                                onScheduleButtonClick = { _, _ ->
+                                    navController.navigateUp()
+                                }
                             )
                         }
 
@@ -114,7 +118,6 @@ class MainActivity : ComponentActivity() {
                             ConfirmPickupScreen(onSearchClick = {}, onNavigationBack = {
                                 navController.navigateUp()
                             }) {
-
                             }
                         }
                     }

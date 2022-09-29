@@ -1,14 +1,16 @@
 package com.example.uberbookingexperience.ui.screens.confirmPickupScreen
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,8 +19,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -61,6 +61,7 @@ import com.example.uberbookingexperience.ui.theme.colorLocationUI
 import com.example.uberbookingexperience.ui.theme.colorUberGrayBg
 import com.example.uberbookingexperience.ui.theme.colorWhite
 import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.clickableWithRipple
 import com.example.uberbookingexperience.ui.util.defaultCameraPosition
 import com.example.uberbookingexperience.ui.util.pathLatLongsFirst
 import com.example.uberbookingexperience.ui.util.rememberDeviceHeight
@@ -70,7 +71,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun ConfirmPickupScreen(
     onSearchClick: () -> Unit = {},
@@ -93,6 +94,9 @@ fun ConfirmPickupScreen(
     }
 
     var isLocationConfirmed by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var locationChangeAnimation by rememberSaveable {
         mutableStateOf(false)
     }
     var bottomSheetCase by rememberSaveable {
@@ -140,6 +144,22 @@ fun ConfirmPickupScreen(
                 sheetBackgroundColor = MaterialTheme.colorScheme.onPrimary,
                 sheetPeekHeight = sheetPeekHeight.dp,
                 sheetContent = {
+                    AnimatedContent(targetState = "") {
+                        if (locationChangeAnimation) {
+                            UberLoader(
+                                modifier = dynamicWidth
+                                    .height(MaterialTheme.spacing.small)
+                                    .background(color = MaterialTheme.colorScheme.onPrimary),
+                                text = "Processing your request...",
+                                loaderColor = MaterialTheme.colorScheme.primary,
+                                loaderThickness = MaterialTheme.spacing.extraSmall
+                            )
+                            LaunchedEffect(locationChangeAnimation) {
+                                delay(2000)
+                                locationChangeAnimation = false
+                            }
+                        }
+                    }
                     when (bottomSheetCase) {
                         2 -> {
                             // case to show finalising bottom sheet with animation
@@ -162,12 +182,12 @@ fun ConfirmPickupScreen(
                             // normal bottom sheet content for choose pickup spot
                             Column(
                                 modifier = Modifier
-                                    .systemBarsPadding()
+                                    .padding(top = MaterialTheme.spacing.medium)
                                     .background(colorWhite),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    modifier = Modifier.padding(MaterialTheme.spacing.medium),
+                                    modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium),
                                     text = "Choose you pickup spot",
                                     style = MaterialTheme.typography.titleLarge
                                 )
@@ -176,7 +196,7 @@ fun ConfirmPickupScreen(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.padding(
                                         horizontal = MaterialTheme.spacing.medium,
-                                        vertical = MaterialTheme.spacing.large
+                                        vertical = MaterialTheme.spacing.medium
                                     )
                                 ) {
                                     Text(
@@ -198,16 +218,18 @@ fun ConfirmPickupScreen(
                                                 horizontal = MaterialTheme.spacing.large,
                                                 vertical = MaterialTheme.spacing.small
                                             )
-                                            .clickable {
+                                            .clickableWithRipple {
                                                 onSearchClick()
                                             },
+
                                         text = "Search",
                                         style = MaterialTheme.typography.titleLarge.copy(textAlign = TextAlign.Center)
                                     )
                                 }
                                 UberButton(
                                     text = "Confirm Pickup",
-                                    modifier = Modifier.padding(MaterialTheme.spacing.medium)
+                                    modifier = Modifier.padding(MaterialTheme.spacing.medium),
+                                    isEnable = !locationChangeAnimation
                                 ) {
                                     // onChooseConfirmLocationClick()
                                     isLocationConfirmed = true
@@ -235,7 +257,9 @@ fun ConfirmPickupScreen(
                                 ) {
                                     ConfirmPickupGoogleMap(
                                         modifier = Modifier.weight(1f)
-                                    )
+                                    ) {
+                                        locationChangeAnimation = true
+                                    }
                                 }
                             }
                             GoogleMapCurrentLocationUI(Modifier.padding(bottom = MaterialTheme.spacing.minWidth))
@@ -251,9 +275,10 @@ fun ConfirmPickupScreen(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize(1f)
-                    .padding(bottom = dynamicPadding.dp)
             ) {
-                ConfirmPickupGoogleMap()
+                ConfirmPickupGoogleMap {
+                    locationChangeAnimation = true
+                }
                 if (bottomSheetCase == 1) {
                     GoogleMapCurrentLocationUI(Modifier.padding(start = MaterialTheme.spacing.minWidth))
                 }
@@ -268,6 +293,7 @@ fun ConfirmPickupScreen(
             ) {
                 UberLoader(
                     modifier = Modifier
+                        .defaultMinSize(minWidth = 200.dp)
                         .fillMaxSize()
                         .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
                     text = "Processing your request...",
@@ -290,7 +316,10 @@ fun ConfirmPickupScreen(
         }
         UberBackButton(
             modifier = Modifier
-                .statusBarsPadding()
+                .padding(
+                    vertical = MaterialTheme.spacing.extraLarge,
+                    horizontal = MaterialTheme.spacing.medium
+                )
                 .zIndex(2f),
             iconId = R.drawable.baseline_arrow_back_24,
             backgroundColor = if (rememberIsMobileDevice()) {
@@ -308,13 +337,14 @@ fun ConfirmPickupScreen(
 }
 
 @Composable
-fun ConfirmPickupGoogleMap(modifier: Modifier = Modifier) {
+fun ConfirmPickupGoogleMap(modifier: Modifier = Modifier, onMovementCallback: () -> Unit) {
     UberGoogleMap(
         modifier = modifier,
         cameraPositionState = rememberCameraPositionState {
             position = defaultCameraPosition
         },
-        cameraPositionDefault = CameraPosition.fromLatLngZoom(pathLatLongsFirst.first(), 25f)
+        cameraPositionDefault = CameraPosition.fromLatLngZoom(pathLatLongsFirst.first(), 25f),
+        mapMovingCallback = onMovementCallback
     ) {
     }
 }
@@ -340,23 +370,23 @@ fun GoogleMapCurrentLocationUI(modifier: Modifier = Modifier) {
                 ),
             text = "Pick-up here",
             color = colorWhite,
-            style = MaterialTheme.typography.titleMedium.copy(textAlign = TextAlign.Center)
+            style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center)
         )
         Divider(
             color = colorLocationUI,
             modifier = Modifier
                 .width(2.dp)
-                .height(26.dp)
+                .height(24.dp)
         )
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(32.dp)
+                .size(26.dp)
                 .background(colorLocationUI, CircleShape)
         ) {
             Box(
                 Modifier
-                    .size(10.dp)
+                    .size(8.dp)
                     .background(colorWhite, RectangleShape)
                     .zIndex(2f)
             )
