@@ -1,6 +1,7 @@
 package com.example.uberbookingexperience.ui.common
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,7 +13,11 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.LocationSource
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.maps.android.compose.*
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.GoogleMapComposable
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.rememberCameraPositionState
 
 /**
  * Common Google map composable that we can use in the app
@@ -35,10 +40,9 @@ fun UberGoogleMap(
     locationSource: LocationSource? = null,
     mapZoomAnimationDuration: Int = 1_000,
     mapZoomPadding: Int = ((rememberDeviceWidth() * 5) / 50),
-    content: (@Composable @GoogleMapComposable () -> Unit)? = null
+    nonMapContent: (@Composable BoxScope.() -> Unit)? = null,
+    content: (@Composable @GoogleMapComposable () -> Unit)? = null,
 ) {
-
-
     val isMapReady = rememberSaveable {
         mutableStateOf(false)
     }
@@ -63,16 +67,7 @@ fun UberGoogleMap(
 
             }
         }
-
-
     }
-    // Detect when the map starts moving and print the reason
-    LaunchedEffect(cameraPositionState.isMoving) {
-        if (cameraPositionState.isMoving) {
-            // use "${cameraPositionState.cameraMoveStartedReason.name}" to see reason for moving
-        }
-    }
-
 
     Box(modifier.fillMaxSize()) {
         GoogleMap(
@@ -85,10 +80,8 @@ fun UberGoogleMap(
             locationSource = locationSource,
             properties = mapProperties
         ) {
-            if (content != null) {
-                content()
-            }
-
+            content?.let { nnMapContent -> nnMapContent() }
         }
+        nonMapContent?.let { nnContent -> nnContent() }
     }
 }

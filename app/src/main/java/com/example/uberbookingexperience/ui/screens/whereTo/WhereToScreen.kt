@@ -1,5 +1,6 @@
 package com.example.uberbookingexperience.ui.screens.whereTo
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -59,15 +62,20 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.service.RecentSearchesDataService
+import com.example.uberbookingexperience.ui.common.UberButton
 import com.example.uberbookingexperience.ui.common.UberGoogleMap
 import com.example.uberbookingexperience.ui.theme.Typography
 import com.example.uberbookingexperience.ui.theme.colorGrayLighter
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.LargeScreenChildMaxWidth
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
+import com.example.uberbookingexperience.ui.util.limitWidth
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
+import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
@@ -100,10 +108,17 @@ fun WhereTo(
 
     val swipeProgress = state.rememberBottomSheetProgress()
 
-    val filteredList by remember {
+    val isMapPinVisible by remember {
+        derivedStateOf {
+            !state.bottomSheetState.isExpanded || !isMobile
+        }
+    }
+
+    var filteredList = remember {
         derivedStateOf {
             RecentSearchesDataService.recentSearchesList.filter { searchItem ->
                 when {
+                    !isMapPinVisible || !isMobile -> true
                     isPickupLocationTfFocused -> {
                         searchItem.location.contains(pickupLocationTfText, true)
                     }
@@ -116,9 +131,75 @@ fun WhereTo(
         }
     }
 
+    val cameraPositionState = rememberCameraPositionState()
+
     val uberGoogleMap: @Composable (modifier: Modifier) -> Unit = remember(isMobile) {
         movableContentOf { modifier: Modifier ->
-            UberGoogleMap(modifier = modifier)
+            UberGoogleMap(
+                modifier = modifier,
+                cameraPositionState = cameraPositionState,
+                nonMapContent = {
+                    UberButton(
+                        modifier = Modifier
+                            .then(
+                                if (isMobile) {
+                                    Modifier.fillMaxWidth()
+                                } else {
+                                    Modifier.limitWidth()
+                                }
+                            )
+                            .align(Alignment.BottomEnd)
+                            .padding(MaterialTheme.spacing.medium)
+                            .navigationBarsPadding()
+                            .imePadding(),
+                        text = "Done"
+                    ) {
+                        when {
+                            pickupLocationTfText.isBlank() -> {
+                                pickupLocationTfFocusRequester.requestFocus()
+                            }
+                            whereToTfText.isBlank() -> {
+                                whereToTfRequester.requestFocus()
+                            }
+                            else -> {
+                                navigateToMapScreen()
+                            }
+                        }
+                    }
+                    if (isMapPinVisible) {
+                        Image(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .imePadding(),
+                            painter = painterResource(id = R.drawable.ic_location_pin),
+                            contentDescription = null,
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    LaunchedEffect(cameraPositionState.isMoving, isMobile) {
+        if (cameraPositionState.isMoving) {
+            if (isMobile) {
+                filteredList = derivedStateOf { emptyList() }
+            }
+        } else {
+            when {
+                isPickupLocationTfFocused -> {
+                    pickupLocationTfText = RecentSearchesDataService
+                        .recentSearchesList
+                        .random()
+                        .location
+                }
+                isWhereToTfFocused -> {
+                    whereToTfText = RecentSearchesDataService
+                        .recentSearchesList
+                        .random()
+                        .location
+                }
+            }
         }
     }
 
@@ -317,7 +398,7 @@ fun WhereTo(
                             .background(Color.White),
                         userScrollEnabled = isMobile
                     ) {
-                        items(filteredList) { searchItem ->
+                        items(filteredList.value) { searchItem ->
                             ListTile(
                                 icon = Icons.Sharp.LocationOn,
                                 contentDesc = "",
@@ -339,7 +420,7 @@ fun WhereTo(
                         }
                     }
                 },
-                sheetPeekHeight = 100.dp,
+                sheetPeekHeight = if (!isMobile || !isMapPinVisible) 100.dp else 0.dp,
                 sheetElevation = 0.dp,
                 sheetBackgroundColor = Color.Transparent,
                 sheetGesturesEnabled = isMobile
