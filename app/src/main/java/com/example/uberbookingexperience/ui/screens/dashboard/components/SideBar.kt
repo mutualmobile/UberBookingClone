@@ -1,4 +1,4 @@
-package com.example.uberbookingexperience.ui.screens.dashboard
+package com.example.uberbookingexperience.ui.screens.dashboard.components
 
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
@@ -38,7 +38,13 @@ fun SideBar() {
             val isSelected = selectedItem == index
             val itemColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
             NavigationRailItem(
-                label = { Text(item.first, color = itemColor) },
+                label = {
+                    Text(
+                        item.first,
+                        color = itemColor,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                },
                 icon = {
                     Icon(
                         tabsList[index].second,

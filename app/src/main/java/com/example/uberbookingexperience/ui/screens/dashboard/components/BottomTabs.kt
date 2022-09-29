@@ -1,4 +1,4 @@
-package com.example.uberbookingexperience.ui.screens.dashboard
+package com.example.uberbookingexperience.ui.screens.dashboard.components
 
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
@@ -42,7 +42,9 @@ fun BottomTabs() {
                             contentDescription = null
                         )
                     },
-                    text = { Text(tabsList[index].first) },
+                    text = {
+                        Text(tabsList[index].first, style = MaterialTheme.typography.titleMedium)
+                    },
                     selected = tabIndex == index,
                     onClick = {
                         tabIndex = index

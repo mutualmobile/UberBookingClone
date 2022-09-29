@@ -1,4 +1,4 @@
-package com.example.uberbookingexperience.ui.screens.dashboard
+package com.example.uberbookingexperience.ui.screens.dashboard.components
 
 import com.example.uberbookingexperience.R
 

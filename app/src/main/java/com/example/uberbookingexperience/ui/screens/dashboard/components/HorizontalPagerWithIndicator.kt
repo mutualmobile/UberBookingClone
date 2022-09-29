@@ -99,11 +99,11 @@ fun Page(pageHeight: Dp, offer: Offer, modifier: Modifier) {
         Text(
             text = offer.title,
             color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.titleMedium,
-            maxLines = 2,
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = if (rememberIsMobileDevice()) 2 else 3,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(MaterialTheme.spacing.medium)
                 .align(Alignment.CenterStart)
                 .widthIn(max = if (rememberIsMobileDevice()) textWidthForMobile else textWidthForLargerSize),
         )

@@ -1,5 +1,7 @@
 package com.example.uberbookingexperience.ui.screens.dashboard.components
 
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
 
@@ -52,7 +56,7 @@ fun PickupSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
             Text(
                 text = "Enter pickup point",
                 color = Color.Black,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.alpha(ContentAlpha.medium)
             )
         }
@@ -67,17 +71,19 @@ fun PickupSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Icon(
-                imageVector = Icons.Default.PunchClock,
+                imageVector = Icons.Default.AccessTimeFilled,
                 contentDescription = "timer Icon",
                 tint = Color.Black
             )
             Text(
                 text = "Now",
                 color = Color.Black,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.Medium
+                ),
             )
             Icon(
-                imageVector = Icons.Default.ArrowDropDown,
+                imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = "drop down Icon",
                 tint = Color.Black
             )
@@ -92,24 +98,20 @@ fun DestinationSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
             .padding(MaterialTheme.spacing.medium)
             .heightIn(max = 50.dp)
             .widthIn(max = 360.dp)
+            .clip(RoundedCornerShape(50.dp))
             .clickableWithRipple {
                 onGotoWhereScreen()
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(
-            imageVector = Icons.Default.PinDrop,
-            contentDescription = "pin Icon",
-            tint = Color.Black,
-            modifier = Modifier
-                .padding(MaterialTheme.spacing.medium)
-                .drawBehind {
-                    drawCircle(
-                        color = Color(0XFFEFEFEF),
-                        radius = this.size.maxDimension
-                    )
-                }
-        )
+        Box(contentAlignment = Alignment.Center) {
+            Circle()
+            Image(
+                painter = painterResource(id = R.drawable.location_pin),
+                contentDescription = "pin Icon",
+                modifier = Modifier.requiredSize(24.dp)
+            )
+        }
         Text(
             text = "Set destination on map",
             color = Color.Black,
@@ -125,4 +127,11 @@ fun DestinationSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
             modifier = Modifier.size(14.dp)
         )
     }
+}
+
+@Composable
+fun Circle(){
+    Canvas(modifier = Modifier.size(50.dp), onDraw = {
+        drawCircle(color = Color(0XFFEFEFEF))
+    })
 }

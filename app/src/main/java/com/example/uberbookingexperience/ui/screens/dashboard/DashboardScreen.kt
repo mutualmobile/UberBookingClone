@@ -55,7 +55,7 @@ fun DashboardScreen(
     }
 }
 
-@Preview(showSystemUi = true, device = "spec:width=50dp,height=1000dp")
+@Preview(showSystemUi = true, device = "spec:width=1920dp,height=1080dp")
 @Composable
 private fun DashboardScreenPreview() {
     UberBookingExperienceTheme {
