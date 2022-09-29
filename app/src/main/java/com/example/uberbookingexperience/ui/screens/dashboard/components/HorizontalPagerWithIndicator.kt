@@ -22,9 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.uberbookingexperience.ui.screens.dashboard.Offer
-import com.example.uberbookingexperience.ui.screens.dashboard.getOffers
-import com.example.uberbookingexperience.ui.screens.dashboard.getOffersForBiggerScreen
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.accompanist.pager.ExperimentalPagerApi

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.uberbookingexperience.ui.screens.dashboard.RideOptions
-import com.example.uberbookingexperience.ui.screens.dashboard.getRideOptions
+import androidx.compose.ui.unit.sp
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.accompanist.flowlayout.FlowRow
@@ -70,38 +71,56 @@ fun QuickOptionsLargeTile(modifier: Modifier, rideOption: RideOptions) {
         Image(
             painter = painterResource(id = rideOption.image),
             contentDescription = "option image",
-            modifier = Modifier.requiredSize(94.dp).align(Alignment.TopEnd)
+            modifier = Modifier
+                .requiredSize(94.dp)
+                .align(Alignment.TopEnd)
         )
         Text(
             text = rideOption.title,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Medium
+            ),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(16.dp).align(Alignment.BottomStart),
+            modifier = Modifier
+                .padding(MaterialTheme.spacing.medium)
+                .align(Alignment.BottomStart),
         )
     }
 }
 
 @Composable
 fun QuickOptionsTile(modifier: Modifier, rideOption: RideOptions) {
+    Column(
+        modifier = Modifier.padding(
+            end = MaterialTheme.spacing.medium,
+            bottom = MaterialTheme.spacing.medium
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Box(
             modifier = modifier
-                .size(84.dp)
-                .padding(end = MaterialTheme.spacing.medium, bottom = MaterialTheme.spacing.medium)
+                .size(64.dp)
                 .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
                 .background(color = Color(0XFFEFEFEF)),
         ) {
             Image(
                 painter = painterResource(id = rideOption.image),
                 contentDescription = "option image",
-                modifier = Modifier.requiredSize(60.dp).align(Alignment.TopCenter)
-            )
-            Text(
-                text = rideOption.title,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(4.dp).align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .requiredSize(60.dp)
+                    .align(Alignment.Center)
             )
         }
+        Text(
+            text = rideOption.title,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(MaterialTheme.spacing.extraSmall),
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontWeight = FontWeight.Medium,
+                letterSpacing = 0.2.sp
+            )
+        )
+    }
 }
