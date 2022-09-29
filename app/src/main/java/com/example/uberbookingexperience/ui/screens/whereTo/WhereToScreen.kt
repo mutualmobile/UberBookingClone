@@ -20,11 +20,14 @@ import androidx.compose.material.icons.sharp.LocationOn
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.service.RecentSearchesDataService
 import com.example.uberbookingexperience.ui.common.UberGoogleMap
@@ -32,24 +35,30 @@ import com.example.uberbookingexperience.ui.screens.whereTo.components.TopSectio
 import com.example.uberbookingexperience.ui.util.LargeScreenChildMaxWidth
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun WhereTo(listItemClicked: () -> Unit, onBackPressed: () -> Unit) {
     val isMobile = rememberIsMobileDevice()
     Row(modifier = Modifier.fillMaxWidth()) {
         val state = rememberBottomSheetScaffoldState(
             bottomSheetState = rememberBottomSheetState(
-                initialValue = if (isMobile) BottomSheetValue.Collapsed else BottomSheetValue.Expanded
+                initialValue = BottomSheetValue.Expanded
             )
         )
+        val keyboardManager = LocalSoftwareKeyboardController.current
         val swipeProgress = state.rememberBottomSheetProgress()
+        LaunchedEffect(key1 = state.bottomSheetState.isCollapsed, block = {
+            if (state.bottomSheetState.isCollapsed) {
+                keyboardManager?.hide()
+            }
+        })
 
         Scaffold(
             modifier = if (isMobile) Modifier.fillMaxWidth() else Modifier.width(
                 LargeScreenChildMaxWidth
             ),
             topBar = {
-                TopSection(onBackPressed)
+                TopSection(onBackPressed, state)
             }
         ) { padding ->
             BottomSheetScaffold(

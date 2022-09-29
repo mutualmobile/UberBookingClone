@@ -13,8 +13,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.Icons.Outlined
 import androidx.compose.material.icons.filled.ArrowBack
@@ -26,26 +27,35 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.screens.whereTo.UberTextField
 import com.example.uberbookingexperience.ui.theme.Typography
 import com.example.uberbookingexperience.ui.theme.colorGrayLighter
+import kotlinx.coroutines.launch
 
-@Composable fun TopSection(onBackPressed: () -> Unit) {
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun TopSection(onBackPressed: () -> Unit, state: BottomSheetScaffoldState) {
     Surface(modifier = Modifier.shadow(elevation = 8.dp)) {
         Column {
             TopBar(backButtonClicked = onBackPressed)
-            SearchFieldCard()
+            SearchFieldCard(state)
         }
     }
 }
@@ -69,7 +79,9 @@ import com.example.uberbookingexperience.ui.theme.colorGrayLighter
     }
 }
 
-@Composable fun SearchFieldCard() {
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun SearchFieldCard(state: BottomSheetScaffoldState) {
     var isTfFocused by rememberSaveable { mutableStateOf(false) }
     Row(modifier = Modifier.background(MaterialTheme.colorScheme.onPrimary)) {
         TimeLineWidget(isTfFocused = isTfFocused)
@@ -78,7 +90,7 @@ import com.example.uberbookingexperience.ui.theme.colorGrayLighter
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            SearchFields {
+            SearchFields(state) {
                 isTfFocused = !isTfFocused
             }
         }
@@ -86,16 +98,32 @@ import com.example.uberbookingexperience.ui.theme.colorGrayLighter
     }
 }
 
-@Composable fun SearchFields(tfFocusChanged: () -> Unit) {
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun SearchFields(state: BottomSheetScaffoldState, tfFocusChanged: () -> Unit) {
     var tf1Value by rememberSaveable {
         mutableStateOf("")
     }
     var tf2Value by rememberSaveable {
         mutableStateOf("")
     }
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(key1 = Unit, block = { focusRequester.requestFocus() })
     Column {
+        val coroutineScope = rememberCoroutineScope()
+        val commonModifier = remember(state) {
+            Modifier
+                .padding(horizontal = 8.dp)
+                .onFocusChanged {
+                    if ((it.hasFocus || it.isFocused) && state.bottomSheetState.isCollapsed) {
+                        coroutineScope.launch {
+                            state.bottomSheetState.expand()
+                        }
+                    }
+                }
+        }
         UberTextField(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = commonModifier.focusRequester(focusRequester),
             placeholder = "Enter pickup location",
             value = tf1Value,
             onValueChange = { newTf1Value ->
@@ -105,7 +133,7 @@ import com.example.uberbookingexperience.ui.theme.colorGrayLighter
         )
         Spacer(modifier = Modifier.padding(top = 8.dp))
         UberTextField(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = commonModifier,
             placeholder = "Where to?",
             value = tf2Value,
             onValueChange = { newTf2Value ->
@@ -137,7 +165,7 @@ import com.example.uberbookingexperience.ui.theme.colorGrayLighter
 @Composable fun RiderIconWithGradient() {
     val gradientRadial = Brush.radialGradient(listOf(Color.White, Color.White, Color.LightGray))
     Icon(
-        imageVector = Icons.Filled.Person,
+        imageVector = Filled.Person,
         contentDescription = "Rider Icon",
         tint = Color.Gray,
         modifier = Modifier
@@ -161,7 +189,7 @@ import com.example.uberbookingexperience.ui.theme.colorGrayLighter
 
 @Composable fun BackButton(backButtonClicked: () -> Unit) {
     IconButton(onClick = backButtonClicked, modifier = Modifier.size(48.dp)) {
-        Icon(Icons.Filled.ArrowBack, contentDescription = "Navigate to previous screen button")
+        Icon(Filled.ArrowBack, contentDescription = "Navigate to previous screen button")
     }
 }
 
