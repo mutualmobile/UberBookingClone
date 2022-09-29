@@ -24,7 +24,7 @@ import com.example.uberbookingexperience.ui.util.limitWidth
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
 @Composable
-fun RideSummaryScreen() {
+fun RideSummaryScreen(onButtonClick: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .then(
@@ -51,7 +51,7 @@ fun RideSummaryScreen() {
                         .padding(vertical = MaterialTheme.spacing.large)
                         .limitWidth(),
                     text = "Done",
-                    onClick = { }
+                    onClick = onButtonClick
                 )
             }
         }
