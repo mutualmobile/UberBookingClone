@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.zIndex
 
 @Composable
@@ -42,7 +43,9 @@ fun SideBar() {
                     Text(
                         item.first,
                         color = itemColor,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Medium
+                        )
                     )
                 },
                 icon = {

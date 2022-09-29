@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.clickableWithRipple
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.accompanist.flowlayout.FlowRow
 
@@ -67,6 +68,7 @@ fun QuickOptionsLargeTile(modifier: Modifier, rideOption: RideOptions) {
             .padding(end = MaterialTheme.spacing.medium)
             .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
             .background(color = Color(0XFFEFEFEF))
+            .clickableWithRipple {}
     ) {
         Image(
             painter = painterResource(id = rideOption.image),
@@ -102,7 +104,8 @@ fun QuickOptionsTile(modifier: Modifier, rideOption: RideOptions) {
             modifier = modifier
                 .size(64.dp)
                 .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
-                .background(color = Color(0XFFEFEFEF)),
+                .background(color = Color(0XFFEFEFEF))
+                .clickableWithRipple {},
         ) {
             Image(
                 painter = painterResource(id = rideOption.image),

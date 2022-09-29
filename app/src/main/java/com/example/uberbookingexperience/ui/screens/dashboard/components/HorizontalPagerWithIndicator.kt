@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.clickableWithRipple
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -85,6 +86,7 @@ fun Page(pageHeight: Dp, offer: Offer, modifier: Modifier) {
             .padding(end = MaterialTheme.spacing.medium)
             .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
             .background(color = offer.bgColor)
+            .clickableWithRipple {}
     ) {
         Image(
             painter = painterResource(id = offer.image),

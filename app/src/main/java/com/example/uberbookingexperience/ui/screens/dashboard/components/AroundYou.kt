@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.common.UberGoogleMap
 import com.example.uberbookingexperience.ui.theme.spacing
@@ -28,8 +29,8 @@ fun AroundYou(onGotoMap: () -> Unit) {
     ) {
         Text(
             "Around You",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small)
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small),
+            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         UberGoogleMap(

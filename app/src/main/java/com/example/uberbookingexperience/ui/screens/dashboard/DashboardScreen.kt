@@ -45,6 +45,7 @@ fun DashboardScreen(
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 PickupSelection(Modifier.align(Alignment.CenterHorizontally), onGotoWhereScreen)
                 DestinationSelection(Modifier.align(Alignment.CenterHorizontally), onGotoWhereScreen)
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
                 //around you
                 AroundYou(onGotoMap)
             }
