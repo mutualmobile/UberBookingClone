@@ -7,12 +7,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -32,14 +29,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.style.TextOverflow.Companion
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.theme.ClearIconTint
 import com.example.uberbookingexperience.ui.theme.ContentTextStyle
 import com.example.uberbookingexperience.ui.theme.PlaceholderTextStyle
 import com.example.uberbookingexperience.ui.theme.SelectedBgColor
-import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.UnselectedBgColor
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
@@ -56,7 +50,7 @@ fun UberTextField(
     vertical = MaterialTheme.spacing.extraSmall
   ),
   placeholder: String,
-  tfFocusChanged: () -> Unit
+  onFocus: () -> Unit
 ) {
   var isTfFocused by rememberSaveable { mutableStateOf(false) }
   val bgColor by animateColorAsState(targetValue = if (isTfFocused) SelectedBgColor else UnselectedBgColor)
@@ -93,7 +87,7 @@ fun UberTextField(
           .padding(contentPadding)
           .onFocusChanged {
             isTfFocused = it.isFocused
-            tfFocusChanged()
+            onFocus()
           },
         value = value,
         onValueChange = onValueChange,

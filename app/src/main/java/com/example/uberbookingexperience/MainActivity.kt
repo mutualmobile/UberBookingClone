@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screens.WhereToScreen()) {
                             WhereTo(
-                                listItemClicked = {
+                                navigateToMapScreen = {
                                     navController.navigate(Screens.MapScreen())
                                 },
                                 onBackPressed = {
