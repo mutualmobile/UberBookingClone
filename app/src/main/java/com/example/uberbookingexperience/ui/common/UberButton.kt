@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.style.TextOverflow
 import com.example.uberbookingexperience.ui.theme.spacing
 
 /**
@@ -32,10 +33,15 @@ fun UberButton(
             contentColor = MaterialTheme.colorScheme.surface
         ),
         shape = RectangleShape,
-        contentPadding = PaddingValues(vertical = MaterialTheme.spacing.medium)
+        contentPadding = PaddingValues(
+            vertical = MaterialTheme.spacing.medium,
+            horizontal = MaterialTheme.spacing.extraSmall
+        )
     ) {
         Text(
             text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.headlineMedium
         )
     }

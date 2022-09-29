@@ -23,6 +23,7 @@ import com.example.uberbookingexperience.ui.screens.Screens
 import com.example.uberbookingexperience.ui.screens.addPaymentMethod.AddPaymentMethodScreen
 import com.example.uberbookingexperience.ui.screens.cabswithmap.ChooseCabTypeScreen
 import com.example.uberbookingexperience.ui.screens.cabswithmap.UberMapScreenVM
+import com.example.uberbookingexperience.ui.screens.confirmPickupScreen.ConfirmPickupScreen
 import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
 import com.example.uberbookingexperience.ui.screens.schedulePickup.SchedulePickupScreen
@@ -86,6 +87,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onChooseUberClick = {
                                     //proceed to confirm location screen
+                                    navController.navigate(Screens.ConfirmPickUpLocation())
                                 }
                             ) {
                                 navController.popBackStack()
@@ -93,7 +95,9 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screens.PaymentOptionsScreen()) {
-                            PaymentOptionsScreen { navController.navigateUp() }
+                            PaymentOptionsScreen(onAddedPaymentOptionClick = {
+                                navController.navigate(Screens.AddPaymentMethodScreen())
+                            }) { navController.navigateUp() }
                         }
 
                         composable(Screens.SchedulePickupScreen()) {
@@ -105,6 +109,13 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screens.AddPaymentMethodScreen()) {
                             AddPaymentMethodScreen { navController.navigateUp() }
+                        }
+                        composable(Screens.ConfirmPickUpLocation()) {
+                            ConfirmPickupScreen(onSearchClick = {}, onNavigationBack = {
+                                navController.navigateUp()
+                            }) {
+
+                            }
                         }
                     }
                 }
