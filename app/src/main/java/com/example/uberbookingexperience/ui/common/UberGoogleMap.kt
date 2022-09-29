@@ -17,6 +17,7 @@ import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.GoogleMapComposable
 import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 
 /**
@@ -40,8 +41,9 @@ fun UberGoogleMap(
     locationSource: LocationSource? = null,
     mapZoomAnimationDuration: Int = 1_000,
     mapZoomPadding: Int = ((rememberDeviceWidth() * 5) / 50),
+    mapUiSettings: MapUiSettings = MapUiSettings(zoomControlsEnabled = false),
     nonMapContent: (@Composable BoxScope.() -> Unit)? = null,
-    content: (@Composable @GoogleMapComposable () -> Unit)? = null,
+    content: (@Composable @GoogleMapComposable () -> Unit)? = null
 ) {
     val isMapReady = rememberSaveable {
         mutableStateOf(false)
@@ -73,6 +75,7 @@ fun UberGoogleMap(
         GoogleMap(
             modifier = Modifier.matchParentSize(),
             cameraPositionState = cameraPositionState,
+            uiSettings = mapUiSettings,
             onMapLoaded = {
                 //Map loaded callback
                 isMapReady.value = true

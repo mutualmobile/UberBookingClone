@@ -2,15 +2,20 @@ package com.example.uberbookingexperience.ui.common
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.theme.colorUberGrayBg
 import com.example.uberbookingexperience.ui.util.UberIconSize.MediumIcon
+import com.example.uberbookingexperience.ui.util.clickableWithRipple
 
 /**
  * An Uber-styled icon button that helps its users initiate actions.
@@ -28,24 +33,25 @@ fun UberIconButton(
     contentDescription: String = "",
     onClick: () -> Unit
 ) {
-    IconButton(
-        modifier = modifier
-            .background(backgroundColor),
-        onClick = onClick
-    ) {
+    Box(modifier = modifier
+        .background(backgroundColor)
+        .clickableWithRipple {
+            onClick()
+        }) {
         Icon(
             painterResource(id = iconId),
-            contentDescription = contentDescription,
-            modifier = Modifier.size(MediumIcon)
+            modifier = modifier
+                .size(MediumIcon)
+                .clip(RectangleShape),
+            contentDescription = contentDescription
         )
     }
+
 }
 
-/*
-* Box(contentAlignment = Alignment.Center,
-                    modifier = Modifier.background(
-                    colorUberGrayBg).padding(8.dp)){
-                    Icon(painterResource(id = R.drawable.schedule_button_icon),
-                        contentDescription = "",modifier=Modifier.size(SizeButton))
-                }
-* */
+@Composable
+@Preview
+fun UberIconButtonPreview() {
+    UberIconButton(iconId = R.drawable.schedule_button_icon) {}
+}
+

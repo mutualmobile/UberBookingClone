@@ -10,40 +10,40 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 class Spacing internal constructor(
-    val none: Dp = 0.dp,
     val extraSmall: Dp = 4.dp,
     val small: Dp = 8.dp,
     val medium: Dp = 16.dp,
     val large: Dp = 24.dp,
-    val extraLarge: Dp = 32.dp
+    val extraLarge: Dp = 32.dp,
+    val minWidth: Dp = 300.dp
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || other !is Spacing) return false
 
-        if (none != other.none) return false
         if (extraSmall != other.extraSmall) return false
         if (small != other.small) return false
         if (medium != other.medium) return false
         if (large != other.large) return false
         if (extraLarge != other.extraLarge) return false
+        if (minWidth != other.minWidth) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = none.hashCode()
-        result = 31 * result + extraSmall.hashCode()
+        var result = extraSmall.hashCode()
         result = 31 * result + small.hashCode()
         result = 31 * result + medium.hashCode()
         result = 31 * result + large.hashCode()
         result = 31 * result + extraLarge.hashCode()
+        result = 31 * result + minWidth.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Spacing(none=$none, extraSmall=$extraSmall, small=$small, medium=$medium," +
-            " large=$large, extraLarge=$extraLarge)"
+        return "Spacing(extraSmall=$extraSmall, small=$small, medium=$medium," +
+            " large=$large, extraLarge=$extraLarge, minWidth=$minWidth)"
     }
 }
 

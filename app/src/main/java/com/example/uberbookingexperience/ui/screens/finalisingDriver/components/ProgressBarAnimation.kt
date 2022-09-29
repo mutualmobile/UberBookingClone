@@ -3,22 +3,14 @@ package com.example.uberbookingexperience.ui.screens.finalisingDriver.components
 import androidx.annotation.IntRange
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,7 +47,7 @@ fun ProgressBarAnimation(
         repeat(parts) { partIndex ->
             selectedPart = partIndex + 1
             delay(ProgressStateChangeDelay)
-            if (partIndex == parts) {
+            if (selectedPart == parts) {
                 onAnimationFinished()
             }
         }

@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BottomSheetScaffoldState.rememberScaffoldStateFraction() = remember {
+fun BottomSheetScaffoldState.rememberBottomSheetProgress() = remember {
     derivedStateOf {
         val fraction = bottomSheetState.progress.fraction
         val targetValue = bottomSheetState.targetValue
@@ -30,4 +30,3 @@ fun BottomSheetScaffoldState.rememberScaffoldStateFraction() = remember {
         }
     }
 }.value
-
