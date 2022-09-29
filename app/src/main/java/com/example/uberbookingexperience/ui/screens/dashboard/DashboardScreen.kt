@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.uberbookingexperience.ui.screens.dashboard.components.*
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
@@ -26,9 +25,8 @@ fun DashboardScreen(
     onGotoWhereScreen: () -> Unit,
     onGotoMap: () -> Unit
 ) {
-    val isMobile = rememberIsMobileDevice()
     Row {
-        if(isMobile.not()) {
+        if(rememberIsMobileDevice().not()) {
             SideBar()
         }
         Column {
@@ -36,28 +34,28 @@ fun DashboardScreen(
                 modifier = Modifier
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
-                    .background(color = Color.White)
+                    .background(color = MaterialTheme.colorScheme.onPrimary)
             ) {
                 Spacer(modifier = Modifier.statusBarsPadding())
                 //header
-                HorizontalPagerWithIndicator(isMobile)
+                HorizontalPagerWithIndicator()
                 //options
-                QuickOptions(isMobile)
+                QuickOptions()
                 //start/end location
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 PickupSelection(Modifier.align(Alignment.CenterHorizontally), onGotoWhereScreen)
                 DestinationSelection(Modifier.align(Alignment.CenterHorizontally), onGotoWhereScreen)
                 //around you
-                AroundYou(isMobile, onGotoMap)
+                AroundYou(onGotoMap)
             }
-            if (isMobile) {
+            if (rememberIsMobileDevice()) {
                 BottomTabs()
             }
         }
     }
 }
 
-@Preview(showSystemUi = true, device = "spec:width=1920dp,height=1080dp,dpi=480")
+@Preview(showSystemUi = true, device = "spec:width=50dp,height=1000dp")
 @Composable
 private fun DashboardScreenPreview() {
     UberBookingExperienceTheme {

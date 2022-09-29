@@ -21,14 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.ui.screens.dashboard.RideOptions
 import com.example.uberbookingexperience.ui.screens.dashboard.getRideOptions
 import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-fun QuickOptions(isMobile: Boolean) {
+fun QuickOptions() {
     val options = getRideOptions()
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -40,7 +40,7 @@ fun QuickOptions(isMobile: Boolean) {
                 bottom = MaterialTheme.spacing.medium
             )
     ) {
-        if (isMobile) {
+        if (rememberIsMobileDevice()) {
             QuickOptionsLargeTile(modifier = Modifier.weight(1f), options[0])
             QuickOptionsLargeTile(modifier = Modifier.weight(1f), options[1])
         }
