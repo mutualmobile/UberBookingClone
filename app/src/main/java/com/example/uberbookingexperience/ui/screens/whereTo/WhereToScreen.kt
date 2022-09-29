@@ -126,7 +126,6 @@ fun WhereTo(
         derivedStateOf {
             RecentSearchesDataService.recentSearchesList.filter { searchItem ->
                 when {
-                    !isMapPinVisible || !isMobile -> true
                     isPickupLocationTfFocused -> {
                         searchItem.location.contains(pickupLocationTfText, true)
                     }
