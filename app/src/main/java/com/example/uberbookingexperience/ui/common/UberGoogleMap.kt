@@ -35,6 +35,7 @@ fun UberGoogleMap(
     locationSource: LocationSource? = null,
     mapZoomAnimationDuration: Int = 1_000,
     mapZoomPadding: Int = ((rememberDeviceWidth() * 5) / 50),
+    mapUiSettings: MapUiSettings = MapUiSettings(zoomControlsEnabled = false),
     content: (@Composable @GoogleMapComposable () -> Unit)? = null
 ) {
 
@@ -78,6 +79,7 @@ fun UberGoogleMap(
         GoogleMap(
             modifier = Modifier.matchParentSize(),
             cameraPositionState = cameraPositionState,
+            uiSettings = mapUiSettings,
             onMapLoaded = {
                 //Map loaded callback
                 isMapReady.value = true

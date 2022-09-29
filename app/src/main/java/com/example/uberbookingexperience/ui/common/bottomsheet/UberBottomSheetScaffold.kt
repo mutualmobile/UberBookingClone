@@ -28,7 +28,6 @@ import com.example.uberbookingexperience.ui.theme.colorWhite
 @Composable
 fun UberBottomSheetScaffold(
     modifier: Modifier = Modifier,
-    bottomSheetDynamicWidthFraction: Float = 1f,
     scaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed)
     ),

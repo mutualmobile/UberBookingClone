@@ -37,17 +37,18 @@ import com.example.uberbookingexperience.ui.util.DevicePreviews
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
 @Composable
-fun RideConfirmedScreen() {
+fun RideConfirmedScreen(shouldScroll: Boolean = false) {
     Column(
-        modifier = Modifier.then(
-            if (rememberIsMobileDevice()) {
-                Modifier.fillMaxWidth()
-            } else {
-                Modifier.width(300.dp)
-            }
-        )
+        modifier = Modifier
+            .then(
+                if (rememberIsMobileDevice()) {
+                    Modifier.fillMaxWidth()
+                } else {
+                    Modifier.width(MaterialTheme.spacing.minWidth)
+                }
+            )
             .wrapContentSize()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState(), enabled = shouldScroll),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface {
@@ -74,7 +75,9 @@ fun RideConfirmedScreen() {
                 )
                 UberDivider()
                 Image(
-                    modifier = Modifier.padding(MaterialTheme.spacing.medium).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(MaterialTheme.spacing.medium)
+                        .fillMaxWidth()
                         .clip(RoundedCornerShape(10)),
                     painter = painterResource(id = R.drawable.travel_responsibly),
                     contentDescription = null,
@@ -82,7 +85,8 @@ fun RideConfirmedScreen() {
                 )
                 UberDivider()
                 Image(
-                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.medium)
+                    modifier = Modifier
+                        .padding(vertical = MaterialTheme.spacing.medium)
                         .width(200.dp)
                         .aspectRatio(2f)
                         .clip(RoundedCornerShape(10)),

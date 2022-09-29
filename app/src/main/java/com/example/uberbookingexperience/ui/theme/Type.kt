@@ -61,13 +61,6 @@ val Typography = Typography(
         letterSpacing = 0.sp,
         fontFamily = UberMove
     ),
-    titleMedium = TextStyle(
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 14.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.15.sp,
-        fontFamily = UberMove
-    ),
     titleSmall = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,

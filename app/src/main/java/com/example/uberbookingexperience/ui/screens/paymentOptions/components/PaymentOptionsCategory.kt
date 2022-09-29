@@ -46,9 +46,10 @@ fun PaymentOptionsCategory(
     paymentOptions: List<PaymentOption>,
     mobileUseSwitchForSelected: Boolean = false,
     desktopHorizontalItemSpacing: Dp = 0.dp,
-    desktopVerticalItemSpacing: Dp = 0.dp
+    desktopVerticalItemSpacing: Dp = 0.dp,
+    onFooterClick: () -> Unit = {}
 ) {
-    val commonPadding = MaterialTheme.spacing.none
+    val commonPadding = MaterialTheme.spacing.medium
     val paddingModifier = remember { Modifier.padding(horizontal = commonPadding) }
     Column(modifier = modifier) {
         title?.let { nnTitle ->
@@ -90,7 +91,9 @@ fun PaymentOptionsCategory(
             Text(
                 modifier = paddingModifier
                     .padding(vertical = MaterialTheme.spacing.medium)
-                    .clickableWithRipple {},
+                    .clickableWithRipple {
+                        onFooterClick()
+                    },
                 text = nnFooter,
                 style = MaterialTheme.typography.headlineSmall.copy(
                     color = MaterialTheme.colorScheme.tertiary
