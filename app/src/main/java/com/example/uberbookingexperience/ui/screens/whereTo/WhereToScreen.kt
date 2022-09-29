@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,23 +19,28 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.sharp.LocationOn
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -63,6 +69,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
 import com.example.uberbookingexperience.service.RecentSearchesDataService
@@ -74,6 +81,7 @@ import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.LargeScreenChildMaxWidth
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
 import com.example.uberbookingexperience.ui.util.limitWidth
+import com.example.uberbookingexperience.ui.util.rememberBottomSheetProgress
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
@@ -297,13 +305,7 @@ fun WhereTo(
                                 )
 
                                 // vertical line
-                                Box(
-                                    modifier = Modifier
-                                        .padding(vertical = 2.dp)
-                                        .width(1.dp)
-                                        .height(45.dp)
-                                        .background(Color.LightGray)
-                                )
+                                UberVerticalDivider()
 
                                 // square
                                 Box(
@@ -395,16 +397,65 @@ fun WhereTo(
                             .padding(horizontal = MaterialTheme.spacing.extraLarge.times(1 - swipeProgress))
                             .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                             .fillMaxHeight()
-                            .background(Color.White),
+                            .background(Color.White)
+                            .imePadding(),
                         userScrollEnabled = isMobile
                     ) {
+                        item {
+                            LazyRow(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                item {
+                                    ListTile(
+                                        modifier = Modifier.width(200.dp),
+                                        icon = Icons.Filled.Home,
+                                        title = "Home",
+                                        subtitle = "43, Durga Mandir Rd, new",
+                                        backgroundColor = MaterialTheme.colorScheme.secondary,
+                                        maxlines = 1
+                                    )
+                                    UberVerticalDivider(
+                                        height = 48.dp
+                                    )
+                                }
+                                item {
+                                    ListTile(
+                                        modifier = Modifier.width(200.dp),
+                                        icon = Icons.Filled.Work,
+                                        title = "Work",
+                                        subtitle = "Gitarattan International",
+                                        backgroundColor = MaterialTheme.colorScheme.secondary,
+                                        maxlines = 1
+                                    )
+                                    UberVerticalDivider(
+                                        height = 48.dp
+                                    )
+                                }
+                                item {
+                                    ListTile(
+                                        modifier = Modifier.width(200.dp),
+                                        icon = Icons.Filled.Star,
+                                        title = "Saved Places"
+                                    )
+                                    UberVerticalDivider(
+                                        height = 48.dp
+                                    )
+                                }
+                            }
+                        }
+                        item {
+                            Divider(
+                                thickness = 3.dp,
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                            )
+                        }
                         items(filteredList.value) { searchItem ->
                             ListTile(
-                                icon = Icons.Sharp.LocationOn,
+                                icon = Icons.Filled.Schedule,
                                 contentDesc = "",
                                 title = searchItem.location,
                                 subtitle = searchItem.locationDesc,
-                                isClicked = {
+                                onClick = {
                                     when {
                                         isPickupLocationTfFocused -> {
                                             pickupLocationTfText = searchItem.location
@@ -417,6 +468,20 @@ fun WhereTo(
                                     }
                                 }
                             )
+                        }
+                        if (isMobile) {
+                            item {
+                                ListTile(
+                                    icon = Icons.Default.LocationOn,
+                                    contentDesc = null,
+                                    title = "Set location on map",
+                                    subtitle = null
+                                ) {
+                                    coroutineScope.launch {
+                                        state.bottomSheetState.collapse()
+                                    }
+                                }
+                            }
                         }
                     }
                 },
@@ -436,19 +501,19 @@ fun WhereTo(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BottomSheetScaffoldState.rememberBottomSheetProgress() = remember {
-    derivedStateOf {
-        val fraction = bottomSheetState.progress.fraction
-        val targetValue = bottomSheetState.targetValue
-        val currentValue = bottomSheetState.currentValue
-
-        when {
-            currentValue == BottomSheetValue.Collapsed && targetValue == BottomSheetValue.Collapsed -> 0f
-            currentValue == BottomSheetValue.Expanded && targetValue == BottomSheetValue.Expanded -> 1f
-            currentValue == BottomSheetValue.Collapsed && targetValue == BottomSheetValue.Expanded -> fraction
-            else -> 1f - fraction
-        }
-    }
-}.value
+private fun UberVerticalDivider(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(vertical = 2.dp),
+    width: Dp = 1.dp,
+    height: Dp = 45.dp,
+    color: Color = Color.LightGray,
+) {
+    Box(
+        modifier = modifier
+            .padding(paddingValues)
+            .width(width)
+            .height(height)
+            .background(color)
+    )
+}
