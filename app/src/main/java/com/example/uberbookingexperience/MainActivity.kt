@@ -27,7 +27,7 @@ import com.example.uberbookingexperience.ui.screens.dashboard.DashboardScreen
 import com.example.uberbookingexperience.ui.screens.paymentOptions.PaymentOptionsScreen
 import com.example.uberbookingexperience.ui.screens.schedulePickup.SchedulePickupScreen
 import com.example.uberbookingexperience.ui.screens.splash.SplashScreen
-import com.example.uberbookingexperience.ui.screens.whereTo.WhereToScreen
+import com.example.uberbookingexperience.ui.screens.whereTo.WhereTo
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.util.changeSystemBarsColor
 import com.example.uberbookingexperience.ui.util.clearAndNavigate
@@ -73,20 +73,33 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screens.DashboardScreen()) {
                             DashboardScreen {
-                                navController.navigate(Screens.MapScreen())
+                                navController.navigate(Screens.WhereToScreen())
                             }
+                        }
+
+                        composable(Screens.WhereToScreen()) {
+                            WhereTo(
+                                listItemClicked = {
+                                    navController.navigate(Screens.MapScreen())
+                                },
+                                onBackPressed = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
 
                         composable(Screens.MapScreen()) {
                             val uberMapScreenVM = UberMapScreenVM()
-                            ChooseCabTypeScreen(uberMapScreenVM, onPaymentOptionClick = {
-                                navController.navigate(Screens.PaymentOptionsScreen())
-                            },
+                            ChooseCabTypeScreen(
+                                uberMapScreenVM,
+                                onPaymentOptionClick = {
+                                    navController.navigate(Screens.PaymentOptionsScreen())
+                                },
                                 onSchedulePickupOption = {
                                     navController.navigate(Screens.SchedulePickupScreen())
                                 },
                                 onChooseUberClick = {
-                                    //proceed to confirm location screen
+                                    // proceed to confirm location screen
                                 }
                             ) {
                                 navController.popBackStack()

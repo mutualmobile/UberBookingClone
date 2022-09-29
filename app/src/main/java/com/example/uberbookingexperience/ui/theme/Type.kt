@@ -1,6 +1,9 @@
 package com.example.uberbookingexperience.ui.theme
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -37,11 +40,6 @@ val Typography = Typography(
         fontFamily = UberMove,
         fontWeight = FontWeight.Medium,
         fontSize = 13.sp
-    ),
-    titleMedium = TextStyle(
-        fontFamily = UberMove,
-        fontWeight = FontWeight.Medium,
-        fontSize = 16.sp
     ),
     bodySmall = TextStyle(
         fontFamily = UberMove,
@@ -81,3 +79,18 @@ val Typography = Typography(
         fontFamily = UberMove
     )
 )
+
+val Typography.bodyMedium_gray: TextStyle
+    get() = bodyMedium.copy(
+        color = colorSubtitleGrey,
+    )
+
+val ContentTextStyle
+    @Composable get() = MaterialTheme.typography.bodyLarge.copy(
+        color = MaterialTheme.colorScheme.onSurface
+    )
+
+val PlaceholderTextStyle
+    @Composable get() = MaterialTheme.typography.bodyLarge.copy(
+        color = Color(0xFFA3A4AD)
+    )
