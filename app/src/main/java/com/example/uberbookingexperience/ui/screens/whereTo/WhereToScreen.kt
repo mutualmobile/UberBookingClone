@@ -40,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -112,6 +113,12 @@ fun WhereTo(
                     else -> false
                 }
             }
+        }
+    }
+
+    val uberGoogleMap: @Composable (modifier: Modifier) -> Unit = remember(isMobile) {
+        movableContentOf { modifier: Modifier ->
+            UberGoogleMap(modifier = modifier)
         }
     }
 
@@ -340,20 +347,14 @@ fun WhereTo(
                 sheetElevation = 0.dp,
                 sheetBackgroundColor = Color.Transparent,
                 sheetGesturesEnabled = isMobile
-            ) { _ ->
+            ) {
                 if (isMobile) {
-                    UberGoogleMap(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    )
+                    uberGoogleMap(Modifier.fillMaxSize())
                 }
             }
         }
         if (!isMobile) {
-            UberGoogleMap(
-                modifier = Modifier
-                    .weight(1f)
-            )
+            uberGoogleMap(Modifier.weight(1f))
         }
     }
 }
