@@ -13,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.LocationSource
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.maps.android.compose.CameraMoveStartedReason
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.GoogleMapComposable
@@ -42,8 +43,12 @@ fun UberGoogleMap(
     mapZoomAnimationDuration: Int = 1_000,
     mapZoomPadding: Int = ((rememberDeviceWidth() * 5) / 50),
     mapUiSettings: MapUiSettings = MapUiSettings(zoomControlsEnabled = false),
+    mapMovingCallback: () -> Unit = {},
     nonMapContent: (@Composable BoxScope.() -> Unit)? = null,
-    content: (@Composable @GoogleMapComposable () -> Unit)? = null
+    content: (
+    @Composable @GoogleMapComposable
+        () -> Unit
+    )? = null,
 ) {
     val isMapReady = rememberSaveable {
         mutableStateOf(false)
@@ -64,9 +69,17 @@ fun UberGoogleMap(
                     CameraUpdateFactory.newLatLngBounds(
                         latLngBounds,
                         mapZoomPadding
-                    ), mapZoomAnimationDuration
+                    ),
+                    mapZoomAnimationDuration
                 )
-
+            }
+        }
+    }
+    // Detect when the map starts moving and print the reason
+    LaunchedEffect(cameraPositionState.isMoving) {
+        if (cameraPositionState.isMoving) {
+            if (cameraPositionState.cameraMoveStartedReason == CameraMoveStartedReason.GESTURE) {
+                mapMovingCallback()
             }
         }
     }
@@ -77,7 +90,7 @@ fun UberGoogleMap(
             cameraPositionState = cameraPositionState,
             uiSettings = mapUiSettings,
             onMapLoaded = {
-                //Map loaded callback
+                // Map loaded callback
                 isMapReady.value = true
             },
             locationSource = locationSource,

@@ -117,7 +117,9 @@ class MainActivity : ComponentActivity() {
                         composable(Screens.SchedulePickupScreen()) {
                             SchedulePickupScreen(
                                 onNavigationIconClick = { navController.navigateUp() },
-                                onScheduleButtonClick = { _, _ -> }
+                                onScheduleButtonClick = { _, _ ->
+                                    navController.navigateUp()
+                                }
                             )
                         }
 
@@ -128,7 +130,6 @@ class MainActivity : ComponentActivity() {
                             ConfirmPickupScreen(onSearchClick = {}, onNavigationBack = {
                                 navController.navigateUp()
                             }) {
-
                             }
                         }
                     }
