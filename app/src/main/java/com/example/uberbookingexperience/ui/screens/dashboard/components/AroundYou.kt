@@ -10,17 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.common.UberGoogleMap
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.defaultCameraPosition
-import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun AroundYou(onGotoMap: () -> Unit) {
-    val mapHeightForLargerSize = LocalConfiguration.current.screenHeightDp.dp / 2
-
+fun AroundYou(isMobile: Boolean, screenWidth: Dp, onGotoMap: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,7 +34,7 @@ fun AroundYou(onGotoMap: () -> Unit) {
         UberGoogleMap(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = if (rememberIsMobileDevice()) 150.dp else mapHeightForLargerSize)
+                .heightIn(min = if (isMobile) 150.dp else (screenWidth / 2))
                 .align(Alignment.CenterHorizontally)
                 .clip(RoundedCornerShape(16.dp)),
             cameraPositionState = rememberCameraPositionState {

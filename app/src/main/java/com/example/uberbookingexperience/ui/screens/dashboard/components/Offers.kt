@@ -1,14 +1,18 @@
 package com.example.uberbookingexperience.ui.screens.dashboard.components
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.example.uberbookingexperience.R
 
+@Immutable
 data class Offer(
     var title: String,
     var image: Int,
     var bgColor: Color
 )
 
+@Immutable
 data class OfferForBiggerScreen(
     val offerFirst: Offer,
     val offerSecond: Offer
@@ -39,5 +43,3 @@ fun getOffersForBiggerScreen() : List<OfferForBiggerScreen> {
     )
     return offerForBiggerScreen
 }
-
-

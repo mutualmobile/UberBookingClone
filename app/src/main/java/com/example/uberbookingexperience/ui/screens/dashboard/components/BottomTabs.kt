@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -22,10 +23,14 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 @Composable
 fun BottomTabs() {
 
-    val tabsList = listOf(
-        "Home" to Icons.Default.Home,
-        "Account" to Icons.Default.AccountBox,
-    )
+    val tabsList by rememberSaveable {
+        mutableStateOf(
+            listOf(
+                "Home" to Icons.Default.Home,
+                "Account" to Icons.Default.AccountBox
+            )
+        )
+    }
     var tabIndex by remember { mutableStateOf(0) }
 
     Surface(shadowElevation = AppBarDefaults.BottomAppBarElevation) {

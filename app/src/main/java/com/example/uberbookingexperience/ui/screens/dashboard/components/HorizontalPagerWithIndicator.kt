@@ -14,17 +14,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
-import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -32,15 +33,15 @@ import com.google.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HorizontalPagerWithIndicator() {
+fun HorizontalPagerWithIndicator(isMobile: Boolean, screenWidth: Dp) {
     val pagerState = rememberPagerState()
-    val pagerHeightForLargerSize = LocalConfiguration.current.screenHeightDp.dp / 3
-    val offers = getOffers()
-    val offersForBiggerScreen = getOffersForBiggerScreen()
+    val pagerHeightForLargerSize = screenWidth / 3
+    val offers by rememberSaveable { mutableStateOf(getOffers()) }
+    val offersForBiggerScreen by rememberSaveable { mutableStateOf(getOffersForBiggerScreen()) }
 
     Box {
         HorizontalPager(
-            count = if (rememberIsMobileDevice()) offers.size else offersForBiggerScreen.size,
+            count = if (isMobile) offers.size else offersForBiggerScreen.size,
             state = pagerState,
             contentPadding = PaddingValues(
                 top = MaterialTheme.spacing.medium,
@@ -48,19 +49,21 @@ fun HorizontalPagerWithIndicator() {
             )
         ) { page ->
             // Our page content
-            if (rememberIsMobileDevice()) {
-                Page(150.dp, offers[page], modifier = Modifier.fillMaxWidth())
+            if (isMobile) {
+                Page(150.dp, offers[page], modifier = Modifier.fillMaxWidth(),screenWidth, true)
             } else {
                 Row {
                     Page(
                         pageHeight = pagerHeightForLargerSize,
                         offer = offersForBiggerScreen[page].offerFirst,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        screenWidth
                     )
                     Page(
                         pageHeight = pagerHeightForLargerSize,
                         offer = offersForBiggerScreen[page].offerSecond,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        screenWidth
                     )
                 }
             }
@@ -76,8 +79,7 @@ fun HorizontalPagerWithIndicator() {
 }
 
 @Composable
-fun Page(pageHeight: Dp, offer: Offer, modifier: Modifier) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+fun Page(pageHeight: Dp, offer: Offer, modifier: Modifier,screenWidth: Dp, isMobile: Boolean = false) {
     val textWidthForMobile = screenWidth / 2
     val textWidthForLargerSize = screenWidth / 6
     Box(
@@ -99,12 +101,12 @@ fun Page(pageHeight: Dp, offer: Offer, modifier: Modifier) {
             text = offer.title,
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.bodyMedium,
-            maxLines = if (rememberIsMobileDevice()) 2 else 3,
+            maxLines = if (isMobile) 2 else 3,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .padding(MaterialTheme.spacing.medium)
                 .align(Alignment.CenterStart)
-                .widthIn(max = if (rememberIsMobileDevice()) textWidthForMobile else textWidthForLargerSize),
+                .widthIn(max = if (isMobile) textWidthForMobile else textWidthForLargerSize),
         )
     }
 }

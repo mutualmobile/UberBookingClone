@@ -1,7 +1,9 @@
 package com.example.uberbookingexperience.ui.screens.dashboard.components
 
+import androidx.compose.runtime.Immutable
 import com.example.uberbookingexperience.R
 
+@Immutable
 data class RideOptions(
     val title: String,
     val image: Int

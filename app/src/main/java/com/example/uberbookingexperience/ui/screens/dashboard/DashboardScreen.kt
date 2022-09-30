@@ -12,10 +12,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.screens.dashboard.components.*
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.rememberDeviceWidth
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -25,8 +28,10 @@ fun DashboardScreen(
     onGotoWhereScreen: () -> Unit,
     onGotoMap: () -> Unit
 ) {
+    val isMobile = rememberIsMobileDevice()
+    val screenWidth = rememberDeviceWidth().dp
     Row {
-        if(rememberIsMobileDevice().not()) {
+        if(isMobile.not()) {
             SideBar()
         }
         Column {
@@ -38,18 +43,18 @@ fun DashboardScreen(
             ) {
                 Spacer(modifier = Modifier.statusBarsPadding())
                 //header
-                HorizontalPagerWithIndicator()
+                HorizontalPagerWithIndicator(isMobile, screenWidth)
                 //options
-                QuickOptions()
+                QuickOptions(isMobile)
                 //start/end location
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 PickupSelection(Modifier.align(Alignment.CenterHorizontally), onGotoWhereScreen)
                 DestinationSelection(Modifier.align(Alignment.CenterHorizontally), onGotoWhereScreen)
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
                 //around you
-                AroundYou(onGotoMap)
+                AroundYou(isMobile, screenWidth, onGotoMap)
             }
-            if (rememberIsMobileDevice()) {
+            if (isMobile) {
                 BottomTabs()
             }
         }

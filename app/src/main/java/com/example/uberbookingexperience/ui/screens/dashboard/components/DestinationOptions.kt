@@ -21,18 +21,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.R
+import com.example.uberbookingexperience.ui.theme.colorGrayExtraLight
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
+import com.example.uberbookingexperience.ui.util.limitWidth
 
 @Composable
 fun PickupSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
     Row(
         modifier = modifier
             .height(60.dp)
-            .widthIn(max = 400.dp)
+            .limitWidth()
             .padding(horizontal = MaterialTheme.spacing.medium)
             .clip(RoundedCornerShape(50.dp))
-            .background(color = Color(0XFFEFEFEF))
+            .background(color = colorGrayExtraLight)
             .clickableWithRipple {
                 onGotoWhereScreen()
             },
@@ -50,12 +52,12 @@ fun PickupSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "search Icon",
-                tint = Color.Black,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(36.dp)
             )
             Text(
                 text = "Enter pickup point",
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.alpha(ContentAlpha.medium)
             )
@@ -66,18 +68,18 @@ fun PickupSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
                 .weight(1f)
                 .padding(horizontal = MaterialTheme.spacing.medium)
                 .clip(RoundedCornerShape(50.dp))
-                .background(color = Color.White),
+                .background(color = MaterialTheme.colorScheme.onPrimary),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Icon(
                 imageVector = Icons.Default.AccessTimeFilled,
                 contentDescription = "timer Icon",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.primary
             )
             Text(
                 text = "Now",
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -85,7 +87,7 @@ fun PickupSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
             Icon(
                 imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = "drop down Icon",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -114,7 +116,7 @@ fun DestinationSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
         }
         Text(
             text = "Set destination on map",
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier
                 .weight(1f)
@@ -123,7 +125,7 @@ fun DestinationSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
         Icon(
             imageVector = Icons.Default.ArrowForwardIos,
             contentDescription = "forward Icon",
-            tint = Color.Black,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(14.dp)
         )
     }
@@ -132,6 +134,6 @@ fun DestinationSelection(modifier: Modifier, onGotoWhereScreen: () -> Unit) {
 @Composable
 fun Circle(){
     Canvas(modifier = Modifier.size(50.dp), onDraw = {
-        drawCircle(color = Color(0XFFEFEFEF))
+        drawCircle(color = colorGrayExtraLight)
     })
 }
