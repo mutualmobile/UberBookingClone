@@ -236,7 +236,7 @@ fun ChooseCabTypeScreen(
         ) {
             UberBottomSheetScaffold(
                 modifier = dynamicWidth
-                    .fillMaxHeight(),
+                    .wrapContentHeight(),
                 scaffoldState = scaffoldState,
                 sheetShape = RectangleShape,
                 sheetBackgroundColor = Color.Transparent,
@@ -331,7 +331,7 @@ fun ChooseCabTypeScreen(
                     } else {
                         Spacer(modifier = Modifier.padding(1.dp))
                     }
-                }
+                },
             )
 
             val bottomSheetProgress = scaffoldState.rememberBottomSheetProgress()

@@ -12,7 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.example.uberbookingexperience.ui.common.UberButton
 import com.example.uberbookingexperience.ui.common.UberDivider
 import com.example.uberbookingexperience.ui.screens.rideSummary.components.LocationDescription
@@ -20,6 +19,7 @@ import com.example.uberbookingexperience.ui.screens.rideSummary.components.Payme
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.DevicePreviews
+import com.example.uberbookingexperience.ui.util.LargeScreenChildMaxWidth
 import com.example.uberbookingexperience.ui.util.limitWidth
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
@@ -31,7 +31,7 @@ fun RideSummaryScreen(onButtonClick: () -> Unit = {}) {
                 if (rememberIsMobileDevice()) {
                     Modifier.fillMaxWidth()
                 } else {
-                    Modifier.width(300.dp)
+                    Modifier.width(LargeScreenChildMaxWidth)
                 }
             )
             .wrapContentSize()
@@ -67,7 +67,7 @@ private fun RideSummaryScreenPreview() {
                 if (rememberIsMobileDevice()) {
                     Modifier.fillMaxWidth()
                 } else {
-                    Modifier.width(300.dp)
+                    Modifier.width(LargeScreenChildMaxWidth)
                 }
             )
         ) {

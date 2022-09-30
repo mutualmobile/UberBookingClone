@@ -35,7 +35,7 @@ import com.google.accompanist.pager.rememberPagerState
 @Composable
 fun HorizontalPagerWithIndicator(isMobile: Boolean, screenWidth: Dp) {
     val pagerState = rememberPagerState()
-    val pagerHeightForLargerSize = screenWidth / 3
+    val pagerHeightForLargerSize = screenWidth / 6
     val offers by rememberSaveable { mutableStateOf(getOffers()) }
     val offersForBiggerScreen by rememberSaveable { mutableStateOf(getOffersForBiggerScreen()) }
 

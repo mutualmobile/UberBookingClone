@@ -1,5 +1,6 @@
 package com.example.uberbookingexperience.ui.screens.rideConfirmed
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -34,10 +35,18 @@ import com.example.uberbookingexperience.ui.screens.rideConfirmed.components.Rid
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.DevicePreviews
+import com.example.uberbookingexperience.ui.util.LargeScreenChildMaxWidth
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
 @Composable
-fun RideConfirmedScreen(shouldScroll: Boolean = false) {
+fun RideConfirmedScreen(
+    shouldScroll: Boolean = false,
+    goToDashboard: () -> Unit
+) {
+    BackHandler {
+        goToDashboard()
+    }
+
     Column(
         modifier = Modifier
             .then(
@@ -125,7 +134,7 @@ fun RideConfirmedScreen(shouldScroll: Boolean = false) {
                     actionTitle = "Share",
                     useFullSizeDivider = true
                 )
-                BottomActions()
+                BottomActions(goToDashboard = goToDashboard)
             }
         }
     }
@@ -140,11 +149,11 @@ private fun RideConfirmedScreenPreview() {
                 if (rememberIsMobileDevice()) {
                     Modifier.fillMaxWidth()
                 } else {
-                    Modifier.width(300.dp)
+                    Modifier.width(LargeScreenChildMaxWidth)
                 }
             )
         ) {
-            RideConfirmedScreen()
+            RideConfirmedScreen {}
         }
     }
 }

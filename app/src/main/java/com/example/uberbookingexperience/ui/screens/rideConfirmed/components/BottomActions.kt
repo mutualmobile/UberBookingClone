@@ -9,14 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun BottomActions() {
+fun BottomActions(goToDashboard: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
         BottomSheetActionButton(
             modifier = Modifier.weight(1f),
             text = "Cancel",
-            textColor = MaterialTheme.colorScheme.error
+            textColor = MaterialTheme.colorScheme.error,
+            onClick = goToDashboard
         )
         BottomSheetActionButton(
             modifier = Modifier.weight(1f),

@@ -76,6 +76,7 @@ import kotlinx.coroutines.launch
 fun ConfirmPickupScreen(
     onSearchClick: () -> Unit = {},
     onNavigationBack: () -> Unit = {},
+    goToDashboard: () -> Unit,
     onChooseConfirmLocationClick: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
@@ -176,7 +177,10 @@ fun ConfirmPickupScreen(
                         }
                         3 -> {
                             // case for ride confirm screen
-                            RideConfirmedScreen(scaffoldState.bottomSheetState.isExpanded)
+                            RideConfirmedScreen(
+                                scaffoldState.bottomSheetState.isExpanded,
+                                goToDashboard
+                            )
                         }
                         else -> {
                             // normal bottom sheet content for choose pickup spot
@@ -403,5 +407,7 @@ fun GoogleMapCurrentLocationUIPreview() {
 @Preview
 @Composable
 fun ConfirmPickupScreenPreview() {
-    ConfirmPickupScreen()
+    ConfirmPickupScreen(
+        goToDashboard = {}
+    )
 }

@@ -1,6 +1,11 @@
 package com.example.uberbookingexperience.ui.screens.finalisingDriver
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,6 +30,7 @@ import com.example.uberbookingexperience.ui.screens.finalisingDriver.components.
 import com.example.uberbookingexperience.ui.theme.UberBookingExperienceTheme
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.DevicePreviews
+import com.example.uberbookingexperience.ui.util.LargeScreenChildMaxWidth
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
 
 @Composable
@@ -41,7 +47,7 @@ fun FinalisingDriverScreen(
                 if (rememberIsMobileDevice()) {
                     Modifier.fillMaxWidth()
                 } else {
-                    Modifier.width(300.dp)
+                    Modifier.width(LargeScreenChildMaxWidth)
                 }
             ),
             horizontalAlignment = Alignment.CenterHorizontally

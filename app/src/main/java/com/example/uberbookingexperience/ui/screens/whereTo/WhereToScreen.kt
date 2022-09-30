@@ -80,6 +80,7 @@ import com.example.uberbookingexperience.ui.theme.colorGrayLighter
 import com.example.uberbookingexperience.ui.theme.spacing
 import com.example.uberbookingexperience.ui.util.LargeScreenChildMaxWidth
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
+import com.example.uberbookingexperience.ui.util.defaultCameraPosition
 import com.example.uberbookingexperience.ui.util.limitWidth
 import com.example.uberbookingexperience.ui.util.rememberBottomSheetProgress
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
@@ -138,7 +139,9 @@ fun WhereTo(
         }
     }
 
-    val cameraPositionState = rememberCameraPositionState()
+    val cameraPositionState = rememberCameraPositionState {
+        position = defaultCameraPosition
+    }
 
     val uberGoogleMap: @Composable (modifier: Modifier) -> Unit = remember(isMobile) {
         movableContentOf { modifier: Modifier ->

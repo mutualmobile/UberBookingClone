@@ -2,9 +2,15 @@ package com.example.uberbookingexperience.ui.common.bottomsheet
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetScaffoldDefaults
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,6 +18,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import com.example.uberbookingexperience.ui.theme.colorWhite
+
 /**
  * Common bottom sheet Scaffold composable for the app to integrated bottom sheet with required body and bottomsheet content
  * @param modifier Used to modify the overall look and behavior of the BottomSheetScaffold
@@ -47,11 +54,13 @@ fun UberBottomSheetScaffold(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(fraction = bottomSheetBodyContentHeightFraction)
+                    .wrapContentHeight()
             ) {
                 sheetContent()
             }
-        }, sheetPeekHeight = sheetPeekHeight
+        },
+        sheetPeekHeight = sheetPeekHeight,
+        backgroundColor = Color.Transparent
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             bodyContent()

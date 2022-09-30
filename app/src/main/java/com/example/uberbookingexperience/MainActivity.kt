@@ -129,10 +129,19 @@ class MainActivity : ComponentActivity() {
                             AddPaymentMethodScreen { navController.navigateUp() }
                         }
                         composable(Screens.ConfirmPickUpLocation()) {
-                            ConfirmPickupScreen(onSearchClick = {}, onNavigationBack = {
-                                navController.navigateUp()
-                            }) {
-                            }
+                            ConfirmPickupScreen(
+                                onSearchClick = {},
+                                onNavigationBack = {
+                                    navController.navigateUp()
+                                },
+                                onChooseConfirmLocationClick = {},
+                                goToDashboard = {
+                                    navController.popBackStack(
+                                        route = Screens.DashboardScreen(),
+                                        inclusive = false
+                                    )
+                                }
+                            )
                         }
                     }
                 }

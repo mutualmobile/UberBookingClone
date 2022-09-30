@@ -1,5 +1,6 @@
 package com.example.uberbookingexperience.ui.screens.dashboard.components
 
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Tab
@@ -16,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -35,6 +37,7 @@ fun BottomTabs() {
 
     Surface(shadowElevation = AppBarDefaults.BottomAppBarElevation) {
         TabRow(
+            modifier = Modifier.navigationBarsPadding(),
             selectedTabIndex = tabIndex,
             backgroundColor = MaterialTheme.colorScheme.onPrimary,
             contentColor = MaterialTheme.colorScheme.primary,

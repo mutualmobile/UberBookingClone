@@ -1,5 +1,7 @@
 package com.example.uberbookingexperience.ui.screens.dashboard.components
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.NavigationRail
@@ -13,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -41,6 +42,7 @@ fun SideBar() {
             .shadow(AppBarDefaults.TopAppBarElevation)
             .zIndex(1f)
     ) {
+        Spacer(modifier = Modifier.statusBarsPadding())
         tabsList.forEachIndexed { index, item ->
             val isSelected = selectedItem == index
             val itemColor = if (isSelected) MaterialTheme.colorScheme.primary else colorGrayLight
