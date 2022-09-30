@@ -12,7 +12,13 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.LocationSource
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.maps.android.compose.*
+import com.google.maps.android.compose.CameraMoveStartedReason
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.GoogleMapComposable
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.rememberCameraPositionState
 
 /**
  * Common Google map composable that we can use in the app
@@ -36,10 +42,12 @@ fun UberGoogleMap(
     mapZoomAnimationDuration: Int = 1_000,
     mapZoomPadding: Int = ((rememberDeviceWidth() * 5) / 50),
     mapUiSettings: MapUiSettings = MapUiSettings(zoomControlsEnabled = false),
-    content: (@Composable @GoogleMapComposable () -> Unit)? = null
+    mapMovingCallback: () -> Unit = {},
+    content: (
+        @Composable @GoogleMapComposable
+        () -> Unit
+    )? = null
 ) {
-
-
     val isMapReady = rememberSaveable {
         mutableStateOf(false)
     }
@@ -59,21 +67,20 @@ fun UberGoogleMap(
                     CameraUpdateFactory.newLatLngBounds(
                         latLngBounds,
                         mapZoomPadding
-                    ), mapZoomAnimationDuration
+                    ),
+                    mapZoomAnimationDuration
                 )
-
             }
         }
-
-
     }
     // Detect when the map starts moving and print the reason
     LaunchedEffect(cameraPositionState.isMoving) {
         if (cameraPositionState.isMoving) {
-            // use "${cameraPositionState.cameraMoveStartedReason.name}" to see reason for moving
+            if (cameraPositionState.cameraMoveStartedReason == CameraMoveStartedReason.GESTURE) {
+                mapMovingCallback()
+            }
         }
     }
-
 
     Box(modifier.fillMaxSize()) {
         GoogleMap(
@@ -81,7 +88,7 @@ fun UberGoogleMap(
             cameraPositionState = cameraPositionState,
             uiSettings = mapUiSettings,
             onMapLoaded = {
-                //Map loaded callback
+                // Map loaded callback
                 isMapReady.value = true
             },
             locationSource = locationSource,
@@ -90,7 +97,6 @@ fun UberGoogleMap(
             if (content != null) {
                 content()
             }
-
         }
     }
 }
