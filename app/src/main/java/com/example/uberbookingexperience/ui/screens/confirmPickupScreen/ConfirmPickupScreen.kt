@@ -3,6 +3,12 @@ package com.example.uberbookingexperience.ui.screens.confirmPickupScreen
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +47,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,6 +61,7 @@ import com.example.uberbookingexperience.ui.common.UberButton
 import com.example.uberbookingexperience.ui.common.UberDivider
 import com.example.uberbookingexperience.ui.common.UberGoogleMap
 import com.example.uberbookingexperience.ui.common.UberLoader
+import com.example.uberbookingexperience.ui.common.UberMapInfoWindowText
 import com.example.uberbookingexperience.ui.common.bottomsheet.UberBottomSheetScaffold
 import com.example.uberbookingexperience.ui.screens.finalisingDriver.FinalisingDriverScreen
 import com.example.uberbookingexperience.ui.screens.rideConfirmed.RideConfirmedScreen
@@ -61,12 +70,19 @@ import com.example.uberbookingexperience.ui.theme.colorLocationUI
 import com.example.uberbookingexperience.ui.theme.colorUberGrayBg
 import com.example.uberbookingexperience.ui.theme.colorWhite
 import com.example.uberbookingexperience.ui.theme.spacing
+import com.example.uberbookingexperience.ui.util.bitmapDescriptorFromVector
 import com.example.uberbookingexperience.ui.util.clickableWithRipple
 import com.example.uberbookingexperience.ui.util.defaultCameraPosition
 import com.example.uberbookingexperience.ui.util.pathLatLongsFirst
 import com.example.uberbookingexperience.ui.util.rememberDeviceHeight
 import com.example.uberbookingexperience.ui.util.rememberIsMobileDevice
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.JointType
+import com.google.android.gms.maps.model.RoundCap
+import com.google.maps.android.compose.MarkerInfoWindowContent
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -260,7 +276,8 @@ fun ConfirmPickupScreen(
                                         .fillMaxSize()
                                 ) {
                                     ConfirmPickupGoogleMap(
-                                        modifier = Modifier.weight(1f)
+                                        modifier = Modifier.weight(1f),
+                                        bottomSheetCase = bottomSheetCase
                                     ) {
                                         locationChangeAnimation = true
                                     }
@@ -278,9 +295,11 @@ fun ConfirmPickupScreen(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .fillMaxSize(1f)
+                    .fillMaxSize(1f),
             ) {
-                ConfirmPickupGoogleMap {
+                ConfirmPickupGoogleMap(
+                    bottomSheetCase = bottomSheetCase
+                ) {
                     locationChangeAnimation = true
                 }
                 if (bottomSheetCase == 1) {
@@ -332,24 +351,84 @@ fun ConfirmPickupScreen(
                 colorGrayExtraLight
             }
         ) {
-            onNavigationBack()
+            when (bottomSheetCase) {
+                3 -> goToDashboard()
+                else -> onNavigationBack()
+            }
         }
     }
     BackHandler {
-        onNavigationBack()
+        when (bottomSheetCase) {
+            3 -> goToDashboard()
+            else -> onNavigationBack()
+        }
     }
 }
 
 @Composable
-fun ConfirmPickupGoogleMap(modifier: Modifier = Modifier, onMovementCallback: () -> Unit) {
+fun ConfirmPickupGoogleMap(
+    modifier: Modifier = Modifier,
+    bottomSheetCase: Int,
+    showMyCab: Boolean = bottomSheetCase == 3,
+    onMovementCallback: () -> Unit,
+) {
+    val infiniteTransition = rememberInfiniteTransition()
+    val animateColor by infiniteTransition.animateColor(
+        initialValue = Color(0xFFF4F4F4),
+        targetValue = Color(0xFF000000),
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 2000,
+                easing = LinearEasing
+            ),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    val cameraPositionState = rememberCameraPositionState {
+        position = defaultCameraPosition
+    }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(bottomSheetCase) {
+        if (bottomSheetCase == 3) {
+            coroutineScope.launch {
+                cameraPositionState.animate(
+                    CameraUpdateFactory.newCameraPosition(
+                        CameraPosition.fromLatLngZoom(pathLatLongsFirst[2], 12f)
+                    )
+                )
+            }
+        }
+    }
+
     UberGoogleMap(
         modifier = modifier,
-        cameraPositionState = rememberCameraPositionState {
-            position = defaultCameraPosition
-        },
+        cameraPositionState = cameraPositionState,
         cameraPositionDefault = CameraPosition.fromLatLngZoom(pathLatLongsFirst.first(), 25f),
-        mapMovingCallback = onMovementCallback
+        mapMovingCallback = onMovementCallback,
     ) {
+        if (showMyCab) {
+            MarkerInfoWindowContent(
+                MarkerState(pathLatLongsFirst.first()),
+                icon = bitmapDescriptorFromVector(LocalContext.current, R.mipmap.ub__marker_vehicle_fallback)
+            ) {
+                UberMapInfoWindowText("My start Location", R.drawable.baseline_navigate_next_24)
+            }
+            MarkerInfoWindowContent(
+                MarkerState(pathLatLongsFirst.last()),
+                icon = bitmapDescriptorFromVector(LocalContext.current, R.drawable.ic_location_start)
+            ) {
+                UberMapInfoWindowText("My end Location", R.drawable.baseline_navigate_next_24)
+            }
+            Polyline(
+                points = pathLatLongsFirst,
+                color = animateColor,
+                clickable = true,
+                startCap = RoundCap(),
+                endCap = RoundCap(),
+                jointType = JointType.ROUND
+            )
+        }
     }
 }
 
