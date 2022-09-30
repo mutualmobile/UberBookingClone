@@ -229,7 +229,7 @@ fun ConfirmPickupScreen(
                                 UberButton(
                                     text = "Confirm Pickup",
                                     modifier = Modifier.padding(MaterialTheme.spacing.medium),
-                                    isEnable = !locationChangeAnimation
+                                    enabled = !locationChangeAnimation
                                 ) {
                                     // onChooseConfirmLocationClick()
                                     isLocationConfirmed = true
@@ -376,7 +376,7 @@ fun GoogleMapCurrentLocationUI(modifier: Modifier = Modifier) {
             color = colorLocationUI,
             modifier = Modifier
                 .width(2.dp)
-                .height(24.dp)
+                .height(MaterialTheme.spacing.large)
         )
         Box(
             contentAlignment = Alignment.Center,
@@ -386,7 +386,7 @@ fun GoogleMapCurrentLocationUI(modifier: Modifier = Modifier) {
         ) {
             Box(
                 Modifier
-                    .size(8.dp)
+                    .size(MaterialTheme.spacing.small)
                     .background(colorWhite, RectangleShape)
                     .zIndex(2f)
             )

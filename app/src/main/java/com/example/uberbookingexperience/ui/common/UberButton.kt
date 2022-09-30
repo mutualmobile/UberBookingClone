@@ -22,7 +22,7 @@ import com.example.uberbookingexperience.ui.theme.spacing
 fun UberButton(
     modifier: Modifier = Modifier,
     text: String,
-    isEnable: Boolean = true,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     Button(
@@ -38,7 +38,7 @@ fun UberButton(
             vertical = MaterialTheme.spacing.medium,
             horizontal = MaterialTheme.spacing.extraSmall
         ),
-        enabled = isEnable
+        enabled = enabled
     ) {
         Text(
             text = text,
