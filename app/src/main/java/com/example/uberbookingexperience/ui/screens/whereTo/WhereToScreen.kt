@@ -342,7 +342,7 @@ fun WhereTo(
                                             isWhereToTfFocused = false
                                         }
                                     )
-                                    Spacer(modifier = Modifier.padding(top = 8.dp))
+                                    Spacer(modifier = Modifier.padding(top = MaterialTheme.spacing.small))
                                     UberTextField(
                                         modifier = Modifier
                                             .padding(horizontal = MaterialTheme.spacing.small)
@@ -364,14 +364,14 @@ fun WhereTo(
                                             isWhereToTfFocused = true
                                         }
                                     )
-                                    Spacer(modifier = Modifier.padding(bottom = 16.dp))
+                                    Spacer(modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium))
                                 }
                             }
                             // AddDestinationButton
                             IconButton(
                                 onClick = {},
                                 modifier = Modifier
-                                    .padding(horizontal = 12.dp, vertical = 24.dp)
+                                    .padding(horizontal = 12.dp, vertical = MaterialTheme.spacing.large)
                                     .size(36.dp)
                                     .clip(CircleShape)
                                     .background(colorGrayLighter)
@@ -394,7 +394,7 @@ fun WhereTo(
                     LazyColumn(
                         modifier = Modifier
                             .padding(horizontal = MaterialTheme.spacing.extraLarge.times(1 - swipeProgress))
-                            .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                            .clip(RoundedCornerShape(topStart = MaterialTheme.spacing.small, topEnd = MaterialTheme.spacing.small))
                             .fillMaxHeight()
                             .background(Color.White)
                             .imePadding(),
