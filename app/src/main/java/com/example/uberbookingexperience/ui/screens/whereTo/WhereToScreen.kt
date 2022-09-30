@@ -410,8 +410,7 @@ fun WhereTo(
                                         icon = Icons.Filled.Home,
                                         title = "Home",
                                         subtitle = "43, Durga Mandir Rd, new",
-                                        backgroundColor = MaterialTheme.colorScheme.secondary,
-                                        maxlines = 1
+                                        backgroundColor = MaterialTheme.colorScheme.secondary
                                     )
                                     UberVerticalDivider(
                                         height = 48.dp
@@ -423,8 +422,7 @@ fun WhereTo(
                                         icon = Icons.Filled.Work,
                                         title = "Work",
                                         subtitle = "Gitarattan International",
-                                        backgroundColor = MaterialTheme.colorScheme.secondary,
-                                        maxlines = 1
+                                        backgroundColor = MaterialTheme.colorScheme.secondary
                                     )
                                     UberVerticalDivider(
                                         height = 48.dp

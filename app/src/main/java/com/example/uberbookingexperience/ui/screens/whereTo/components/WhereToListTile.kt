@@ -34,7 +34,7 @@ fun ListTile(
     subtitle: String? = null,
     contentDesc: String? = null,
     backgroundColor: Color = Color.Gray,
-    maxlines: Int? = null,
+    maxlines: Int = 1,
     onClick: () -> Unit = {},
 ) {
     ListItem(
@@ -63,7 +63,8 @@ fun ListTile(
                 Text(
                     text = nnTitle,
                     style = Typography.titleMedium,
-                    maxLines = maxlines ?: Int.MAX_VALUE
+                    maxLines = maxlines,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         },
@@ -72,7 +73,7 @@ fun ListTile(
                 Text(
                     text = nnSubtitle,
                     style = Typography.bodyMedium_gray,
-                    maxLines = maxlines ?: Int.MAX_VALUE,
+                    maxLines = maxlines,
                     overflow = TextOverflow.Ellipsis
                 )
             }
