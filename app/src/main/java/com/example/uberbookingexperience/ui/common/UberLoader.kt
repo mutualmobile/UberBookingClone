@@ -14,7 +14,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -67,7 +66,7 @@ fun UberLoader(
     loaderMaxSize: Dp = 64.dp,
     loaderColor: Color = MaterialTheme.colorScheme.primary,
     loaderThickness: Dp = 2.dp,
-    text: String,
+    text: String? = null,
     textColor: Color = loaderColor,
     spaceBetweenTextAndLoader: Dp = 8.dp,
     animationDurationMillis: Int = 1000,
@@ -109,8 +108,7 @@ fun UberLoader(
     val loaderCurrentSizeInPx by remember { derivedStateOf { with(density) { loaderCurrentSizeInDp.dp.toPx() } } }
 
     Column(
-        modifier = modifier
-            .defaultMinSize(minWidth = 200.dp),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center
     ) {
         Canvas(
@@ -124,14 +122,16 @@ fun UberLoader(
                 )
             }
         )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentWidth()
-                .padding(top = spaceBetweenTextAndLoader),
-            text = text,
-            color = textColor
-        )
+        text?.let {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth()
+                    .padding(top = spaceBetweenTextAndLoader),
+                text = text,
+                color = textColor
+            )
+        }
     }
 }
 

@@ -41,7 +41,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -121,11 +120,10 @@ fun ChooseCabTypeScreen(
     var selectedUberCab by rememberSaveable(stateSaver = UberCabInfoSaver) {
         mutableStateOf(uberMapScreenViewModel.selectedItem())
     }
+
     var isItemSelected by rememberSaveable {
         mutableStateOf(false)
     }
-
-    val uberButtonText by remember { derivedStateOf { "Choose " + selectedUberCab.cabInfo } }
 
     val currentDen = LocalDensity.current
     val navBottom = WindowInsets.Companion.navigationBars.getBottom(currentDen)
@@ -282,7 +280,7 @@ fun ChooseCabTypeScreen(
                                 modifier = Modifier
                                     .background(colorWhite)
                             ) {
-                                uberMapScreenViewModel.selectedItem().let { uberCabInfo ->
+                                selectedUberCab.let { uberCabInfo ->
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier
@@ -387,7 +385,7 @@ fun ChooseCabTypeScreen(
                     modifier = Modifier.navigationBarsPadding()
                 ) {
                     UberButton(
-                        text = uberButtonText,
+                        text = "Choose " + selectedUberCab.cabInfo,
                         modifier =
                         Modifier
                             .weight(1f)

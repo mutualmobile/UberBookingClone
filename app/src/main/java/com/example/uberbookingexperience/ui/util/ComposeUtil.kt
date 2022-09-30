@@ -32,7 +32,7 @@ fun Modifier.clickableWithRipple(
  * measurement [Constraints].
  * */
 fun Modifier.limitWidth(min: Dp = 200.dp, max: Dp = 400.dp) = widthIn(min = min, max = max)
-
+val LargeScreenChildMaxWidth = 300.dp
 @Composable
 fun rememberIsMobileDevice(): Boolean {
     val config = LocalConfiguration.current
