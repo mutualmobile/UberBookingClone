@@ -42,6 +42,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -155,6 +156,12 @@ fun ChooseCabTypeScreen(
     // define dynamic height so we can show atlease 2 list item of cabs in different screen sizes
     val sheetPeekHeight = rememberDeviceHeight().div(if (isDeviceMobileType) 2f else 1.5f)
 
+    val cabTypeGoogleMap: @Composable (modifier: Modifier) -> Unit = remember(isDeviceMobileType) {
+        movableContentOf { modifier: Modifier ->
+            CabTypeGoogleMap(modifier = modifier)
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         UberBackButton(
             modifier = Modifier
@@ -227,7 +234,7 @@ fun ChooseCabTypeScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                CabTypeGoogleMap()
+                cabTypeGoogleMap(Modifier)
             }
         }
         Box(
@@ -323,9 +330,7 @@ fun ChooseCabTypeScreen(
                                     .fillMaxWidth()
                                     .fillMaxHeight(0.55f)
                             ) {
-                                CabTypeGoogleMap(
-                                    modifier = Modifier.weight(1f)
-                                )
+                                cabTypeGoogleMap(Modifier.weight(1f))
                             }
                         }
                     } else {
