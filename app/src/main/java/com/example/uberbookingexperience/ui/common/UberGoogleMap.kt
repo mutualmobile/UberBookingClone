@@ -1,6 +1,7 @@
 package com.example.uberbookingexperience.ui.common
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,10 +44,11 @@ fun UberGoogleMap(
     mapZoomPadding: Int = ((rememberDeviceWidth() * 5) / 50),
     mapUiSettings: MapUiSettings = MapUiSettings(zoomControlsEnabled = false),
     mapMovingCallback: () -> Unit = {},
+    nonMapContent: (@Composable BoxScope.() -> Unit)? = null,
     content: (
-        @Composable @GoogleMapComposable
+    @Composable @GoogleMapComposable
         () -> Unit
-    )? = null
+    )? = null,
 ) {
     val isMapReady = rememberSaveable {
         mutableStateOf(false)
@@ -94,9 +96,8 @@ fun UberGoogleMap(
             locationSource = locationSource,
             properties = mapProperties
         ) {
-            if (content != null) {
-                content()
-            }
+            content?.let { nnMapContent -> nnMapContent() }
         }
+        nonMapContent?.let { nnContent -> nnContent() }
     }
 }
