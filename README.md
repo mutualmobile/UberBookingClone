@@ -44,7 +44,9 @@
 | 🎨 Accompanist | [Accompanist](https://google.github.io/accompanist) |
 
 
-
+| Pick direction location pin show every time  | 
+| ------------- | 
+| <video src="https://drive.google.com/file/d/19hUOInJLT5i3MxOd1BwMhZeOiNY-8YEj/view?usp=sharing"  width=250px /> |
 
 ### ⚙️ Run a project
 
