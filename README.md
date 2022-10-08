@@ -43,17 +43,15 @@
 | 🧭 Navigating with Compose | [Navigating with Compose](https://developer.android.com/jetpack/compose/navigation) |
 | 🎨 Accompanist | [Accompanist](https://google.github.io/accompanist) |
 
-
-| Pick direction location pin show every time  | 
-| ------------- | 
-| <video src="https://drive.google.com/file/d/19hUOInJLT5i3MxOd1BwMhZeOiNY-8YEj/view?usp=sharing"  width=250px /> |
-
 ### ⚙️ Run a project
 
-- Create new Google map API key by following [steps](https://developers.google.com/maps/documentation/android-sdk/maps-compose#requirements) here and 
+> **Note**
+> Create new Google map API key by following [steps](https://developers.google.com/maps/documentation/android-sdk/maps-compose#requirements) here and 
 add map api key in `local.properties` as `MAPS_API_KEY="[your_api_key]"` and Sync project with gradle file to run it.
 
-### 📷 Screenshots
+### 📷 Video
+
+![](uberbookingclone.gif)
 
 ### Contribute
 
