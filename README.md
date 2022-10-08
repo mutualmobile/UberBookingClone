@@ -53,7 +53,15 @@ add map api key in `local.properties` as `MAPS_API_KEY="[your_api_key]"` and Syn
 
 ![](uberbookingclone.gif)
 
-### Contribute
+### 💬 Want to discuss?
+
+Have any questions, doubts or want to present your opinions, views? You're always welcome. You can [start discussions](https://github.com/mutualmobile/UberBookingClone/discussions).
+
+### 🤝 Contributors
+
+See our rockstar contributors :smile:
+
+[![UberBookingClone Contributors](https://contrib.rocks/image?repo=mutualmobile/UberBookingClone)](https://github.com/mutualmobile/UberBookingClone/graphs/contributors)
 
 - If you want to contribute to this library, you're always welcome!
 See [Contributing Guidelines](CONTRIBUTING.md).
