@@ -31,6 +31,12 @@
 - Follows Android design guide and development best practices with Jetpack Compose.
 - Explore the possibilities of creating complex ui and ux of a Uber Booking flow using Compose.
 
+### Video Demo:
+
+https://user-images.githubusercontent.com/32521663/195015157-bd31b444-9e00-459f-a5c9-70d17e5c6fa3.mp4
+
+
+
 ### 🛠 Built with ❤️ using Kotlin
 
 | Tools | Link |
