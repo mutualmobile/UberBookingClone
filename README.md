@@ -57,7 +57,7 @@ add map api key in `local.properties` as `MAPS_API_KEY="[your_api_key]"` and Syn
 
 ### 📷 Video
 
-![](uberbookingclone.gif)
+![Screen Recording 2022-09-30 at 5 32 46 PM](https://user-images.githubusercontent.com/89389061/195022512-5f3785af-1156-4de1-b6dd-bf88290c5df4.gif)
 
 ### 💬 Want to discuss?
 
