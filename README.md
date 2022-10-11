@@ -55,10 +55,6 @@ https://user-images.githubusercontent.com/32521663/195015157-bd31b444-9e00-459f-
 > Create new Google map API key by following [steps](https://developers.google.com/maps/documentation/android-sdk/maps-compose#requirements) here and 
 add map api key in `local.properties` as `MAPS_API_KEY="[your_api_key]"` and Sync project with gradle file to run it.
 
-### 📷 Video
-
-![Screen Recording 2022-09-30 at 5 32 46 PM](https://user-images.githubusercontent.com/89389061/195022512-5f3785af-1156-4de1-b6dd-bf88290c5df4.gif)
-
 ### 💬 Want to discuss?
 
 Have any questions, doubts or want to present your opinions, views? You're always welcome. You can [start discussions](https://github.com/mutualmobile/UberBookingClone/discussions).
